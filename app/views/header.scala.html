@@ -1,0 +1,43 @@
+@* header Template File *@
+
+@import helper._
+@(param: Any)
+<div class="navbar navbar-default navbar-fixed-top nav">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">Диспечерская служба:</a>
+            <ul class="nav navbar-nav navbar-left">
+                <li >
+                    <input  id ="enterprise" class="con">
+                </li>
+            </ul>
+            <button data-target="#navbar-main" data-toggle="collapse" type="button" class="navbar-toggle">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div id="navbar-main" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li> </li>
+                <li class=""><a href="@routes.JournalShipmentController.show">План отгрузки </a></li>
+                <li><a href="#">Планирование отгрузки</a></li>
+                <li class="dropdown">
+                    <a aria-expanded="false" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Справочники<span class="caret"></span></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a target="_blank" href="#">Транспортные компании</a></li>
+                        <li class="divider"></li>
+                        <li><a target="_blank" href="#">Нормативы времени</a></li>
+                        <li><a target="_blank" href="#">Время работы</a></li>
+                    </ul>
+
+                </li>
+                <li><a href="#">Вход</a> </li>
+                <li><a href="#">Выход</a> </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<script>utils.createListServiceDstl()</script>

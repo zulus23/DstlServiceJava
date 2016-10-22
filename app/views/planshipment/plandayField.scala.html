@@ -1,0 +1,80 @@
+@()
+
+<div class="demo-section k-content">
+    <div id="tabstrip">
+        <ul>
+            <li class="k-state-active">
+                Основная
+            </li>
+            <li>
+                Заказ
+            </li>
+            <li>
+                Отгрузка
+            </li>
+
+        </ul>
+        <div>
+            <div class="row">
+              <div class="col-xs-2">
+                  <label class="col-sm-2" for="enterprise">Предприятие отправитель</label>
+                  <input id="enterprise" class="form-control" type="text" >
+              </div>
+                <div class="col-xs-3">
+                    <label class="col-sm-2" for="shipment">Вид отгрузки</label>
+                    <input id="shipment" class="form-control" type="text">
+                </div>
+                <div class="col-xs-4">
+                    <label class="col-sm-2" for="dateplane">Дата плана</label>
+                    <input id="dateplane" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-2">
+                    <label class="col-sm-2" for="enterprise">Предприятие отправитель</label>
+                    <input id="enterprise" class="form-control" type="text" >
+                </div>
+                <div class="col-xs-3">
+                    <label class="col-sm-2" for="shipment">Вид отгрузки</label>
+                    <input id="shipment" class="form-control" type="text">
+                </div>
+                <div class="col-xs-4">
+                    <label class="col-sm-2" for="dateplane">Дата плана</label>
+                    <input id="dateplane" class="form-control" type="text">
+                </div>
+            </div>
+        </div>
+        <div>
+            <span class="sunny">&nbsp;</span>
+            <div class="weather">
+                <h2>29<span>&ordm;C</span></h2>
+                <p>Sunny weather in New York.</p>
+            </div>
+        </div>
+        <div>
+            <span class="sunny">&nbsp;</span>
+            <div class="weather">
+                <h2>21<span>&ordm;C</span></h2>
+                <p>Sunny weather in London.</p>
+            </div>
+        </div>
+        <div>
+            <span class="cloudy">&nbsp;</span>
+            <div class="weather">
+                <h2>16<span>&ordm;C</span></h2>
+                <p>Cloudy weather in Moscow.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+        $(document).ready(function() {
+            $("#tabstrip").kendoTabStrip({
+                animation:  {
+                    open: {
+                        effects: "fadeIn"
+                    }
+                }
+            });
+        });
+</script>

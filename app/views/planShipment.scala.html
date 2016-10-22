@@ -1,0 +1,42 @@
+
+
+@(param: String)(implicit webJarAssets: WebJarAssets)
+@main(param) {
+    <div style="height: 30px; width: 100%;">
+        <h5>План на сутки</h5>
+    </div>
+    <div id="planShipment" style="height: 100%;
+        width: 100%;">
+        <div id="planShipmentByDay">
+          @planshipment.plandays()
+        </div>
+        <div id="journalShipment">
+           @planshipment.journalshipment()
+        </div>
+
+
+
+    </div>
+
+    <script>
+            $(document).ready(function () {
+                $("#planShipment").kendoSplitter({
+                    orientation: "vertical",
+                    panes: [
+                        {collapsible: false},
+                        {collapsible: false, size: "60%"},
+                        {collapsible: false, resizable: false, size: "40%"}
+                    ]
+                });
+                $("#days_").kendoSplitter({
+                    orientation: "horizontal",
+                    panes: [
+                        {collapsible: true},
+                        {collapsible: false, size: "70%"},
+                        {collapsible: false, resizable: false, size: "30%"}
+                    ]
+                });
+
+            });
+    </script>
+}

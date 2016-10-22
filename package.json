@@ -1,0 +1,23 @@
+{
+  "name": "DstlService",
+  "version": "1.0.0",
+  "description": "This is manage shipment application\r",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zulus23/DstlService.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zulus23/DstlService/issues"
+  },
+  "homepage": "https://github.com/zulus23/DstlService#readme"
+}
