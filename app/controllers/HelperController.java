@@ -16,6 +16,6 @@ public class HelperController extends Controller{
 
 
     public Result serviceDstl() {
-        return ok(Json.toJson(helperServices.listEnterprise()));
+        return ok(Json.toJson(helperServices.serviceDstl()));
     }
 }

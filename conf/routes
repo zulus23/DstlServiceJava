@@ -9,8 +9,10 @@ GET         /planshipment              controllers.JournalShipmentController.sho
 
 # An example controller showing how to use dependency injection
 GET         /api/listservicedstl       controllers.HelperController.serviceDstl
-
-
+GET         /loginForm                        controllers.ApplicationController.loginForm()
+GET         /callback                         @org.pac4j.play.CallbackController.callback()
+POST        /callback                         @org.pac4j.play.CallbackController.callback()
+GET         /logout                           @org.pac4j.play.ApplicationLogoutController.logout()
 
 
 

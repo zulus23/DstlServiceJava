@@ -15,20 +15,24 @@ import java.util.stream.Collectors;
  */
 @Singleton
 public class HelperServices {
+    private List<Enterprise> enterpriseList = Arrays.asList(new Enterprise(0,"ЗАО ГОТЭК-ЦПУ","",true),
+            new Enterprise(1,"ЗАО ГОТЭК-СЕВЕРО-ЗАПАД","",true),
+            new Enterprise(2,"ГОТЭК","",false),
+            new Enterprise(3,"ПРИНТ","",false),
+            new Enterprise(4,"ПОЛИПАК","",false),
+            new Enterprise(5,"ЛИТАР","",false),
+            new Enterprise(6,"ГОФРО","",false)
 
+    );
 
 
     public List<Enterprise> listEnterprise() {
-        return Arrays.asList(new Enterprise(0,"ЗАО ГОТЭК-ЦПУ",""),
-                             new Enterprise(1,"ЗАО ГОТЭК-СЕВЕРО-ЗАПАД",""),
-                             new Enterprise(2,"ГОТЭК",""),
-                             new Enterprise(3,"ПРИНТ",""),
-                             new Enterprise(4,"ПОЛИПАК",""),
-                             new Enterprise(5,"ЛИТАР",""),
-                             new Enterprise(6,"ГОФРО","")
-
-        ).stream().filter(e -> e.getId() == 0 || e.getId() == 1).collect(Collectors.toList());
+        return enterpriseList;
     }
+    public List<Enterprise> serviceDstl() {
+        return enterpriseList.stream().filter(e -> e.isService()).collect(Collectors.toList());
+    }
+
 
     public List<DeviationShipment> listDeviationShipment() {
 

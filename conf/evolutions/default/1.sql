@@ -19,6 +19,7 @@ create table gtk_enterprise (
   id                            integer identity(1,1) not null,
   name                          varchar(255),
   sldb                          varchar(255),
+  service                       bit default 0,
   constraint pk_gtk_enterprise primary key (id)
 );
 

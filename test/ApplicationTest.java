@@ -15,6 +15,7 @@ import play.i18n.Lang;
 import play.libs.F;
 import play.libs.F.*;
 import play.twirl.api.Content;
+import services.HelperServices;
 
 import static play.test.Helpers.*;
 import static org.junit.Assert.*;
@@ -29,17 +30,11 @@ import static org.junit.Assert.*;
 public class ApplicationTest {
 
     @Test
-    public void simpleCheck() {
-        int a = 1 + 1;
-        assertEquals(2, a);
+    public void serviceDstl() {
+        HelperServices helperServices = new HelperServices();
+        assertEquals(1, helperServices.serviceDstl().get(1).getId());
     }
 
-    @Test
-    public void renderTemplate() {
-        Content html = views.html.index.render("Your new application is ready.",null);
-        assertEquals("text/html", html.contentType());
-        assertTrue(html.body().contains("Your new application is ready."));
-    }
 
 
 }

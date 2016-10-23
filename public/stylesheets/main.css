@@ -6,13 +6,23 @@ html,body{
     height:100%;
     overflow:hidden;
 }
+body{
+    background-image: url("../images/bg_texture.png");
+}
+
 
 @media (min-width: 768px) {
     .navbar-form .form-control {
         min-width: 250px;
     }
 }
-
+#login-nav input { margin-bottom: 25px; }
+#login {
+    width: 80%;
+    min-width: 280px;
+    max-width: 400px;
+    margin: 80px auto 30px;
+}
 
 
 #vertical,
@@ -37,11 +47,13 @@ html,body{
     width: 250px;
 }
 /* Bootstrap*/
-.form-control {
+/*.form-control {
     height: 20px;
-}
+}*/
 .row {
     margin-right: 0px;
 }
+
+
 
 

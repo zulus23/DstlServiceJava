@@ -1,7 +1,7 @@
 @()
 
 
-<div id="paneljournal">
+<div id="paneljournal"  style="height: 100%;width: 100%;">
     <div id="journalGridView"></div>
 </div>
 <script>
@@ -15,9 +15,9 @@
             sortable: true,
             filterable: true,
             resizable: true,
-            pageable: {
+            /*pageable: {
                 pageSizes: true
-            },
+            },*/
             dataBound: function (e) {
                 $("#gridView").find('.k-icon.k-i-collapse').trigger('click');
             },

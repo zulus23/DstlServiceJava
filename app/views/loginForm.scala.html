@@ -1,8 +1,37 @@
-@(url: String)
-<form action="@url" method="POST">
-    <input type="text" name="username" value="" />
-    <p />
-    <input type="password" name="password" value="" />
-    <p />
-    <input type="submit" name="submit" value="Submit" />
-</form>
+@(url: String)(implicit webJarAssets: WebJarAssets)
+@main("Вход в приложение") {
+    <div id="login">
+        <form class="form-vertical well well-raised clearfix">
+            <fieldset>
+                <legend>Вход <small class="pull-right">Нужен логин? <a href="signup.html">Sign Up</a></small></legend>
+                <div class="control-group">
+                    <label for="email" class="control-label">Имя пользователя</label>
+                    <div class="controls">
+                        <input type="email" id="email" name="email" class="input-full" autofocus="autofocus">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="servicedstl" class="control-label">Предприятие</label>
+                    <div class="controls">
+                        <select id="servicedstl" class="input-full">
+                            <option selected>ЦПУ</option>
+                            <option>ПИТЕР</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="password" class="control-label">Пароль</label>
+                    <div class="controls">
+                        <input type="password" id="password" name="password" class="input-full">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-large pull-right">
+                   Вход
+                </button>
+                <label class="checkbox inline">
+                    <input type="checkbox"> Stay logged in.
+                </label>
+            </fieldset>
+        </form>
+    </div>
+}

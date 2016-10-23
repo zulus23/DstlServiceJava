@@ -20,12 +20,22 @@ public class Enterprise extends Model{
     @Column(name = "slDb")
     private String nameInDb;
 
-    public Enterprise(int id, String name, String nameInDb) {
+    private Boolean service;
+
+    public Enterprise(int id, String name, String nameInDb, Boolean service) {
         this.id = id;
         this.name = name;
-
+        this.nameInDb = nameInDb;
+        this.service = service;
     }
 
+    public Boolean isService() {
+        return service;
+    }
+
+    public void setService(Boolean service) {
+        this.service = service;
+    }
 
     public int getId() {
         return id;
