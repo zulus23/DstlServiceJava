@@ -14,6 +14,7 @@ import org.pac4j.play.PlayWebContext;
 import org.pac4j.play.store.PlaySessionStore;
 import play.mvc.Controller;
 import play.mvc.Result;
+import services.HelperServices;
 
 
 import javax.inject.Inject;
@@ -37,6 +38,10 @@ public class ApplicationController extends Controller {
     @Inject
     WebJarAssets webJarAssets;
 
+    @Inject
+    HelperServices helperServices;
+
+
 
     private List<CommonProfile> getProfiles() {
         final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
@@ -57,7 +62,7 @@ public class ApplicationController extends Controller {
     }
     public  Result loginForm() {
         final FormClient formClient = (FormClient) config.getClients().findClient("FormClient");
-        return ok(views.html.loginForm.render(formClient.getCallbackUrl(),webJarAssets,isLoggedIn(),getUserInfo().orElse(null)));
+        return ok(views.html.loginForm.render(formClient.getCallbackUrl(),webJarAssets,isLoggedIn(),getUserInfo().orElse(null), helperServices.serviceDstl()));
     }
 
     public Result jwt() {

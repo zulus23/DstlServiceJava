@@ -1,5 +1,6 @@
 @import org.pac4j.core.profile.CommonProfile
-@(url: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: CommonProfile)
+@import model.Enterprise
+@(url: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: CommonProfile,listServiceDstl:List[Enterprise])
 @main("Вход в приложение") {
     <div id="login">
         <form class="form-vertical well well-raised clearfix" action="@url" method="POST">
@@ -9,8 +10,13 @@
                     <label for="servicedstl" class="control-label">Предприятие</label>
                     <div class="controls">
                         <select id="servicedstl" class="input-full">
-                            <option selected>ЦПУ</option>
-                            <option>ПИТЕР</option>
+                           @for( i <-  0 to listServiceDstl.length -1 ){
+                              @if(i == 0 ) { <option selected>@listServiceDstl(i).getName()</option>
+                               } else {
+                                <option>@listServiceDstl(i).getName()</option>
+                               }
+                           }
+
                         </select>
                     </div>
                 </div>

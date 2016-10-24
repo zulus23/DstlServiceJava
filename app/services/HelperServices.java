@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  */
 @Singleton
 public class HelperServices {
-    private List<Enterprise> enterpriseList = Arrays.asList(new Enterprise(0,"ЗАО ГОТЭК-ЦПУ","",true),
+    private final List<Enterprise> enterpriseList = Arrays.asList(new Enterprise(0,"ЗАО ГОТЭК-ЦПУ","",true),
             new Enterprise(1,"ЗАО ГОТЭК-СЕВЕРО-ЗАПАД","",true),
             new Enterprise(2,"ГОТЭК","",false),
             new Enterprise(3,"ПРИНТ","",false),
