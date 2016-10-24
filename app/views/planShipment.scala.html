@@ -2,8 +2,15 @@
 @import org.pac4j.core.profile.CommonProfile
 @(param: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: CommonProfile)
 @main(param) {
-    <div style="height: 30px; width: 100%;">
-        <h5>План на сутки</h5>
+    <div style="height: 40px; width: 100%;">
+        <div class="row">
+            <div class="col-lg-2">
+                <input id="planShipmentDay" type="date">
+            </div>
+            <div class="col-lg-2">
+              <button id="savePlan" class="btn btn-sm"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+            </div>
+        </div>
     </div>
     <div id="planShipment" style="height: 100%;
         width: 100%;">
@@ -36,6 +43,11 @@
                         {collapsible: false, resizable: false, size: "30%"}
                     ]
                 });*/
+                kendo.culture("ru-RU");
+                // create DatePicker from input HTML element
+                $("#planShipmentDay").kendoDatePicker({
+                    format: kendo.culture().calendar.patterns.d
+                });
 
             });
             userService.login();
