@@ -1,5 +1,6 @@
 package controllers;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.profile.ProfileManager;
@@ -12,6 +13,7 @@ import play.mvc.Result;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Zhukov on 22.10.2016.
@@ -34,14 +36,25 @@ public class ApplicationController extends Controller {
         return profileManager.getAll(true);
     }
 
+    private Boolean isLoggedIn(){
+        final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
+        final ProfileManager<CommonProfile> profileManager = new ProfileManager(context);
+        return profileManager.isAuthenticated();
+    }
+
+    private Optional<CommonProfile> getUserInfo(){
+        final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
+        final ProfileManager<CommonProfile> profileManager = new ProfileManager(context);
+        return profileManager.get(true);
+    }
     public  Result loginForm() {
         final FormClient formClient = (FormClient) config.getClients().findClient("FormClient");
-        return ok(views.html.loginForm.render(formClient.getCallbackUrl(),webJarAssets));
+        return ok(views.html.loginForm.render(formClient.getCallbackUrl(),webJarAssets,isLoggedIn(),getUserInfo().orElse(null)));
     }
 
     public Result index() {
 
-        return ok(views.html.index.render("Your new application is ready.",webJarAssets));
+        return ok(views.html.index.render("Your new application is ready.",webJarAssets,isLoggedIn(),getUserInfo().orElse(null)));
     }
 
 

@@ -1,13 +1,14 @@
-@(url: String)(implicit webJarAssets: WebJarAssets)
+@import org.pac4j.core.profile.CommonProfile
+@(url: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: CommonProfile)
 @main("Вход в приложение") {
     <div id="login">
-        <form class="form-vertical well well-raised clearfix">
+        <form class="form-vertical well well-raised clearfix" action="@url" method="POST">
             <fieldset>
                 <legend>Вход <small class="pull-right">Нужен логин? <a href="signup.html">Sign Up</a></small></legend>
                 <div class="control-group">
                     <label for="email" class="control-label">Имя пользователя</label>
                     <div class="controls">
-                        <input type="email" id="email" name="email" class="input-full" autofocus="autofocus">
+                        <input type="text" id="email" name="username" class="input-full" autofocus="autofocus">
                     </div>
                 </div>
                 <div class="control-group">

@@ -1,6 +1,6 @@
 
-
-@(param: String)(implicit webJarAssets: WebJarAssets)
+@import org.pac4j.core.profile.CommonProfile
+@(param: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: CommonProfile)
 @main(param) {
     <div style="height: 30px; width: 100%;">
         <h5>План на сутки</h5>

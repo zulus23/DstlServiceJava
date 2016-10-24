@@ -4,7 +4,8 @@
  * two arguments, a `String` for the title of the page and an `Html`
  * object to insert into the body of the page.
  *@
-@(title: String)(content: Html)(implicit webJarAssets: WebJarAssets)
+@import org.pac4j.core.profile.CommonProfile
+@(title: String)(content: Html)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: CommonProfile)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -49,7 +50,7 @@
         @* And here's where we render the `Html` object containing
          * the page content. *@
 
-        @header(title)
+        @header(title)(isLoggedIn,userInfo)
         @content
         @*<script src='@routes.WebJarAssets.at(webJarAssets.locate("jquery.min.js"))' type='text/javascript'></script>
         <script src='@routes.WebJarAssets.at(webJarAssets.locate("bootstrap.js"))' type='text/javascript'></script>*@

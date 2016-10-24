@@ -1,6 +1,7 @@
 package modules;
 
 import com.google.inject.AbstractModule;
+import controllers.DemoHttpActionAdapter;
 import org.pac4j.core.client.Clients;
 import org.pac4j.core.config.Config;
 import org.pac4j.http.client.direct.ParameterClient;
@@ -31,7 +32,7 @@ public class SecurityModule extends AbstractModule {
                 basicAuthClient, parameterClient);
 
         Config config = new Config(clients);
-        //config.setHttpActionAdapter(new DemoHttpActionAdapter());
+        config.setHttpActionAdapter(new DemoHttpActionAdapter());
         bind(Config.class).toInstance(config);
 
         // callback
