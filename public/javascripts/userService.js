@@ -5,8 +5,13 @@
 var userService = (
        function(){
 
+           var getJwt =  function (){
+               axios.get('api/jwt').then(function(response){
+                   console.log(response.data);
+               })
+           }
            return {
-               login:{}
+               login:getJwt
 
            }
        }

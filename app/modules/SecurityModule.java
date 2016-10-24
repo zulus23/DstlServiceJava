@@ -4,10 +4,13 @@ import com.google.inject.AbstractModule;
 import controllers.DemoHttpActionAdapter;
 import org.pac4j.core.client.Clients;
 import org.pac4j.core.config.Config;
+import org.pac4j.http.client.direct.HeaderClient;
 import org.pac4j.http.client.direct.ParameterClient;
 import org.pac4j.http.client.indirect.FormClient;
 import org.pac4j.http.client.indirect.IndirectBasicAuthClient;
 import org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordAuthenticator;
+import org.pac4j.jwt.config.encryption.SecretEncryptionConfiguration;
+import org.pac4j.jwt.config.signature.SecretSignatureConfiguration;
 import org.pac4j.jwt.credentials.authenticator.JwtAuthenticator;
 import org.pac4j.play.ApplicationLogoutController;
 import org.pac4j.play.CallbackController;
@@ -26,14 +29,18 @@ public class SecurityModule extends AbstractModule {
         FormClient formClient = new FormClient("/loginForm", new SimpleTestUsernamePasswordAuthenticator());
         IndirectBasicAuthClient basicAuthClient = new IndirectBasicAuthClient(new SimpleTestUsernamePasswordAuthenticator());
 
-        ParameterClient parameterClient = new ParameterClient("token", new JwtAuthenticator(JWT_SALT));
+        HeaderClient headerClient = new HeaderClient("token", new JwtAuthenticator(new SecretSignatureConfiguration(JWT_SALT),
+                                                              new SecretEncryptionConfiguration(SecurityModule.JWT_SALT)   ));
 
         Clients clients = new Clients("/callback", formClient,
-                basicAuthClient, parameterClient);
+                basicAuthClient, headerClient);
 
         Config config = new Config(clients);
         config.setHttpActionAdapter(new DemoHttpActionAdapter());
         bind(Config.class).toInstance(config);
+
+       //((PlayCacheStore) config.getSessionStore()).setTimeout(60);
+
 
         // callback
         final CallbackController callbackController = new CallbackController();

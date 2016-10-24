@@ -13,7 +13,8 @@ GET         /loginForm                        controllers.ApplicationController.
 GET         /callback                         @org.pac4j.play.CallbackController.callback()
 POST        /callback                         @org.pac4j.play.CallbackController.callback()
 GET         /logout                           @org.pac4j.play.ApplicationLogoutController.logout()
-
+GET         /api/jwt                  controllers.ApplicationController.jwt
+GET         /api/listTest                   controllers.ApiController.listTest
 
 
 # Map static resources from the /public folder to the /assets URL path

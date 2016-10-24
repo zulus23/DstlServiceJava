@@ -19,6 +19,7 @@ libraryDependencies ++= Seq(
   "org.webjars" %% "webjars-play" % "2.5.0",
   "org.webjars" % "bootstrap" % "3.3.7",
   "org.webjars" % "font-awesome" % "4.6.3",
+  "org.webjars.bower" % "axios" % "0.14.0",
   //"org.webjars" % "jquery" % "1.12.3",
   "org.webjars" % "jquery" % "2.2.4",
   "commons-io" % "commons-io" % "2.4"

@@ -6,7 +6,7 @@
 <div class="navbar navbar-inverse navbar-fixed-top nav">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="/">Диспечерская служба:</a>
+            <a class="navbar-brand" href="/">Диспечерская служба</a>
             <ul class="nav navbar-nav navbar-left">
                 <li >
                     <input  id ="enterprise" class="con">
@@ -34,7 +34,7 @@
 
                 </li>
                 @if(isLoggedIn){
-                  <li><p class="navbar-text">@{userInfo.getEmail()}</p></li>
+                  <li><p class="navbar-text">@{userInfo.getDisplayName()}</p></li>
                   <li><a href="/logout?url=/?forcepostlogouturl">Выйти</a></li>
                 } else {
                   <li><a href="@routes.ApplicationController.loginForm">Войти</a></li>
