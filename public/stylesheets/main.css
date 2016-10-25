@@ -57,7 +57,8 @@ body{
 #savePlan{
     margin: 5px 5px;
 }
-#planShipmentDay{
-    margin: 5px 5px;
+span.k-picker-wrap.k-state-default{
+    margin-left: 5px;
+    margin-top: 8px;
 }
 
