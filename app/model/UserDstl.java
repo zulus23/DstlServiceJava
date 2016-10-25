@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "gtk_UserDstl")
-public class User  {
+public class UserDstl  {
     @Id
     private int id;
     private String name;

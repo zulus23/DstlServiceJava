@@ -1,5 +1,6 @@
 package controllers;
 
+import org.pac4j.core.config.Config;
 import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.profile.ProfileManager;
 import org.pac4j.play.PlayWebContext;
@@ -18,6 +19,9 @@ import static play.mvc.Results.ok;
  * Created by Zhukov on 22.10.2016.
  */
 public class JournalShipmentController extends Controller {
+
+
+
     @Inject
     WebJarAssets webJarAssets;
 
@@ -37,7 +41,8 @@ public class JournalShipmentController extends Controller {
     }
 
 
-    @Secure(clients = "FormClient")
+
+    @Secure(clients = "ServiceDstlFormClient")
     public Result show() {
         return ok(views.html.planShipment.render("",webJarAssets,isLoggedIn(),getUserInfo().orElse(null)));
     }

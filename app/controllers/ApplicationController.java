@@ -1,11 +1,11 @@
 package controllers;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import auth.ServiceDstlFormClient;
 import modules.SecurityModule;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.profile.ProfileManager;
-import org.pac4j.core.util.CommonHelper;
+
 import org.pac4j.http.client.indirect.FormClient;
 import org.pac4j.jwt.config.encryption.SecretEncryptionConfiguration;
 import org.pac4j.jwt.config.signature.SecretSignatureConfiguration;
@@ -18,11 +18,11 @@ import services.HelperServices;
 
 
 import javax.inject.Inject;
-import javax.xml.ws.ServiceMode;
+
 import java.util.List;
 import java.util.Optional;
 
-import static java.security.KeyRep.Type.SECRET;
+
 
 /**
  * Created by Zhukov on 22.10.2016.
@@ -61,7 +61,8 @@ public class ApplicationController extends Controller {
         return profileManager.get(true);
     }
     public  Result loginForm() {
-        final FormClient formClient = (FormClient) config.getClients().findClient("FormClient");
+        final ServiceDstlFormClient formClient = (ServiceDstlFormClient) config.getClients().findClient("ServiceDstlFormClient");
+        //final FormClient formClient = (FormClient) config.getClients().findClient("FormClient");
         return ok(views.html.loginForm.render(formClient.getCallbackUrl(),webJarAssets,isLoggedIn(),getUserInfo().orElse(null), helperServices.serviceDstl()));
     }
 

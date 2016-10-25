@@ -11,10 +11,9 @@ libraryDependencies ++= Seq(
   cache,
   javaWs,
 
-  "org.pac4j"%"play-pac4j"%"2.6.0-SNAPSHOT",
-  "org.pac4j"%"pac4j-http"%"1.9.4",
-  "org.pac4j"%"pac4j-jwt"%"1.9.4"  exclude("commons-io" , "commons-io"),
-  "org.pac4j"%"pac4j-sql"%"1.9.4",
+  "org.pac4j"%"play-pac4j"%"2.5.0",
+  "org.pac4j"%"pac4j-http"%"1.9.3",
+  "org.pac4j"%"pac4j-jwt"%"1.9.3"  exclude("commons-io" , "commons-io"),
 
   "org.webjars" %% "webjars-play" % "2.5.0",
   "org.webjars" % "bootstrap" % "3.3.7",
@@ -25,8 +24,6 @@ libraryDependencies ++= Seq(
   "commons-io" % "commons-io" % "2.4"
 
 )
-resolvers ++= Seq(Resolver.mavenLocal, "Sonatype snapshots repository" at "https://oss.sonatype.org/content/repositories/snapshots/",
-                  "Typesafe Releases" at "http://repo.typesafe.com/typesafe/maven-releases/"
-)
+resolvers ++= Seq(Resolver.mavenLocal, "Sonatype snapshots repository" at "https://oss.sonatype.org/content/repositories/snapshots/")
 
 routesGenerator := InjectedRoutesGenerator

@@ -9,7 +9,7 @@
                 <div class="control-group">
                     <label for="servicedstl" class="control-label">Предприятие</label>
                     <div class="controls">
-                        <select id="servicedstl" class="input-full">
+                        <select id="servicedstl" class="input-full" name="servicedstl">
                            @for( i <-  0 to listServiceDstl.length -1 ){
                               @if(i == 0 ) { <option selected>@listServiceDstl(i).getName()</option>
                                } else {

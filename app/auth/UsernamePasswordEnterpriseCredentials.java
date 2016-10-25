@@ -9,7 +9,7 @@ public class UsernamePasswordEnterpriseCredentials extends UsernamePasswordCrede
     private static final long serialVersionUID = -7219878989627796564L;
     private final String enterprise;
 
-    public UsernamePasswordEnterpriseCredentials(String username, String password, String clientName, String enterprise) {
+    public UsernamePasswordEnterpriseCredentials(String username, String password, String enterprise, String clientName) {
         super(username, password, clientName);
         this.enterprise = enterprise;
     }

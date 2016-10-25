@@ -1,7 +1,11 @@
 package modules;
 
+
+import auth.DbUsernamePasswordAuthenticator;
+import auth.ServiceDstlFormClient;
 import com.google.inject.AbstractModule;
 import controllers.DemoHttpActionAdapter;
+import org.pac4j.core.authorization.authorizer.csrf.CsrfAuthorizer;
 import org.pac4j.core.client.Clients;
 import org.pac4j.core.config.Config;
 import org.pac4j.http.client.direct.HeaderClient;
@@ -16,30 +20,46 @@ import org.pac4j.play.ApplicationLogoutController;
 import org.pac4j.play.CallbackController;
 import org.pac4j.play.store.PlayCacheStore;
 import org.pac4j.play.store.PlaySessionStore;
+import play.Configuration;
+import play.Environment;
 
 /**
  * Created by Zhukov on 23.10.2016.
  */
 public class SecurityModule extends AbstractModule {
     public final static String JWT_SALT = "12345678901234567890123456789012";
+
+    private final Environment environment;
+    private final Configuration configuration;
+
+    public SecurityModule( Environment environment,     Configuration configuration) {
+        this.environment = environment;
+        this.configuration = configuration;
+    }
+
     @Override
     protected void configure() {
         bind(PlaySessionStore.class).to(PlayCacheStore.class);
 
-        FormClient formClient = new FormClient("/loginForm", new SimpleTestUsernamePasswordAuthenticator());
-        IndirectBasicAuthClient basicAuthClient = new IndirectBasicAuthClient(new SimpleTestUsernamePasswordAuthenticator());
+        ServiceDstlFormClient serviceDstlFormClient = new ServiceDstlFormClient("/loginForm", new DbUsernamePasswordAuthenticator());
+       FormClient formClient =  new FormClient("/loginForm", new SimpleTestUsernamePasswordAuthenticator());
+        //IndirectBasicAuthClient basicAuthClient = new IndirectBasicAuthClient(new SimpleTestUsernamePasswordAuthenticator());
 
         HeaderClient headerClient = new HeaderClient("token", new JwtAuthenticator(new SecretSignatureConfiguration(JWT_SALT),
                                                               new SecretEncryptionConfiguration(SecurityModule.JWT_SALT)   ));
 
-        Clients clients = new Clients("/callback", formClient,
-                basicAuthClient, headerClient);
+       // CsrfAuthorizer csrfAuthorizer = new CsrfAuthorizer();
 
-        Config config = new Config(clients);
+        Clients clients = new Clients("/callback", serviceDstlFormClient, headerClient);
+
+        final Config config = new Config(clients);
         config.setHttpActionAdapter(new DemoHttpActionAdapter());
+        //config.addAuthorizer("csrf",csrfAuthorizer);
+     //   ((PlayCacheStore) config.getSessionStore()).setTimeout(60);
+
         bind(Config.class).toInstance(config);
 
-       //((PlayCacheStore) config.getSessionStore()).setTimeout(60);
+
 
 
         // callback
