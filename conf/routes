@@ -2,10 +2,13 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# An example controller showing a sample home page
-GET     /                           controllers.ApplicationController.index
+
+GET         /                              controllers.ApplicationController.index
 
 GET         /planshipment              controllers.JournalShipmentController.show()
+
+GET         /helper                    controllers.HelperShipmentController.show()
+
 
 # An example controller showing how to use dependency injection
 GET         /api/listservicedstl       controllers.HelperController.serviceDstl

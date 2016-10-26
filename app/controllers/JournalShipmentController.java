@@ -1,5 +1,6 @@
 package controllers;
 
+import auth.AuthService;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.profile.ProfileManager;
@@ -25,7 +26,11 @@ public class JournalShipmentController extends Controller {
     @Inject
     WebJarAssets webJarAssets;
 
+
     @Inject
+    private AuthService authService;
+
+    /*@Inject
     private PlaySessionStore playSessionStore;
 
     private Boolean isLoggedIn(){
@@ -39,11 +44,11 @@ public class JournalShipmentController extends Controller {
         final ProfileManager<CommonProfile> profileManager = new ProfileManager(context);
         return profileManager.get(true);
     }
-
+*/
 
 
     @Secure(clients = "ServiceDstlFormClient")
     public Result show() {
-        return ok(views.html.planShipment.render("",webJarAssets,isLoggedIn(),getUserInfo().orElse(null)));
+        return ok(views.html.planShipment.render("",webJarAssets, authService.isLoggedIn(),authService.getUserInfo().orElse(null)));
     }
 }

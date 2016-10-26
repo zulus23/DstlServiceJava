@@ -23,16 +23,7 @@
                 <li> </li>
                 <li class=""><a href="@routes.JournalShipmentController.show">План отгрузки </a></li>
                 <li><a href="#">Планирование отгрузки</a></li>
-                <li class="dropdown">
-                    <a aria-expanded="false" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Справочники<span class="caret"></span></a>
-                    <ul role="menu" class="dropdown-menu">
-                        <li><a target="_blank" href="#">Транспортные компании</a></li>
-                        <li class="divider"></li>
-                        <li><a target="_blank" href="#">Нормативы времени</a></li>
-                        <li><a target="_blank" href="#">Время работы</a></li>
-                    </ul>
-
-                </li>
+                <li><a href="@routes.HelperShipmentController.show">Справочники</a></li>
                 @if(isLoggedIn){
                   <li><p class="navbar-text">@{userInfo.getDisplayName()}</p></li>
                   <li><a href="/logout?url=/?forcepostlogouturl">Выйти</a></li>

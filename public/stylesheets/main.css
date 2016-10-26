@@ -4,7 +4,9 @@ html,body{
     with:100%;
     margin:0;
     height:100%;
+    font-size: 12px;
     overflow:hidden;
+
 }
 body{
     background-image: url("../images/bg_texture.png");
@@ -57,8 +59,27 @@ body{
 #savePlan{
     margin: 5px 5px;
 }
+span.k-widget.k-datepicker.k-header {
+    background-color: inherit;
+}
 span.k-picker-wrap.k-state-default{
     margin-left: 5px;
     margin-top: 8px;
 }
+label#labelPlanShipmentDay.pull-left {
+    padding-top: 15px;
+    padding-left: 15px;
+}
+button#bSavePlan.k-button.k-state-default,button#bCancelPlan.k-button.k-state-default,
+button#bExportPlan.k-button.k-state-default,
+button#bExportJournalPlan.k-button.k-state-default{
+    margin-left: 1px;
+    margin-top: 8px;
+}
+.red-tooltip + .tooltip > .tooltip-inner {background-color: #f00;}
+.red-tooltip + .tooltip > .tooltip-arrow { border-bottom-color:#f00; }
+
+
+
+
 
