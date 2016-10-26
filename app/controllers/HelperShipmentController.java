@@ -1,5 +1,6 @@
 package controllers;
 
+import auth.AuthService;
 import org.pac4j.play.store.PlaySessionStore;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -14,11 +15,12 @@ public class HelperShipmentController extends Controller {
     WebJarAssets webJarAssets;
 
     @Inject
-    private PlaySessionStore playSessionStore;
+    private AuthService authService;
 
 
 
     public  Result show() {
-        return play.mvc.Results.TODO;
+
+        return ok(views.html.helper.helperShipment.render("Справочники",webJarAssets,authService.isLoggedIn(),authService.getUserInfo().orElse(null)));
     }
 }
