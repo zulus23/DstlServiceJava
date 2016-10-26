@@ -7,7 +7,14 @@ GET         /                              controllers.ApplicationController.ind
 
 GET         /planshipment              controllers.JournalShipmentController.show()
 
-GET         /helper                    controllers.HelperShipmentController.show()
+
+#Норма времени погрузки
+GET         /normtime                    controllers.HelperShipmentController.show()
+GET         /api/normloads                    controllers.HelperShipmentController.index()
+GET         /api/normload/:id                    controllers.HelperShipmentController.read(id:Integer)
+POST        /api/normload                    controllers.HelperShipmentController.create()
+DELETE      /api/normload/:id                    controllers.HelperShipmentController.delete(id:Integer)
+PATCH       /api/normload/:id                    controllers.HelperShipmentController.update(id:Integer)
 
 
 # An example controller showing how to use dependency injection

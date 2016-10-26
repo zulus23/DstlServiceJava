@@ -1,9 +1,12 @@
 package services;
 
+import com.avaje.ebean.Ebean;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Singleton;
 import model.DeviationDelivery;
 import model.DeviationShipment;
 import model.Enterprise;
+import model.NormaTimeLoading;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,4 +61,22 @@ public class HelperServices {
                              new DeviationDelivery(6,"Поздняя отгрузка"),
                              new DeviationDelivery(7,"Доставка ЗК ранее плановой даты"));
     }
+
+
+    public List<NormaTimeLoading> normaTimeLoadingList(){
+        return Ebean.find(NormaTimeLoading.class).findList();
+    }
+    public  Integer saveNormaTimeLoading(JsonNode value){
+        NormaTimeLoading normaTimeLoading = new NormaTimeLoading(value.findValue("id").asInt(),
+                                                                 enterpriseList.get(3),
+                                                                 value.findValue("packageTime").asInt(),
+                                                                 value.findValue("commissionTime").asInt(),
+                                                                 value.findValue("placerTime").asInt()
+                );
+
+
+        Ebean.save(normaTimeLoading);
+        return 0;
+    }
+
 }

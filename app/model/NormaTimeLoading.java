@@ -1,9 +1,6 @@
 package model;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by Zhukov on 22.10.2016.
@@ -12,6 +9,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "gtk_NormaTimeLoading")
 public class NormaTimeLoading {
+    @Id
+    private Integer id;
     @ManyToOne
     @JoinColumn(name = "idEnterprise")
     private Enterprise enterprise;
@@ -22,11 +21,20 @@ public class NormaTimeLoading {
     /*Россыпь*/
     private int placerTime;
 
-    public NormaTimeLoading(Enterprise enterprise, int packageTime, int commissionTime, int placerTime) {
+    public NormaTimeLoading(Integer id, Enterprise enterprise, int packageTime, int commissionTime, int placerTime) {
+        this.id = id;
         this.enterprise = enterprise;
         this.packageTime = packageTime;
         this.commissionTime = commissionTime;
         this.placerTime = placerTime;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Enterprise getEnterprise() {
@@ -60,4 +68,6 @@ public class NormaTimeLoading {
     public void setPlacerTime(int placerTime) {
         this.placerTime = placerTime;
     }
+
+
 }
