@@ -74,7 +74,7 @@
 
                         fields: {
                             id:{type:"number"},
-                            enterprise: { type: "number",defaultValue: { id: 0,name:''} },
+                            enterprise: { defaultValue: { id: 0,name:''} },
                             packageTime: { type: "number" },
                             commissionTime:{type:"number"},
                             placerTime:{type:"number"}
@@ -110,7 +110,7 @@
                        field: "enterprise",
                        title: "Предприятие",
                        width: "70px",
-                       editor: enterpriseDropDownEditor, template: "#=enterprise#"
+                       editor: enterpriseDropDownEditor, template: "#=enterprise.name#"
 
                    },
                    {
