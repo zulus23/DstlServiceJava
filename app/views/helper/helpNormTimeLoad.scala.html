@@ -1,14 +1,16 @@
 @import org.pac4j.core.profile.CommonProfile
 @(param: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: CommonProfile)
 @main(param) {
-   <div class="container">
-       <div class="row">
-           <div class="col-lg-12">
+
+       <div class="k-content wide">
+           <div class="jumbotron">
+               <h1>Header</h1>
+           </div>
               <div id="gridNormTimeView"></div>
 
-           </div>
+
        </div>
-   </div>
+
 
     <script>
 
@@ -95,15 +97,10 @@
            $("#gridNormTimeView").kendoGrid({
                toolbar: ["create", "save", "cancel"],
                dataSource: dataSourceDB,
-               editable: { //disables the deletion functionality
-
-                   update: true,
-                   destroy: false
-               },
-               height: '100%',
+               editable: true,
+             //  height: '300px',
                sortable: true,
-               filterable: true,
-               resizable: true,
+
 
                dataBound: function (e) {
                    $("#gridView").find('.k-icon.k-i-collapse').trigger('click');
@@ -114,23 +111,21 @@
                        title: "Предприятие",
                        width: "70px",
 
-                       groupable: false
+
                    },
                    {
                        field: "packageTime",
                        title: "Пакет",
                        width: "60px",
 
-                       //filterable: false,
-                       groupable: false
+
                    },
                    {
                        field: "commissionTime",
                        title: "Комиссионная отгрузка",
                        width: "60px",
 
-                       //filterable: false,
-                       groupable: false
+
                    },
                    {
                        field: "placerTime",
