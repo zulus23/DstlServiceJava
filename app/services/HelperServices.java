@@ -103,4 +103,8 @@ public class HelperServices {
 
         return updateNormaTimeLoading;
     }
+
+    public Integer deleteNormaTimeLoading(Integer value) {
+        return Ebean.delete(NormaTimeLoading.class,value);
+    }
 }

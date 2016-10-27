@@ -44,10 +44,10 @@
                     destroy: function(options) {
                         $.ajax({
                             type: "DELETE",
-                            url: "api/normloads",
+                            url: "api/normload/"+options.data.id,
                             contentType: "application/json; charset=utf-8",
                             dataType: 'json',
-                            @*data:{dateBegin: '@select.getDateBegin',dateEnd:'@select.getDateEnd', site:'@select.getEnterprise'},*@
+                            data: kendo.stringify(options.data),
                             success: function(data) {
                                 options.success(data);
                             }
@@ -74,7 +74,7 @@
 
                         fields: {
                             id:{type:"number"},
-                            'enterprise.idEnterprise': { type: "number" },
+                            enterprise: { type: "number",defaultValue: { id: 0,name:''} },
                             packageTime: { type: "number" },
                             commissionTime:{type:"number"},
                             placerTime:{type:"number"}
@@ -110,7 +110,7 @@
                        field: "enterprise",
                        title: "Предприятие",
                        width: "70px",
-                       editor: enterpriseDropDownEditor, template: "#=enterprise.name#"
+                       editor: enterpriseDropDownEditor, template: "#=enterprise#"
 
                    },
                    {
@@ -134,11 +134,13 @@
 
 
 
-                   }
+                   },
+                   { command: "destroy", title: " ", width: "150px" }
                ]
            })
 
             function enterpriseDropDownEditor(container, options) {
+                console.log(options);
                 $('<input required name="' + options.field + '"/>')
                         .appendTo(container)
                         .kendoDropDownList({
