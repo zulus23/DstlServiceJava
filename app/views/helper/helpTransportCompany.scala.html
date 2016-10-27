@@ -4,17 +4,35 @@
 
        <div class="k-content wide">
            <div class="jumbotron">
-               <h1>Header</h1>
+               <h1>Справочник транспортных компаний</h1>
            </div>
-              <div id="gridNormTimeView"></div>
+           @*
+           *@
+           <div class="row clearfix">
+               <div class="col-lg-7">
+                   <section class="well">
+                       <h2 class="ra-well-title">Profile</h2>
+
+                       <div class="row">
+                           <div class="col-lg-12 col-sm-2">
+                               <div id="transportCompanyView"></div>
+                           </div>
+                       </div>
+                   </section>
+               </div>
+
+               <div class="col-lg-5">
+                   <div id="transportCompanyDriverView"></div>
+               </div>
+           </div>
 
 
-       </div>
+           </div>
 
 
     <script>
 
-            var dataSourceDB = new kendo.data.DataSource({
+      /*      var dataSourceDB = new kendo.data.DataSource({
                 serverAggregates: true,
                 transport: {
                     read: function(options) {
@@ -92,13 +110,13 @@
 
             });
 
+*/
 
+            /!* ========================================== Grid ======================================= *!/
 
-            /* ========================================== Grid ======================================= */
-
-           var grid =  $("#gridNormTimeView").kendoGrid({
+           var grid =  $("#transportCompanyView").kendoGrid({
                toolbar: ["create"],
-               dataSource: dataSourceDB,
+              // dataSource: dataSourceDB,
                editable: {
                    mode: "inline",
                    confirmation: false
@@ -117,30 +135,30 @@
                },
                columns: [
                    {
-                       field: "enterprise",
-                       title: "Предприятие",
-                       width: "70px",
-                       editor: enterpriseDropDownEditor, template: "#=enterprise.name#"
+                       field: "",
+                       title: "Наименование ТЭК",
+                       width: "200px"
+                      // editor: enterpriseDropDownEditor, template: "#=enterprise.name#"
 
                    },
                    {
-                       field: "packageTime",
-                       title: "Пакет",
-                       width: "60px",
-
-
-                   },
-                   {
-                       field: "commissionTime",
-                       title: "Комиссионная отгрузка",
-                       width: "60px",
+                       field: "",
+                       title: "Адрес ТЭК",
+                       width: "200px",
 
 
                    },
                    {
-                       field: "placerTime",
-                       title: "Россыпь",
-                       width: "180px",
+                       field: "",
+                       title: "Контактное лицо",
+                       width: "150px",
+
+
+                   },
+                   {
+                       field: "",
+                       title: "Телефон",
+                       width: "80px",
 
 
 
@@ -152,7 +170,56 @@
                ]
            }).data("kendoGrid");
 
-            function enterpriseDropDownEditor(container, options) {
+            var gridDriver =  $("#transportCompanyDriverView").kendoGrid({
+                      toolbar: ["create"],
+                      // dataSource: dataSourceDB,
+                      editable: {
+                          mode: "inline",
+                          confirmation: false
+                      },
+                      //  height: '300px',
+                      sortable: true,
+
+
+                      dataBound: function() {
+                          $(".k-grid-myDelete span").addClass("k-icon k-delete");
+                      },
+                      cancel: function() {
+                          setTimeout(function(){
+                              $(".k-grid-myDelete span").addClass("k-icon k-delete");
+                          });
+                      },
+                      columns: [
+                          {
+                              field: "",
+                              title: "Водитель ФИО",
+                              width: "250px"
+                              // editor: enterpriseDropDownEditor, template: "#=enterprise.name#"
+
+                          },
+                          {
+                              field: "",
+                              title: "ТЭК",
+                              width: "200px",
+
+
+                          },
+                          {
+                              field: "",
+                              title: "Телефон",
+                              width: "150px",
+
+
+                          },
+
+                          { command: ["edit", {
+                              name: "myDelete",
+                              text: "Удалить"
+                          }], title: "&nbsp;", width: "350px" }
+                      ]
+                  }).data("kendoGrid");
+
+       /*     function enterpriseDropDownEditor(container, options) {
                 console.log(options);
                 $('<input required name="' + options.field + '"/>')
                         .appendTo(container)
@@ -192,7 +259,7 @@
                 grid.refresh();
             })
 
-
+*/
    </script>
 
 }

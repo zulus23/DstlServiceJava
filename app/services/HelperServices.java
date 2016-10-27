@@ -77,9 +77,10 @@ public class HelperServices {
     public List<NormaTimeLoading> normaTimeLoadingList(){
         return find(NormaTimeLoading.class).findList();
     }
-    public  Integer saveNormaTimeLoading(JsonNode value){
+    public  NormaTimeLoading saveNormaTimeLoading(JsonNode value){
+        Enterprise _enterprise = Ebean.find(Enterprise.class,value.findValue("enterprise").findValue("id").asInt());
         NormaTimeLoading normaTimeLoading = new NormaTimeLoading(value.findValue("id").asInt(),
-                                                                 enterpriseList.get(3),
+                                                                 _enterprise,
                                                                  value.findValue("packageTime").asInt(),
                                                                  value.findValue("commissionTime").asInt(),
                                                                  value.findValue("placerTime").asInt()
@@ -87,7 +88,7 @@ public class HelperServices {
 
 
         Ebean.save(normaTimeLoading);
-        return 0;
+        return normaTimeLoading;
     }
 
     public NormaTimeLoading updateNormaTimeLoading(JsonNode value) {

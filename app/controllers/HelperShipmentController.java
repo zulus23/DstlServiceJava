@@ -41,8 +41,7 @@ public class HelperShipmentController extends Controller {
     }
 
     public Result create(){
-        helperServices.saveNormaTimeLoading(request().body().asJson());
-        return ok();
+        return ok(Json.toJson(helperServices.saveNormaTimeLoading(request().body().asJson())));
     }
     public Result update(Integer id){
         return ok(Json.toJson(helperServices.updateNormaTimeLoading(request().body().asJson())));

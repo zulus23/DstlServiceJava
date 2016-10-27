@@ -6,7 +6,7 @@
 GET         /                            controllers.ApplicationController.index
 
 GET         /planshipment                controllers.JournalShipmentController.show()
-
+GET         /transports                  controllers.HelperTransportCompanyController.show()
 
 #Норма времени погрузки
 GET         /normtime                    controllers.HelperShipmentController.show()
