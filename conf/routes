@@ -3,30 +3,35 @@
 # ~~~~
 
 
-GET         /                              controllers.ApplicationController.index
+GET         /                            controllers.ApplicationController.index
 
-GET         /planshipment              controllers.JournalShipmentController.show()
+GET         /planshipment                controllers.JournalShipmentController.show()
 
 
 #Норма времени погрузки
 GET         /normtime                    controllers.HelperShipmentController.show()
-GET         /api/normloads                    controllers.HelperShipmentController.index()
-GET         /api/normload/:id                    controllers.HelperShipmentController.read(id:Integer)
-POST        /api/normload                    controllers.HelperShipmentController.create()
-DELETE      /api/normload/:id                    controllers.HelperShipmentController.delete(id:Integer)
-PATCH       /api/normload/:id                    controllers.HelperShipmentController.update(id:Integer)
+GET         /api/normloads               controllers.HelperShipmentController.index()
+GET         /api/normload/:id            controllers.HelperShipmentController.read(id:Integer)
+POST        /api/normload                controllers.HelperShipmentController.create()
+DELETE      /api/normload/:id            controllers.HelperShipmentController.delete(id:Integer)
+PATCH         /api/normload/:id            controllers.HelperShipmentController.update(id:Integer)
 
+
+# Предприятия
+GET        /api/enterprises               controllers.HelperController.listEnterprise
+
+GET         /api/listservicedstl          controllers.HelperController.serviceDstl
 
 # An example controller showing how to use dependency injection
-GET         /api/listservicedstl       controllers.HelperController.serviceDstl
-GET         /loginForm                        controllers.ApplicationController.loginForm()
-GET         /callback                         @org.pac4j.play.CallbackController.callback()
-POST        /callback                         @org.pac4j.play.CallbackController.callback()
-GET         /logout                           @org.pac4j.play.ApplicationLogoutController.logout()
-GET         /api/jwt                  controllers.ApplicationController.jwt
-GET         /api/listTest                   controllers.ApiController.listTest
+
+GET         /loginForm                    controllers.ApplicationController.loginForm()
+GET         /callback                     @org.pac4j.play.CallbackController.callback()
+POST        /callback                     @org.pac4j.play.CallbackController.callback()
+GET         /logout                       @org.pac4j.play.ApplicationLogoutController.logout()
+GET         /api/jwt                      controllers.ApplicationController.jwt
+GET         /api/listTest                 controllers.ApiController.listTest
 
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
-GET     /webjars/*file              controllers.WebJarAssets.at(file)
+GET     /assets/*file                     controllers.Assets.versioned(path="/public", file: Asset)
+GET     /webjars/*file                    controllers.WebJarAssets.at(file)

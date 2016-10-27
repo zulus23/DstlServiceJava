@@ -3,6 +3,7 @@ package controllers;
 import akka.stream.impl.io.OutputStreamSourceStage;
 import auth.AuthService;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import model.NormaTimeLoading;
 import play.libs.Json;
 import play.mvc.BodyParser;
@@ -44,7 +45,7 @@ public class HelperShipmentController extends Controller {
         return ok();
     }
     public Result update(Integer id){
-        return TODO;
+        return ok(Json.toJson(helperServices.updateNormaTimeLoading(request().body().asJson())));
     }
     public Result delete(Integer id){
         return TODO;

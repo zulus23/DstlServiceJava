@@ -1,6 +1,7 @@
 package services;
 
 import com.avaje.ebean.Ebean;
+import com.avaje.ebean.Query;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Singleton;
 import model.DeviationDelivery;
@@ -13,24 +14,34 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.avaje.ebean.Ebean.find;
+
 /**
  * Created by Zhukov on 22.10.2016.
  */
 @Singleton
 public class HelperServices {
     private final List<Enterprise> enterpriseList = Arrays.asList(new Enterprise(0,"ЗАО ГОТЭК-ЦПУ","",true),
-            new Enterprise(1,"ЗАО ГОТЭК-СЕВЕРО-ЗАПАД","",true),
-            new Enterprise(2,"ГОТЭК","",false),
-            new Enterprise(3,"ПРИНТ","",false),
-            new Enterprise(4,"ПОЛИПАК","",false),
-            new Enterprise(5,"ЛИТАР","",false),
-            new Enterprise(6,"ГОФРО","",false)
+            new Enterprise(0,"ЗАО ГОТЭК-СЕВЕРО-ЗАПАД","",true),
+            new Enterprise(0,"ГОТЭК","",false),
+            new Enterprise(0,"ПРИНТ","",false),
+            new Enterprise(0,"ПОЛИПАК","",false),
+            new Enterprise(0,"ЛИТАР","",false),
+            new Enterprise(0,"ГОФРО","",false)
 
     );
 
 
     public List<Enterprise> listEnterprise() {
-        return enterpriseList;
+        Query<Enterprise> enterpriseQuery =  find(Enterprise.class);
+
+        if(enterpriseQuery.findList().size() > 0 ){
+          return  enterpriseQuery.findList();
+        } else {
+           Ebean.saveAll(enterpriseList);
+            return  enterpriseQuery.findList();
+        }
+
     }
     public List<Enterprise> serviceDstl() {
         return enterpriseList.stream().filter(e -> e.isService()).collect(Collectors.toList());
@@ -64,7 +75,7 @@ public class HelperServices {
 
 
     public List<NormaTimeLoading> normaTimeLoadingList(){
-        return Ebean.find(NormaTimeLoading.class).findList();
+        return find(NormaTimeLoading.class).findList();
     }
     public  Integer saveNormaTimeLoading(JsonNode value){
         NormaTimeLoading normaTimeLoading = new NormaTimeLoading(value.findValue("id").asInt(),
@@ -79,4 +90,17 @@ public class HelperServices {
         return 0;
     }
 
+    public NormaTimeLoading updateNormaTimeLoading(JsonNode value) {
+        NormaTimeLoading updateNormaTimeLoading =  Ebean.find(NormaTimeLoading.class,value.findValue("id"));
+        JsonNode updateEnterprise =  value.findValue("enterprise");
+        Enterprise enterprise = Ebean.find(Enterprise.class, updateEnterprise.findValue("id").asInt());
+        updateNormaTimeLoading.setEnterprise(enterprise);
+        updateNormaTimeLoading.setPackageTime(value.findValue("packageTime").asInt());
+        updateNormaTimeLoading.setCommissionTime(value.findValue("commissionTime").asInt());
+        updateNormaTimeLoading.setPlacerTime(value.findValue("placerTime").asInt());
+        Ebean.update(updateNormaTimeLoading);
+
+
+        return updateNormaTimeLoading;
+    }
 }

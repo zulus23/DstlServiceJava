@@ -19,5 +19,8 @@ public class HelperController extends Controller{
         return ok(Json.toJson(helperServices.serviceDstl()));
     }
 
+    public Result listEnterprise(){
+        return ok(Json.toJson(helperServices.listEnterprise()));
+    }
 
 }
