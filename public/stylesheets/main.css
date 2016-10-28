@@ -79,7 +79,9 @@ button#bExportJournalPlan.k-button.k-state-default{
 .red-tooltip + .tooltip > .tooltip-inner {background-color: #f00;}
 .red-tooltip + .tooltip > .tooltip-arrow { border-bottom-color:#f00; }
 
-
+div.k-content.wide{
+    background-image: inherit;
+}
 
 
 
