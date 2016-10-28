@@ -30,3 +30,4 @@ project/project/
 /public/stylesheets/Default/
 /public/javascripts/kendo.culture.ru.min.js
 /public/javascripts/kendo.culture.ru.min.js.map
+/test/resources/test-ebean.properties

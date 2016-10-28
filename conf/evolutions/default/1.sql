@@ -3,18 +3,6 @@
 
 # --- !Ups
 
-create table gtk_deviationdelivery (
-  id                            integer identity(1,1) not null,
-  decription                    varchar(255),
-  constraint pk_gtk_deviationdelivery primary key (id)
-);
-
-create table gtk_deviationshipment (
-  id                            integer identity(1,1) not null,
-  decription                    varchar(255),
-  constraint pk_gtk_deviationshipment primary key (id)
-);
-
 create table gtk_dstl_enterprise (
   id                            integer identity(1,1) not null,
   name                          varchar(255),
@@ -67,10 +55,6 @@ drop index if exists ix_gtk_dstl_normatimeloading_identerprise;
 
 IF OBJECT_ID('fk_gtk_dstl_user_idservice', 'F') IS NOT NULL alter table gtk_dstl_user drop constraint fk_gtk_dstl_user_idservice;
 drop index if exists ix_gtk_dstl_user_idservice;
-
-IF OBJECT_ID('gtk_deviationdelivery', 'U') IS NOT NULL drop table gtk_deviationdelivery;
-
-IF OBJECT_ID('gtk_deviationshipment', 'U') IS NOT NULL drop table gtk_deviationshipment;
 
 IF OBJECT_ID('gtk_dstl_enterprise', 'U') IS NOT NULL drop table gtk_dstl_enterprise;
 

@@ -1,0 +1,90 @@
+@import org.pac4j.core.profile.CommonProfile
+@(param: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: CommonProfile)
+@main(param) {
+
+       <div class="k-content wide">
+           <section class="well">
+               <h2>Справочник отклонений</h2>
+           </section>
+              <div id="gridDeviationView"></div>
+       </div>
+
+
+    <script>
+
+            var dataSourceDB = new kendo.data.DataSource({
+                serverAggregates: true,
+                transport: {
+                    read: function(options) {
+                        $.ajax({
+                            type: "GET",
+                            url: "api/deviations",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: 'json',
+                            @*data:{dateBegin: '@select.getDateBegin',dateEnd:'@select.getDateEnd', site:'@select.getEnterprise'},*@
+                            success: function(data) {
+                                options.success(data);
+                            }
+                        });
+                    },
+
+                },
+                //batch: true,
+                schema: {
+                    model: {
+                        id:"id",
+
+                        fields: {
+                            id:{type:"number",editable:false},
+                            decription: { defaultValue: { id: 0,name:''} },
+                            type: { type: "string" }
+
+                        }
+                    }
+                },
+
+                change: function(e) {
+                    var data = this.data();
+
+                }
+
+
+            });
+
+
+
+            /* ========================================== Grid ======================================= */
+
+           var grid =  $("#gridDeviationView").kendoGrid({
+
+               dataSource: dataSourceDB,
+               editable: {
+                   mode: "inline",
+                   confirmation: false
+               },
+             //  height: '300px',
+               sortable: true,
+               columns: [
+                   {
+                       field: "decription",
+                       title: "Наименование",
+                       width: "400px"
+
+
+                   },
+                   {
+                       field: "type",
+                       title: "Тип",
+                       width: "100px",
+
+
+                   }
+               ]
+           }).data("kendoGrid");
+
+
+
+   </script>
+
+}
+

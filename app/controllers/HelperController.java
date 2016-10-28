@@ -14,6 +14,10 @@ public class HelperController extends Controller{
   @Inject
   private HelperServices helperServices;
 
+    public Result deviations() {
+        return ok(Json.toJson(helperServices.listDeviation()));
+    }
+
 
     public Result serviceDstl() {
         return ok(Json.toJson(helperServices.serviceDstl()));
