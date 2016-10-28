@@ -64,18 +64,19 @@
                },
              //  height: '300px',
                sortable: true,
+               filterable: true,
                columns: [
                    {
                        field: "decription",
                        title: "Наименование",
-                       width: "400px"
-
-
+                       width: "400px",
+                       filterable: { multi: true, search: true, search: true }
                    },
                    {
                        field: "type",
                        title: "Тип",
                        width: "100px",
+                       filterable: { multi: true, search: true, search: true }
 
 
                    }
