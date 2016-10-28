@@ -11,15 +11,17 @@ import javax.persistence.Table;
  * Created by Gukov on 05.08.2016.
  */
 @Entity
-@Table(name = "gtk_Enterprise")
+@Table(name = "GTK_DSTL_Enterprise")
 public class Enterprise extends Model{
     @Id
+    @Column(name = "ID")
     private int id;
+    @Column(name = "Name")
     private String name;
 
-    @Column(name = "slDb")
+    @Column(name = "SlDB")
     private String nameInDb;
-
+    @Column(name = "ServiceDSTL")
     private Boolean service;
 
     public Enterprise(int id, String name, String nameInDb, Boolean service) {

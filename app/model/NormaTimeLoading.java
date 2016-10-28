@@ -1,5 +1,7 @@
 package model;
 
+import com.avaje.ebean.Model;
+
 import javax.persistence.*;
 
 /**
@@ -7,18 +9,22 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(name = "gtk_NormaTimeLoading")
-public class NormaTimeLoading {
+@Table(name = "GTK_DSTL_NormaTimeLoading")
+public class NormaTimeLoading  extends Model{
     @Id
+    @Column(name = "ID")
     private Integer id;
     @ManyToOne
-    @JoinColumn(name = "idEnterprise")
+    @JoinColumn(name = "IdEnterprise")
     private Enterprise enterprise;
     /*Пакет*/
+    @Column(name = "PackageTime")
     private int packageTime;
     /*Коммисионная отгрузка*/
+    @Column(name = "CommissionTime")
     private int commissionTime;
     /*Россыпь*/
+    @Column(name = "PlacerTime")
     private int placerTime;
 
     public NormaTimeLoading(Integer id, Enterprise enterprise, int packageTime, int commissionTime, int placerTime) {

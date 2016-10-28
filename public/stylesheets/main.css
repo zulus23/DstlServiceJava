@@ -82,6 +82,8 @@ button#bExportJournalPlan.k-button.k-state-default{
 div.k-content.wide{
     background-image: inherit;
 }
-
+div.col-lg-5, div.col-lg-7 {
+    padding-right: 0px;
+}
 
 

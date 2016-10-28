@@ -1,25 +1,35 @@
 package model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.avaje.ebean.Model;
+
+import javax.persistence.*;
 
 /**
  * Created by Zhukov on 23.10.2016.
  */
 
 @Entity
-@Table(name = "gtk_UserDstl")
-public class UserDstl  {
+@Table(name = "GTK_DSTL_User")
+public class UserDstl extends Model {
     @Id
+    @Column(name = "ID")
     private int id;
+    @Column(name = "Name")
     private String name;
+    @Column(name = "Password")
     private String password;
-    private String enterprise;
+    @ManyToOne
+    @JoinColumn(name = "IdService")
+    private Enterprise serviceDstl;
 
 
+    public Enterprise getServiceDstl() {
+        return serviceDstl;
+    }
 
-
+    public void setServiceDstl(Enterprise serviceDstl) {
+        this.serviceDstl = serviceDstl;
+    }
 
     public int getId() {
         return id;
@@ -45,11 +55,5 @@ public class UserDstl  {
         this.password = password;
     }
 
-    public String getEnterprise() {
-        return enterprise;
-    }
 
-    public void setEnterprise(String enterprise) {
-        this.enterprise = enterprise;
-    }
 }
