@@ -39,6 +39,12 @@ create table gtk_dstl_user (
 );
 
 create table gtk_dstl_worktime (
+  id                            integer identity(1,1) not null,
+  idservicedstl                 integer,
+  starttime                     time,
+  endtime                       time,
+  worktime                      bit default 0,
+  constraint pk_gtk_dstl_worktime primary key (id)
 );
 
 alter table gtk_dstl_normatimeloading add constraint fk_gtk_dstl_normatimeloading_identerprise foreign key (identerprise) references gtk_dstl_enterprise (id);
@@ -46,6 +52,9 @@ create index ix_gtk_dstl_normatimeloading_identerprise on gtk_dstl_normatimeload
 
 alter table gtk_dstl_user add constraint fk_gtk_dstl_user_idservice foreign key (idservice) references gtk_dstl_enterprise (id);
 create index ix_gtk_dstl_user_idservice on gtk_dstl_user (idservice);
+
+alter table gtk_dstl_worktime add constraint fk_gtk_dstl_worktime_idservicedstl foreign key (idservicedstl) references gtk_dstl_enterprise (id);
+create index ix_gtk_dstl_worktime_idservicedstl on gtk_dstl_worktime (idservicedstl);
 
 
 # --- !Downs
@@ -55,6 +64,9 @@ drop index if exists ix_gtk_dstl_normatimeloading_identerprise;
 
 IF OBJECT_ID('fk_gtk_dstl_user_idservice', 'F') IS NOT NULL alter table gtk_dstl_user drop constraint fk_gtk_dstl_user_idservice;
 drop index if exists ix_gtk_dstl_user_idservice;
+
+IF OBJECT_ID('fk_gtk_dstl_worktime_idservicedstl', 'F') IS NOT NULL alter table gtk_dstl_worktime drop constraint fk_gtk_dstl_worktime_idservicedstl;
+drop index if exists ix_gtk_dstl_worktime_idservicedstl;
 
 IF OBJECT_ID('gtk_dstl_enterprise', 'U') IS NOT NULL drop table gtk_dstl_enterprise;
 

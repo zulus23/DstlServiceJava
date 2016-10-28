@@ -8,7 +8,7 @@ GET         /                            controllers.ApplicationController.index
 GET         /planshipment                controllers.JournalShipmentController.show()
 GET         /transports                  controllers.HelperTransportCompanyController.show()
 GET         /deviation                   controllers.HelperDeviationController.show()
-
+GET         /worktime                    controllers.HelperWorkTimeController.show()
 
 #Норма времени погрузки
 GET         /normtime                    controllers.HelperShipmentController.show()

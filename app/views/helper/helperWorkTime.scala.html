@@ -1,0 +1,197 @@
+@import org.pac4j.core.profile.CommonProfile
+@(param: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: CommonProfile)
+@main(param) {
+
+       <div class="k-content wide">
+           <section class="well">
+               <h2>Справочник рабочего времени</h2>
+           </section>
+              <div id="gridWorkTimeView"></div>
+       </div>
+
+
+    <script>
+
+            var dataSourceDB = new kendo.data.DataSource({
+                serverAggregates: true,
+                transport: {
+                    read: function(options) {
+                        $.ajax({
+                            type: "GET",
+                            url: "api/normloads",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: 'json',
+                            @*data:{dateBegin: '@select.getDateBegin',dateEnd:'@select.getDateEnd', site:'@select.getEnterprise'},*@
+                            success: function(data) {
+                                options.success(data);
+                            }
+                        });
+                    },
+                    update: function(options){
+                        console.log(options);
+                        $.ajax({
+                            type: "PATCH",
+                            url: "api/normload/"+options.data.id,
+                            contentType: "application/json; charset=utf-8",
+                            dataType: 'json',
+                            data: kendo.stringify(options.data),
+                            success: function(data) {
+                                options.success(data);
+                            }
+                        });
+                    },
+                    destroy: function(options) {
+                        $.ajax({
+                            type: "DELETE",
+                            url: "api/normload/"+options.data.id,
+                            contentType: "application/json; charset=utf-8",
+                            dataType: 'json',
+                            data: kendo.stringify(options.data),
+                            success: function(data) {
+                                options.success(data);
+                            }
+                        });
+                    },
+                    create: function(options){
+                        console.log(options);
+                        $.ajax({
+                            type: "POST",
+                            url: "api/normload",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: 'json',
+                            data :kendo.stringify(options.data)
+                            ,
+                            success: function(data) {
+                                options.success(data);
+                            }
+                        });
+                    }
+                },
+                //batch: true,
+                schema: {
+                    model: {
+                        id:"id",
+
+                        fields: {
+                            id:{type:"number",editable:false},
+                            enterprise: { defaultValue: { id: 0,name:''} },
+                            packageTime: { type: "number" },
+                            commissionTime:{type:"number"},
+                            placerTime:{type:"number"}
+                        }
+                    }
+                },
+
+                change: function(e) {
+                    var data = this.data();
+                    console.log(data.length); // displays "77"
+                }
+
+
+            });
+
+
+
+            /* ========================================== Grid ======================================= */
+
+           var grid =  $("#gridWorkTimeView").kendoGrid({
+               toolbar: ["create"],
+               //dataSource: dataSourceDB,
+               editable: {
+                   mode: "inline",
+                   confirmation: false
+               },
+             //  height: '300px',
+               sortable: true,
+
+
+               dataBound: function() {
+                   $(".k-grid-myDelete span").addClass("k-icon k-delete");
+               },
+               cancel: function() {
+                   setTimeout(function(){
+                       $(".k-grid-myDelete span").addClass("k-icon k-delete");
+                   });
+               },
+               columns: [
+                   {
+                       field: "",
+                       title: "Наименование",
+                       width: "70px",
+
+
+                   },
+                   {
+                       field: "",
+                       title: "Начало",
+                       width: "60px",
+
+
+                   },
+                   {
+                       field: "",
+                       title: "Окончание",
+                       width: "60px",
+
+
+                   },
+                   {
+                       field: "",
+                       title: "Рабочие время",
+                       width: "180px",
+
+
+
+                   },
+                   { command: ["edit", {
+                       name: "myDelete",
+                       text: "Удалить"
+                   }], title: "&nbsp;", width: "350px" }
+               ]
+           }).data("kendoGrid");
+
+         /*   function enterpriseDropDownEditor(container, options) {
+                console.log(options);
+                $('<input required name="' + options.field + '"/>')
+                        .appendTo(container)
+                        .kendoDropDownList({
+                            autoBind: false,
+                            dataTextField: "name",
+                            dataValueField: "id",
+                            dataSource: {
+                                transport: {
+                                    read: function(options){
+                                            axios.get('/api/enterprises').then(function(response){
+                                                options.success(response.data);
+                                            });
+                                    }
+                                }
+                            }
+                        });
+            }*/
+            $("#gridWorkTimeView").on("click", ".k-grid-myDelete", function(e) {
+                e.preventDefault();
+
+                var command = $(this);
+                var cell = command.closest("td");
+
+                command.remove();
+                cell.append('<a class="k-button k-button-icontext k-grid-myConfirm" href="#"><span class="k-icon k-update"></span>Подтвердить</a>');
+                cell.append('<a class="k-button k-button-icontext k-grid-myCancel" href="#"><span class="k-icon k-cancel"></span>Отмена</a>');
+            });
+
+            $("#gridWorkTimeView").on("click", ".k-grid-myConfirm", function(e){
+                e.preventDefault();
+                grid.removeRow($(this).closest("tr"))
+            });
+
+            $("#gridWorkTimeView").on("click", ".k-grid-myCancel", function(e){
+                e.preventDefault();
+                grid.refresh();
+            })
+
+
+   </script>
+
+}
+
