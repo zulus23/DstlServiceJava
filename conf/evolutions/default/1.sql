@@ -40,6 +40,7 @@ create table gtk_dstl_user (
 
 create table gtk_dstl_worktime (
   id                            integer identity(1,1) not null,
+  name                          varchar(255),
   idservicedstl                 integer,
   starttime                     time,
   endtime                       time,

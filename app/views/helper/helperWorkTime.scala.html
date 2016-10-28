@@ -18,7 +18,7 @@
                     read: function(options) {
                         $.ajax({
                             type: "GET",
-                            url: "api/normloads",
+                            url: "api/worktimes",
                             contentType: "application/json; charset=utf-8",
                             dataType: 'json',
                             @*data:{dateBegin: '@select.getDateBegin',dateEnd:'@select.getDateEnd', site:'@select.getEnterprise'},*@
@@ -74,10 +74,10 @@
 
                         fields: {
                             id:{type:"number",editable:false},
-                            enterprise: { defaultValue: { id: 0,name:''} },
-                            packageTime: { type: "number" },
-                            commissionTime:{type:"number"},
-                            placerTime:{type:"number"}
+                            name: { type:"string" },
+                            startTime: { type: "time" },
+                            endTime:{type:"time"},
+                            workTime:{type:"number"}
                         }
                     }
                 },
@@ -96,7 +96,7 @@
 
            var grid =  $("#gridWorkTimeView").kendoGrid({
                toolbar: ["create"],
-               //dataSource: dataSourceDB,
+               dataSource: dataSourceDB,
                editable: {
                    mode: "inline",
                    confirmation: false
@@ -115,21 +115,21 @@
                },
                columns: [
                    {
-                       field: "",
+                       field: "name",
                        title: "Наименование",
                        width: "70px",
 
 
                    },
                    {
-                       field: "",
+                       field: "startTime",
                        title: "Начало",
                        width: "60px",
 
 
                    },
                    {
-                       field: "",
+                       field: "endTime",
                        title: "Окончание",
                        width: "60px",
 

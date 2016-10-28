@@ -1,19 +1,16 @@
 package services;
 
 import com.avaje.ebean.Ebean;
-import com.avaje.ebean.EbeanServer;
+
 import com.avaje.ebean.Query;
 import com.avaje.ebean.SqlRow;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Singleton;
 import model.*;
-import play.db.DB;
-import play.db.DBApi;
-import play.db.Database;
-import play.db.NamedDatabase;
 import utils.DbUtils;
 
 import javax.inject.Inject;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collector;
@@ -29,13 +26,13 @@ import static utils.DbUtils.connectToSLGotek;
  */
 @Singleton
 public class HelperServices {
-    private final List<Enterprise> enterpriseList = Arrays.asList(new Enterprise(0, "ЗАО ГОТЭК-ЦПУ", "", true),
-            new Enterprise(0, "ЗАО ГОТЭК-СЕВЕРО-ЗАПАД", "", true),
-            new Enterprise(0, "ГОТЭК", "", false),
-            new Enterprise(0, "ПРИНТ", "", false),
-            new Enterprise(0, "ПОЛИПАК", "", false),
-            new Enterprise(0, "ЛИТАР", "", false),
-            new Enterprise(0, "ГОФРО", "", false)
+    private final List<Enterprise> enterpriseList = Arrays.asList(new Enterprise(0, "ЗАО ГОТЭК-ЦПУ", "SL_CPU", true),
+            new Enterprise(0, "ЗАО ГОТЭК-СЕВЕРО-ЗАПАД", "SL_SPB", true),
+            new Enterprise(0, "ГОТЭК", "SL_GOTEK", false),
+            new Enterprise(0, "ПРИНТ", "SL_PRINT", false),
+            new Enterprise(0, "ПОЛИПАК", "SL_POLYPACK", false),
+            new Enterprise(0, "ЛИТАР", "SL_LITAR", false),
+            new Enterprise(0, "ЦЕНТР", "SL_CENTER", false)
 
     );
 
@@ -58,29 +55,11 @@ public class HelperServices {
 
 
     public List<DeviationShipment> listDeviationShipment() {
-
-
-        return Arrays.asList(new DeviationShipment(0, "Отсутствие свободных транспортных средств"),
-                new DeviationShipment(1, "Низкий тариф на доставку"),
-                new DeviationShipment(2, "Плохие погодные условия"),
-                new DeviationShipment(3, "Не обеспечено продукцией"),
-                new DeviationShipment(4, "Недостаточность технического ресурса (погрузчики)"),
-                new DeviationShipment(5, "Отсутствие основного персонала"),
-                new DeviationShipment(6, "Ошибки персонала предприятия"),
-                new DeviationShipment(7, "Ошибки персонала перевозчика"),
-                new DeviationShipment(8, "Отгрузка ранее плановой даты"),
-                new DeviationShipment(9, "Комплектация грузов"));
+        return null;
     }
 
     public List<Deviation> listDeviationDelivery() {
-        return Arrays.asList(new DeviationDelivery(0, "Выход из строя ТС"),
-                new DeviationDelivery(1, "Плохие погодные условия"),
-                new DeviationDelivery(2, "Допущение отклонений от маршрута"),
-                new DeviationDelivery(3, "Задержка ТС органами надзора"),
-                new DeviationDelivery(4, "Некорректное оформление рабочей документации"),
-                new DeviationDelivery(5, "Проблема с системой на складе клиента"),
-                new DeviationDelivery(6, "Поздняя отгрузка"),
-                new DeviationDelivery(7, "Доставка ЗК ранее плановой даты"));
+        return null;
     }
 
 
@@ -128,6 +107,14 @@ public class HelperServices {
         return sqlRowList.stream().map(this::mapSqlRowToDeviation).collect(toList());
     }
 
+    public List<WorkTime> workTimeList(Enterprise serviceDstl){
+          List<WorkTime> _list  = Ebean.createQuery(WorkTime.class).fetch("serviceDstl").where().eq("serviceDstl.id",serviceDstl.getId()).findList();
+          return  _list;
+    }
+
+
+
+
     private Deviation mapSqlRowToDeviation(SqlRow row) {
         Deviation deviation = new Deviation(0, row.getString("Value"), "");
         if(row.getString("TypeName").equals("UDTOtmena")){
@@ -136,5 +123,14 @@ public class HelperServices {
             deviation.setType("Доставка");
         }
         return deviation;
+    }
+
+    public WorkTime  saveWorkTime(JsonNode jsonNode,String enterpriseName) {
+        Enterprise _enterprise = DbUtils.enterpriseFromUser(enterpriseName);
+        //WorkTime saveWorkTime = new WorkTime();
+      //  saveWorkTime.setServiceDstl(_enterprise);
+      //  saveWorkTime.setStartTime(Duration. jsonNode.findValue("StartTime").asText());
+
+        return null;//saveWorkTime;
     }
 }

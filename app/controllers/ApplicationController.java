@@ -62,7 +62,6 @@ public class ApplicationController extends Controller {
     }
     public  Result loginForm() {
         final ServiceDstlFormClient formClient = (ServiceDstlFormClient) config.getClients().findClient("ServiceDstlFormClient");
-        //final FormClient formClient = (FormClient) config.getClients().findClient("FormClient");
         return ok(views.html.loginForm.render(formClient.getCallbackUrl(),webJarAssets,isLoggedIn(),getUserInfo().orElse(null), helperServices.serviceDstl()));
     }
 

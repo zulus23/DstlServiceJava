@@ -1,8 +1,10 @@
 package utils;
 
+import com.avaje.ebean.Ebean;
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebean.EbeanServerFactory;
 import com.avaje.ebean.config.ServerConfig;
+import model.Enterprise;
 import org.avaje.datasource.DataSourceConfig;
 
 import java.util.HashMap;
@@ -18,6 +20,9 @@ public class DbUtils {
 
 
 
+    public static Enterprise enterpriseFromUser(String value){
+        return Ebean.createQuery(Enterprise.class).where().eq("name",value).findUnique();
+    }
 
     public static Optional<EbeanServer> connectToSLGotek() {
 

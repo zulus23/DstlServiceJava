@@ -32,3 +32,16 @@ CREATE TABLE GTK_DSTL_NormaTimeLoading (
 ALTER TABLE GTK_DSTL_NormaTimeLoading ADD CONSTRAINT  FK_GTK_DSTL_NormaTimeLoading_IdEnterprise FOREIGN KEY (IdEnterprise)
 REFERENCES  GTK_DSTL_Enterprise (ID) ;
 CREATE INDEX IX_GTK_DSTL_NormaTimeLoading_IdEnterprise ON GTK_DSTL_NormaTimeLoading (IdEnterprise);
+
+CREATE TABLE GTK_DSTL_WorkTime (
+  ID                            integer identity(1,1) not null,
+  Name                          VARCHAR(70),
+  IdServiceDstl                 integer,
+  StartTime                     time,
+  EndTime                       time,
+  WorkTime                      bit default 0,
+  constraint PK_GTK_DSTL_WorkTime primary key (id)
+);
+
+ALTER TABLE GTK_DSTL_WorkTime ADD CONSTRAINT FK_constraint_IdServiceDstl foreign key (IdServiceDstl) REFERENCES GTK_DSTL_Enterprise (ID);
+CREATE INDEX IX_GTK_DSTL_WorkTime_IdServiceDstl on GTK_DSTL_WorkTime (IdServiceDstl);

@@ -1,10 +1,14 @@
 package controllers;
 
+import auth.AuthConstants;
 import auth.AuthService;
+import model.Enterprise;
+import org.pac4j.core.profile.CommonProfile;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import services.HelperServices;
+import utils.DbUtils;
 
 import javax.inject.Inject;
 
@@ -27,15 +31,18 @@ public class HelperWorkTimeController extends Controller {
         return ok(views.html.helper.helperWorkTime.render("Рабочие время",webJarAssets,authService.isLoggedIn(),authService.getUserInfo().orElse(null)));
     }
 
-   /*
+
     public Result index(){
-        return ok(Json.toJson(helperServices.normaTimeLoadingList()));
+        Enterprise enterprise = DbUtils.enterpriseFromUser("ЗАО ГОТЭК-ЦПУ");
+        return ok(Json.toJson(helperServices.workTimeList(enterprise)));
     }
 
     public Result create(){
-        return ok(Json.toJson(helperServices.saveNormaTimeLoading(request().body().asJson())));
+        CommonProfile commonProfile =  authService.getUserInfo().orElse(null);
+        return ok(Json.toJson(helperServices.saveWorkTime(request().body().asJson(),
+                                                          commonProfile.getAttribute(AuthConstants.SERVICE_DSTL).toString())));
     }
-    public Result update(Integer id){
+  /*  public Result update(Integer id){
         return ok(Json.toJson(helperServices.updateNormaTimeLoading(request().body().asJson())));
     }
     public Result delete(Integer id){

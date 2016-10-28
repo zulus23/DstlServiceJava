@@ -6,6 +6,8 @@ import com.avaje.ebean.EbeanServerFactory;
 import com.avaje.ebean.SqlRow;
 import com.avaje.ebean.config.ServerConfig;
 import com.fasterxml.jackson.databind.JsonNode;
+import model.Enterprise;
+import model.WorkTime;
 import org.avaje.datasource.DataSourceConfig;
 import org.junit.*;
 
@@ -56,6 +58,54 @@ public class ApplicationTest {
 
         return EbeanServerFactory.create(config);
     }
+    public EbeanServer getObjectLocal() throws Exception {
+
+        ServerConfig config = new ServerConfig();
+        config.setName("defaut");
+        config.loadFromProperties();
+        // load test-ebean.properties if present for running tests
+        // typically using H2 in memory database
+        config.loadTestProperties();
+
+        // set as default and register so that Model can be
+        // used if desired for save() and update() etc
+        config.setDefaultServer(true);
+        config.setRegister(false);
+      /*  config.addPackage("model.*");
+        config.addClass(WorkTime.class);
+        config.addClass(Enterprise.class);*/
+
+        DataSourceConfig ds = new DataSourceConfig();
+        ds.setDriver("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        ds.setUrl("jdbc:sqlserver://localhost\\MSSQL2014_DEV;databaseName=test1");
+        ds.setUsername("sa");
+        ds.setPassword("415631234");
+        config.setDataSourceConfig(ds);
+
+
+
+        return EbeanServerFactory.create(config);
+    }
+
+    @Test
+    public void listTimeWorkHaveOneRecord () throws Exception {
+        getObjectLocal();
+        Enterprise enterprise = DbUtils.enterpriseFromUser("ЗАО ГОТЭК-ЦПУ");
+
+        assertNotNull(enterprise);
+        /*HelperServices helperServices = new HelperServices();
+        assertEquals(0,helperServices.workTimeList(enterprise).size());*/
+
+    }
+
+
+    @Test
+    public void nameMustEquelEnterprise() throws Exception {
+        getObjectLocal();
+        assertEquals("SL_SPB",DbUtils.enterpriseFromUser("ЗАО ГОТЭК-СЕВЕРО-ЗАПАД").getNameInDb());
+    }
+
+
 
     @Test
     public void serviceDstl() {

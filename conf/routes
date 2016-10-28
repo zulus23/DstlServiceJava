@@ -23,8 +23,11 @@ PATCH         /api/normload/:id            controllers.HelperShipmentController.
 GET        /api/enterprises               controllers.HelperController.listEnterprise
 
 GET         /api/listservicedstl          controllers.HelperController.serviceDstl
-
 GET         /api/deviations               controllers.HelperController.deviations
+#Рабочие время
+GET         /api/worktimes               controllers.HelperWorkTimeController.index()
+
+#Рабочие время
 
 
 # An example controller showing how to use dependency injection
