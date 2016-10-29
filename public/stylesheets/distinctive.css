@@ -55,7 +55,7 @@ form{
 
 
 
-textarea, input[type="text"], input[type="password"],input[type="email"] {
+textarea, input[type="text"].input-full, input[type="password"],input[type="email"] {
     background-color: rgb(255,255,255);
     box-shadow: rgba(0,0,0,0.0745098) 0px 1px 1px inset;
     border-width: 1px;
@@ -65,7 +65,7 @@ textarea, input[type="text"], input[type="password"],input[type="email"] {
     transition: border 0.2s linear,box-shadow 0.2s linear;
 }
 
-select, textarea, input[type="text"], input[type="password"],input[type="email"] {
+select, textarea, input[type="text"].input-full, input[type="password"],input[type="email"] {
     display: inline-block;
     height: 20px;
     margin-bottom: 9px;
@@ -88,7 +88,7 @@ select, textarea, input[type="text"], input[type="password"],input[type="email"]
 input,button,select,textarea {
     font-family: Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-input.input-full {
+input.input-full, input[type="text"].input-full {
     width: 100%;
     box-sizing: border-box;
     height: 30px;

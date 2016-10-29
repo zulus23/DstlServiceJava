@@ -85,5 +85,11 @@ div.k-content.wide{
 div.col-lg-5, div.col-lg-7 {
     padding-right: 0px;
 }
+span.k-picker-wrap.k-state-default{
+    margin-left: 0px;
+    margin-top: 0px;
+}
+/*td.k-input.k-textbox{
 
+}*/
 

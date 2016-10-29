@@ -23,6 +23,7 @@ libraryDependencies ++= Seq(
   "org.webjars.bower" % "axios" % "0.14.0",
   //"org.webjars" % "jquery" % "1.12.3",
   "org.webjars" % "jquery" % "2.2.4",
+  "org.webjars.npm" % "moment" % "2.15.2",
   "commons-io" % "commons-io" % "2.4"
 
 )

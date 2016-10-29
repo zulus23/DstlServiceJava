@@ -11,6 +11,8 @@ import model.WorkTime;
 import org.avaje.datasource.DataSourceConfig;
 import org.junit.*;
 
+import play.Application;
+import play.inject.guice.GuiceApplicationBuilder;
 import play.mvc.*;
 import play.test.*;
 import play.data.DynamicForm;
@@ -34,7 +36,36 @@ import static org.junit.Assert.*;
  * If you are interested in mocking a whole application, see the wiki for more details.
  *
  */
+
 public class ApplicationTest {
+
+    private Application app;
+
+    public void startApp() throws Exception {
+        Map<String, String> settings = new HashMap<String, String>();
+        settings.put("db.default.driver", "org.h2.Driver");
+        settings.put("db.default.user", "sa");
+        settings.put("db.default.password", "");
+        settings.put("db.default.url", "jdbc:h2:mem:play-test-351881363;MODE=MySQL"); // TODO: use config for url
+        settings.put("db.default.jndiName", "DefaultDS");
+        app = new GuiceApplicationBuilder().build();
+        Helpers.start(app);
+/*
+        databaseTester = new JndiDatabaseTester("DefaultDS");
+
+        IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(play.Play.application()
+                .resourceAsStream("/resources/dataset.xml"));
+        databaseTester.setDataSet(expectedDataSet);
+        databaseTester.onSetup();*/
+    }
+
+
+
+    @After
+    public void stopApp() throws Exception {
+         //Helpers.stop(app);
+    }
+
     public EbeanServer getObject() throws Exception {
 
         ServerConfig config = new ServerConfig();
@@ -61,7 +92,7 @@ public class ApplicationTest {
     public EbeanServer getObjectLocal() throws Exception {
 
         ServerConfig config = new ServerConfig();
-        config.setName("defaut");
+        config.setName("default");
         config.loadFromProperties();
         // load test-ebean.properties if present for running tests
         // typically using H2 in memory database
@@ -70,9 +101,9 @@ public class ApplicationTest {
         // set as default and register so that Model can be
         // used if desired for save() and update() etc
         config.setDefaultServer(true);
-        config.setRegister(false);
-      /*  config.addPackage("model.*");
-        config.addClass(WorkTime.class);
+        config.setRegister(true);
+        config.addPackage("model");
+        /*config.addClass(WorkTime.class);
         config.addClass(Enterprise.class);*/
 
         DataSourceConfig ds = new DataSourceConfig();
@@ -90,11 +121,12 @@ public class ApplicationTest {
     @Test
     public void listTimeWorkHaveOneRecord () throws Exception {
         getObjectLocal();
+
         Enterprise enterprise = DbUtils.enterpriseFromUser("ЗАО ГОТЭК-ЦПУ");
 
         assertNotNull(enterprise);
-        /*HelperServices helperServices = new HelperServices();
-        assertEquals(0,helperServices.workTimeList(enterprise).size());*/
+        HelperServices helperServices = new HelperServices();
+        assertEquals(1,helperServices.workTimeList("ЗАО ГОТЭК-ЦПУ").size());
 
     }
 

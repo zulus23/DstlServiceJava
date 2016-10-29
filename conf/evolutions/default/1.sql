@@ -20,16 +20,6 @@ create table gtk_dstl_normatimeloading (
   constraint pk_gtk_dstl_normatimeloading primary key (id)
 );
 
-create table gtk_planshipment (
-  id                            integer,
-  name                          varchar(255),
-  plan_date                     date
-);
-
-create table gtk_planshipmentdetail (
-  id                            integer
-);
-
 create table gtk_dstl_user (
   id                            integer identity(1,1) not null,
   name                          varchar(255),
@@ -72,10 +62,6 @@ drop index if exists ix_gtk_dstl_worktime_idservicedstl;
 IF OBJECT_ID('gtk_dstl_enterprise', 'U') IS NOT NULL drop table gtk_dstl_enterprise;
 
 IF OBJECT_ID('gtk_dstl_normatimeloading', 'U') IS NOT NULL drop table gtk_dstl_normatimeloading;
-
-IF OBJECT_ID('gtk_planshipment', 'U') IS NOT NULL drop table gtk_planshipment;
-
-IF OBJECT_ID('gtk_planshipmentdetail', 'U') IS NOT NULL drop table gtk_planshipmentdetail;
 
 IF OBJECT_ID('gtk_dstl_user', 'U') IS NOT NULL drop table gtk_dstl_user;
 

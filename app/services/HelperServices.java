@@ -7,10 +7,15 @@ import com.avaje.ebean.SqlRow;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Singleton;
 import model.*;
+import org.joda.time.*;
+import org.joda.time.format.DateTimeFormat;
 import utils.DbUtils;
 
 import javax.inject.Inject;
-import java.time.Duration;
+import java.sql.Time;
+import java.time.*;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collector;
@@ -107,7 +112,8 @@ public class HelperServices {
         return sqlRowList.stream().map(this::mapSqlRowToDeviation).collect(toList());
     }
 
-    public List<WorkTime> workTimeList(Enterprise serviceDstl){
+    public List<WorkTime> workTimeList(String enterpriseName){
+           Enterprise serviceDstl  = DbUtils.enterpriseFromUser(enterpriseName);
           List<WorkTime> _list  = Ebean.createQuery(WorkTime.class).fetch("serviceDstl").where().eq("serviceDstl.id",serviceDstl.getId()).findList();
           return  _list;
     }
@@ -125,12 +131,47 @@ public class HelperServices {
         return deviation;
     }
 
-    public WorkTime  saveWorkTime(JsonNode jsonNode,String enterpriseName) {
-        Enterprise _enterprise = DbUtils.enterpriseFromUser(enterpriseName);
-        //WorkTime saveWorkTime = new WorkTime();
-      //  saveWorkTime.setServiceDstl(_enterprise);
-      //  saveWorkTime.setStartTime(Duration. jsonNode.findValue("StartTime").asText());
+    public WorkTime  saveWorkTime(JsonNode jsonNode,String nameServiceDstl) {
+        Enterprise _enterprise = DbUtils.enterpriseFromUser(nameServiceDstl);
+        WorkTime saveWorkTime = new WorkTime();
+         saveWorkTime.setServiceDstl(_enterprise);
+       // LocalDateTime localStartDateTime =  LocalDateTime.parse(jsonNode.findValue("startTime").asText());
+        DateTime dateTime =   DateTime.parse(jsonNode.findValue("startTime").asText(), DateTimeFormat.forPattern("dd-MM-yyyy HH:mm"));
+        LocalTime localTime = LocalTime.of(dateTime.getHourOfDay(),dateTime.getMinuteOfHour());
+        saveWorkTime.setStartTime(Time.valueOf(localTime));
+        //LocalDateTime localEndDateTime =  LocalDateTime.parse(jsonNode.findValue("endTime").asText());
+        dateTime =   DateTime.parse(jsonNode.findValue("endTime").asText(), DateTimeFormat.forPattern("dd-MM-yyyy HH:mm"));
+        localTime = LocalTime.of(dateTime.getHourOfDay(),dateTime.getMinuteOfHour());
+        saveWorkTime.setEndTime(Time.valueOf(localTime));
+        saveWorkTime.setName(jsonNode.findValue("name").asText());
+        saveWorkTime.setWorkTime(jsonNode.findValue("workTime").asBoolean());
+        Ebean.save(saveWorkTime);
+        return saveWorkTime;
+    }
 
-        return null;//saveWorkTime;
+    public WorkTime updateWorkTime(JsonNode jsonNode, String nameServiceDstl) {
+        Enterprise serviceDstl  = DbUtils.enterpriseFromUser(nameServiceDstl);
+        WorkTime updateWorkTime = Ebean.createQuery(WorkTime.class).fetch("serviceDstl")
+                                                                   .where().eq("serviceDstl.id",serviceDstl.getId())
+                                                                   .eq("id",jsonNode.findValue("id").intValue()).findUnique();
+        updateWorkTime.setServiceDstl(serviceDstl);
+        updateWorkTime.setName(jsonNode.findValue("name").asText());
+        DateTime dateTime =   DateTime.parse(jsonNode.findValue("startTime").asText(), DateTimeFormat.forPattern("dd-MM-yyyy HH:mm"));
+        LocalTime localTime = LocalTime.of(dateTime.getHourOfDay(),dateTime.getMinuteOfHour());
+        updateWorkTime.setStartTime(Time.valueOf(localTime));
+        //LocalDateTime localEndDateTime =  LocalDateTime.parse(jsonNode.findValue("endTime").asText());
+        dateTime =   DateTime.parse(jsonNode.findValue("endTime").asText(), DateTimeFormat.forPattern("dd-MM-yyyy HH:mm"));
+        localTime = LocalTime.of(dateTime.getHourOfDay(),dateTime.getMinuteOfHour());
+        updateWorkTime.setEndTime(Time.valueOf(localTime));
+        updateWorkTime.setWorkTime(jsonNode.findValue("workTime").asBoolean());
+
+
+        Ebean.update(updateWorkTime);
+        return  updateWorkTime;
+    }
+
+    public Integer deleteWorkTime(Integer id, String nameServiceDstl) {
+         Enterprise serviceDstl  = DbUtils.enterpriseFromUser(nameServiceDstl);
+         return Ebean.createQuery(WorkTime.class).fetch("serviceDstl").where().eq("serviceDstl.id",serviceDstl.getId()).eq("id",id).delete();
     }
 }

@@ -26,6 +26,10 @@ GET         /api/listservicedstl          controllers.HelperController.serviceDs
 GET         /api/deviations               controllers.HelperController.deviations
 #Рабочие время
 GET         /api/worktimes               controllers.HelperWorkTimeController.index()
+GET         /api/worktime/:id            controllers.HelperWorkTimeController.read(id:Integer)
+POST        /api/worktime                controllers.HelperWorkTimeController.create()
+DELETE      /api/worktime/:id            controllers.HelperWorkTimeController.delete(id:Integer)
+PATCH         /api/worktime/:id            controllers.HelperWorkTimeController.update(id:Integer)
 
 #Рабочие время
 

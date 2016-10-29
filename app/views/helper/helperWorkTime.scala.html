@@ -31,10 +31,16 @@
                         console.log(options);
                         $.ajax({
                             type: "PATCH",
-                            url: "api/normload/"+options.data.id,
+                            url: "api/worktime/"+options.data.id,
                             contentType: "application/json; charset=utf-8",
                             dataType: 'json',
-                            data: kendo.stringify(options.data),
+                            data:  kendo.stringify({
+                                "id":options.data.id,
+                                "name":options.data.name,
+                                "startTime":moment(options.data.startTime).format("DD-MM-YYYY HH:mm"),
+                                "endTime":moment(options.data.endTime).format("DD-MM-YYYY HH:mm"),
+                                "workTime":options.data.workTime
+                            }),
                             success: function(data) {
                                 options.success(data);
                             }
@@ -43,10 +49,16 @@
                     destroy: function(options) {
                         $.ajax({
                             type: "DELETE",
-                            url: "api/normload/"+options.data.id,
+                            url: "api/worktime/"+options.data.id,
                             contentType: "application/json; charset=utf-8",
                             dataType: 'json',
-                            data: kendo.stringify(options.data),
+                            data:  kendo.stringify({
+                            "id":options.data.id,
+                            "name":options.data.name,
+                            "startTime":moment(options.data.startTime).format("DD-MM-YYYY HH:mm"),
+                            "endTime":moment(options.data.endTime).format("DD-MM-YYYY HH:mm"),
+                            "workTime":options.data.workTime
+                        }),
                             success: function(data) {
                                 options.success(data);
                             }
@@ -56,17 +68,31 @@
                         console.log(options);
                         $.ajax({
                             type: "POST",
-                            url: "api/normload",
+                            url: "api/worktime",
                             contentType: "application/json; charset=utf-8",
                             dataType: 'json',
-                            data :kendo.stringify(options.data)
-                            ,
+                            data : kendo.stringify({
+                                   "id":options.data.id,
+                                   "name":options.data.name,
+                                   "startTime":moment(options.data.startTime).format("DD-MM-YYYY HH:mm"),
+                                   "endTime":moment(options.data.endTime).format("DD-MM-YYYY HH:mm"),
+                                   "workTime":options.data.workTime
+                                   }),
                             success: function(data) {
                                 options.success(data);
                             }
                         });
                     }
+                   /* parameterMap: function (options, operation) {
+                        console.log(" ------------------------- ");
+                        if(operation !== 'read' && options){
+                            console.log(options.data);
+                            console.log(kendo.stringify(options.data));
+                            return endo.stringify(options.data);
+                        }
+                    }*/
                 },
+
                 //batch: true,
                 schema: {
                     model: {
@@ -75,9 +101,9 @@
                         fields: {
                             id:{type:"number",editable:false},
                             name: { type:"string" },
-                            startTime: { type: "time" },
-                            endTime:{type:"time"},
-                            workTime:{type:"number"}
+                            startTime: { type: "date" },
+                            endTime:{type:"date"},
+                            workTime:{type:"boolean"}
                         }
                     }
                 },
@@ -117,7 +143,7 @@
                    {
                        field: "name",
                        title: "Наименование",
-                       width: "70px",
+                       width: "250px",
 
 
                    },
@@ -125,6 +151,7 @@
                        field: "startTime",
                        title: "Начало",
                        width: "60px",
+                       format:"{0:HH:mm}", editor: timeEditor
 
 
                    },
@@ -132,21 +159,21 @@
                        field: "endTime",
                        title: "Окончание",
                        width: "60px",
-
+                       format:"{0:HH:mm}", editor: timeEditor
 
                    },
                    {
-                       field: "",
+                       field: "workTime",
                        title: "Рабочие время",
                        width: "180px",
-
+                       template: '<input type="checkbox" #= workTime ? "checked=checked" : "" # disabled="disabled" ></input>'
 
 
                    },
                    { command: ["edit", {
                        name: "myDelete",
                        text: "Удалить"
-                   }], title: "&nbsp;", width: "350px" }
+                   }], title: "&nbsp;", width: "150px" }
                ]
            }).data("kendoGrid");
 
@@ -189,6 +216,11 @@
                 e.preventDefault();
                 grid.refresh();
             })
+            function timeEditor(container, options) {
+                $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" data-format="' + options.format + '"/>')
+                        .appendTo(container)
+                        .kendoTimePicker({culture: "ru-RU"});
+            }
 
 
    </script>

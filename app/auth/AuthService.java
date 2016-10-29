@@ -27,4 +27,10 @@ public class AuthService {
         final ProfileManager<CommonProfile> profileManager = new ProfileManager(context);
         return profileManager.get(true);
     }
+    public String nameServiceDstl(){
+        CommonProfile commonProfile =  getUserInfo().orElse(null);
+        return commonProfile.getAttribute(AuthConstants.SERVICE_DSTL).toString();
+    }
+
+
 }

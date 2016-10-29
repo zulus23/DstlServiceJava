@@ -33,23 +33,24 @@ public class HelperWorkTimeController extends Controller {
 
 
     public Result index(){
-        Enterprise enterprise = DbUtils.enterpriseFromUser("ЗАО ГОТЭК-ЦПУ");
-        return ok(Json.toJson(helperServices.workTimeList(enterprise)));
+
+        return ok(Json.toJson(helperServices.workTimeList(authService.nameServiceDstl())));
     }
 
     public Result create(){
         CommonProfile commonProfile =  authService.getUserInfo().orElse(null);
-        return ok(Json.toJson(helperServices.saveWorkTime(request().body().asJson(),
-                                                          commonProfile.getAttribute(AuthConstants.SERVICE_DSTL).toString())));
+        return ok(Json.toJson(helperServices.saveWorkTime(request().body().asJson(),authService.nameServiceDstl())));
     }
-  /*  public Result update(Integer id){
-        return ok(Json.toJson(helperServices.updateNormaTimeLoading(request().body().asJson())));
+    public Result update(Integer id){
+        return ok(Json.toJson(helperServices.updateWorkTime(request().body().asJson(),authService.nameServiceDstl())));
     }
     public Result delete(Integer id){
 
-        return ok(Json.toJson(helperServices.deleteNormaTimeLoading(id)));
+        return ok(Json.toJson(helperServices.deleteWorkTime(id,authService.nameServiceDstl())));
     }
 
+    public Result read(Integer id){
+        return TODO;
+    }
 
-*/
 }
