@@ -1,6 +1,7 @@
 package controllers;
 
 import auth.AuthService;
+import play.libs.Json;
 import play.mvc.Controller;
 
 import play.mvc.Result;
@@ -22,4 +23,9 @@ public class HelperTransportCompanyController extends Controller {
   public Result show(){
       return  ok(views.html.helper.helpTransportCompany.render("Транспортные компании",webJarAssets,authService.isLoggedIn(),authService.getUserInfo().orElse(null)));
   }
+
+    public Result index(){
+
+        return ok(Json.toJson(helperServices.driverTransportCompanyList()));
+    }
 }

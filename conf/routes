@@ -31,7 +31,8 @@ POST        /api/worktime                controllers.HelperWorkTimeController.cr
 DELETE      /api/worktime/:id            controllers.HelperWorkTimeController.delete(id:Integer)
 PATCH         /api/worktime/:id            controllers.HelperWorkTimeController.update(id:Integer)
 
-#Рабочие время
+#Транспортные компаниии
+GET         /api/transports               controllers.HelperTransportCompanyController.index()
 
 
 # An example controller showing how to use dependency injection

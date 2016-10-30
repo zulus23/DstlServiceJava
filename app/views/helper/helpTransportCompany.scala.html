@@ -42,11 +42,13 @@
 
             var dataSourceDB = new kendo.data.DataSource({
                 serverAggregates: true,
+                serverPaging:true,
+                pageSize: 100,
                 transport: {
                     read: function(options) {
                         $.ajax({
                             type: "GET",
-                            url: "api/transport",
+                            url: "api/transports",
                             contentType: "application/json; charset=utf-8",
                             dataType: 'json',
                             @*data:{dateBegin: '@select.getDateBegin',dateEnd:'@select.getDateEnd', site:'@select.getEnterprise'},*@
@@ -102,39 +104,46 @@
 
                         fields: {
                             id:{type:"string",editable:false},
-                            transportCompany: { defaultValue: { id: 0,name:''} },
-                            fullName: { type: "number" },
-                            commissionTime:{type:"number"},
-                            placerTime:{type:"number"}
+                            nameCompany: { type:"string" },
+                            codeCompany:{type:"string"},
+                            fullName: { type: "string" },
+                            addressCompany:{type:"string"},
+                            contactPersonCompany:{type:"string"},
+                            phoneContactPersonCompany:{type:"string"},
+                            driverFullName:{type:"string"},
+                            driverPhone :{type:"string"}
                         }
                     }
                 },
 
                 change: function(e) {
-                    var data = this.data();
-                    console.log(data.length); // displays "77"
+
                 }
 
 
             });
 
-*/
+
 
             /!* ========================================== Grid ======================================= *!/
 
            var grid =  $("#transportCompanyView").kendoGrid({
               // toolbar: ["create"],
-              // dataSource: dataSourceDB,
-               editable: {
+               dataSource: dataSourceDB,
+               pageable: true,
+
+
+               /*editable: {
                    mode: "inline",
                    confirmation: false
-               },
-             //  height: '300px',
+               },*/
+               height: '400px',
                sortable: true,
 
 
                dataBound: function() {
-                   $(".k-grid-myDelete span").addClass("k-icon k-delete");
+                   dataBindingFlag = true;
+                   //$(".k-grid-myDelete span").addClass("k-icon k-delete");
                },
                cancel: function() {
                    setTimeout(function(){
@@ -143,38 +152,46 @@
                },
                columns: [
                    {
-                       field: "",
+                       field: "nameCompany",
                        title: "Наименование ТЭК",
                        width: "200px"
                       // editor: enterpriseDropDownEditor, template: "#=enterprise.name#"
 
                    },
                    {
-                       field: "",
+                       field: "addressCompany",
                        title: "Адрес ТЭК",
                        width: "200px",
 
-
                    },
                    {
-                       field: "",
+                       field: "contactPersonCompany",
                        title: "Контактное лицо",
                        width: "150px",
 
-
                    },
                    {
-                       field: "",
+                       field: "phoneContactPersonCompany",
                        title: "Телефон",
                        width: "80px",
 
-
+                   },
+                   {
+                       field: "driverFullName",
+                       title: "Водитель",
+                       width: "80px",
 
                    },
-                   { command: ["edit", {
+                   {
+                       field: "driverPhone",
+                       title: "Телефон водителя",
+                       width: "80px",
+
+                   }
+                   /*{ command: ["edit", {
                        name: "myDelete",
                        text: "Удалить"
-                   }], title: "&nbsp;", width: "350px" }
+                   }], title: "&nbsp;", width: "350px" }*/
                ]
            }).data("kendoGrid");
 

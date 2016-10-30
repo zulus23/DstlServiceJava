@@ -6,9 +6,11 @@ import com.avaje.ebean.Query;
 import com.avaje.ebean.SqlRow;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Singleton;
+
 import model.*;
 import org.joda.time.*;
 import org.joda.time.format.DateTimeFormat;
+
 import utils.DbUtils;
 
 import java.sql.Time;
@@ -189,7 +191,7 @@ public class HelperServices {
          TransportCompanyWithDriver transportCompanyWithDriver = new TransportCompanyWithDriver();
          transportCompanyWithDriver.setId(sqlRow.getString("id"));
          transportCompanyWithDriver.setCodeCompany(sqlRow.getString("vend_num"));
-         transportCompanyWithDriver.setNameCompany(sqlRow.getString("vend_name"));
+         transportCompanyWithDriver.setNameCompany(sqlRow.getString("name"));
          transportCompanyWithDriver.setAddressCompany(sqlRow.getString("address"));
          transportCompanyWithDriver.setContactPersonCompany(sqlRow.getString("contact"));
          transportCompanyWithDriver.setPhoneContactPersonCompany(sqlRow.getString("phone"));

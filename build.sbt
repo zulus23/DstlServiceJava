@@ -16,6 +16,7 @@ libraryDependencies ++= Seq(
   "org.pac4j"%"play-pac4j"%"2.5.0",
   "org.pac4j"%"pac4j-http"%"1.9.3",
   "org.pac4j"%"pac4j-jwt"%"1.9.3"  exclude("commons-io" , "commons-io"),
+  "io.javaslang" % "javaslang" % "2.0.4",
 
   "org.webjars" %% "webjars-play" % "2.5.0",
   "org.webjars" % "bootstrap" % "3.3.7",
