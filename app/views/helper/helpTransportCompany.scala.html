@@ -8,7 +8,7 @@
            </section>
 
            <div class="row clearfix">
-               <div class="col-lg-7">
+               <div class="col-lg-12">
                    <section class="well">
                        <h2 class="ra-well-title">Транспортные компании</h2>
 
@@ -20,7 +20,7 @@
                    </section>
                </div>
 
-               <div class="col-lg-5">
+      @*         <div class="col-lg-5">
                    <section class="well">
                        <h2 class="ra-well-title">Водители</h2>
 
@@ -31,7 +31,7 @@
                        </div>
                    </section>
 
-               </div>
+               </div>*@
            </div>
 
 
@@ -40,13 +40,13 @@
 
     <script>
 
-      /*      var dataSourceDB = new kendo.data.DataSource({
+            var dataSourceDB = new kendo.data.DataSource({
                 serverAggregates: true,
                 transport: {
                     read: function(options) {
                         $.ajax({
                             type: "GET",
-                            url: "api/normloads",
+                            url: "api/transport",
                             contentType: "application/json; charset=utf-8",
                             dataType: 'json',
                             @*data:{dateBegin: '@select.getDateBegin',dateEnd:'@select.getDateEnd', site:'@select.getEnterprise'},*@
@@ -55,7 +55,7 @@
                             }
                         });
                     },
-                    update: function(options){
+                    /*update: function(options){
                         console.log(options);
                         $.ajax({
                             type: "PATCH",
@@ -93,7 +93,7 @@
                                 options.success(data);
                             }
                         });
-                    }
+                    }*/
                 },
                 //batch: true,
                 schema: {
@@ -101,9 +101,9 @@
                         id:"id",
 
                         fields: {
-                            id:{type:"number",editable:false},
-                            enterprise: { defaultValue: { id: 0,name:''} },
-                            packageTime: { type: "number" },
+                            id:{type:"string",editable:false},
+                            transportCompany: { defaultValue: { id: 0,name:''} },
+                            fullName: { type: "number" },
                             commissionTime:{type:"number"},
                             placerTime:{type:"number"}
                         }

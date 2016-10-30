@@ -82,4 +82,23 @@ public class WorkTime  extends Model{
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof WorkTime)) return false;
+
+        WorkTime workTime = (WorkTime) o;
+
+        if (!id.equals(workTime.id)) return false;
+        return serviceDstl.equals(workTime.serviceDstl);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + serviceDstl.hashCode();
+        return result;
+    }
 }

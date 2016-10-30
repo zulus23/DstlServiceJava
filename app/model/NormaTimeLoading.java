@@ -75,5 +75,22 @@ public class NormaTimeLoading  extends Model{
         this.placerTime = placerTime;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof NormaTimeLoading)) return false;
 
+        NormaTimeLoading that = (NormaTimeLoading) o;
+
+        if (!id.equals(that.id)) return false;
+        return enterprise.equals(that.enterprise);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + enterprise.hashCode();
+        return result;
+    }
 }

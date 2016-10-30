@@ -28,6 +28,7 @@ import utils.DbUtils;
 import static org.bouncycastle.asn1.x500.style.RFC4519Style.c;
 import static play.test.Helpers.*;
 import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
 
 
 /**
@@ -43,7 +44,7 @@ public class ApplicationTest {
 
     public void startApp() throws Exception {
         Map<String, String> settings = new HashMap<String, String>();
-        settings.put("db.default.driver", "org.h2.Driver");
+        settings.put("db.default.driver", "org.h2.DriverTransportCompany");
         settings.put("db.default.user", "sa");
         settings.put("db.default.password", "");
         settings.put("db.default.url", "jdbc:h2:mem:play-test-351881363;MODE=MySQL"); // TODO: use config for url
@@ -89,7 +90,7 @@ public class ApplicationTest {
 
         return EbeanServerFactory.create(config);
     }
-    public EbeanServer getObjectLocal() throws Exception {
+    public EbeanServer getObjectLocal() {
 
         ServerConfig config = new ServerConfig();
         config.setName("default");
@@ -137,6 +138,15 @@ public class ApplicationTest {
         assertEquals("SL_SPB",DbUtils.enterpriseFromUser("ЗАО ГОТЭК-СЕВЕРО-ЗАПАД").getNameInDb());
     }
 
+    @Test
+    public void selectDriverWithTransportCompony(){
+        getObjectLocal();
+        HelperServices helperServices = new HelperServices();
+        assertNotEquals(0,helperServices.driverTransportCompanyList().size());
+        assertEquals("П004641",helperServices.driverTransportCompanyList().stream().filter(e -> e.getCodeCompany().equals("П004641")).findFirst().get().getCodeCompany());
+
+
+    }
 
 
     @Test

@@ -45,3 +45,12 @@ CREATE TABLE GTK_DSTL_WorkTime (
 
 ALTER TABLE GTK_DSTL_WorkTime ADD CONSTRAINT FK_constraint_IdServiceDstl foreign key (IdServiceDstl) REFERENCES GTK_DSTL_Enterprise (ID);
 CREATE INDEX IX_GTK_DSTL_WorkTime_IdServiceDstl on GTK_DSTL_WorkTime (IdServiceDstl);
+
+
+CREATE VIEW GTK_ALL_CAR
+AS
+  SELECT 'ПРИНТ' AS Enterprise,v.vend_num ,v.name,SL_Print.dbo.GTKFormatAddress(v.vend_num,0,'vendaddr') AS address,
+    vd.contact,vd.phone,s.Driver,s.Phone AS driverPhone
+  FROM SL_Print.dbo.GTK_CAR_Sprav s
+    JOIN SL_Print.dbo.vendaddr v ON v.vend_num = s.Vend_Num
+    JOIN SL_Print.dbo.vendor vd ON vd.vend_num = v.vend_num

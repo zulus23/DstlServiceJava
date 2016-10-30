@@ -11,20 +11,13 @@ import org.joda.time.*;
 import org.joda.time.format.DateTimeFormat;
 import utils.DbUtils;
 
-import javax.inject.Inject;
 import java.sql.Time;
-import java.time.*;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
-import static com.avaje.ebean.Ebean.createSqlQuery;
 import static com.avaje.ebean.Ebean.find;
 import static java.util.stream.Collectors.toList;
-import static utils.DbUtils.connectToSLGotek;
 
 /**
  * Created by Zhukov on 22.10.2016.
@@ -174,4 +167,36 @@ public class HelperServices {
          Enterprise serviceDstl  = DbUtils.enterpriseFromUser(nameServiceDstl);
          return Ebean.createQuery(WorkTime.class).fetch("serviceDstl").where().eq("serviceDstl.id",serviceDstl.getId()).eq("id",id).delete();
     }
+
+    /* Транспортные компании и водители*/
+
+    public List<TransportCompanyWithDriver> driverTransportCompanyList(){
+
+        //String sqlsp = "exec dbo.gtk_rpt_logist_www :v_startdate, :v_enddate, :v_site,:v_type_rep";
+        /*List<DriverTransportCompany> result =   Ebean.createSqlQuery(sqlsp).setParameter("v_startdate",dateBegin)
+                .setParameter("v_enddate",dateEnd)
+                .setParameter("v_site",site)
+                .setParameter("v_type_rep",typeReport)
+                .findList().stream().map(this::mapSqlRowToReportPrecisionOrder).collect(toList());*/
+
+        return   Ebean.createSqlQuery("select * from GTK_ALL_CAR").findList()
+                .stream()
+                .map(this::mapSqlRowToTransportCompanyWithDriver)
+                .collect(toList());
+    }
+
+    private  TransportCompanyWithDriver mapSqlRowToTransportCompanyWithDriver(SqlRow sqlRow) {
+         TransportCompanyWithDriver transportCompanyWithDriver = new TransportCompanyWithDriver();
+         transportCompanyWithDriver.setId(sqlRow.getString("id"));
+         transportCompanyWithDriver.setCodeCompany(sqlRow.getString("vend_num"));
+         transportCompanyWithDriver.setNameCompany(sqlRow.getString("vend_name"));
+         transportCompanyWithDriver.setAddressCompany(sqlRow.getString("address"));
+         transportCompanyWithDriver.setContactPersonCompany(sqlRow.getString("contact"));
+         transportCompanyWithDriver.setPhoneContactPersonCompany(sqlRow.getString("phone"));
+         transportCompanyWithDriver.setDriverFullName(sqlRow.getString("driver"));
+         transportCompanyWithDriver.setDriverPhone(sqlRow.getString("driverPhone"));
+
+        return transportCompanyWithDriver;
+    }
+
 }
