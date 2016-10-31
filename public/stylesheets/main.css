@@ -92,4 +92,10 @@ span.k-picker-wrap.k-state-default{
 /*td.k-input.k-textbox{
 
 }*/
-
+/*#transportCompanyView
+{
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    height: 100%; !* DO NOT USE !important for setting the Grid height! *!
+}*/

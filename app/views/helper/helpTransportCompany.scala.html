@@ -2,12 +2,13 @@
 @(param: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: CommonProfile)
 @main(param) {
 
-       <div class="k-content wide">
-           <section class="well">
+       <div style="height: 90%; width: 100%;">
+           @*class="well"*@
+           <section >
                <h2>Справочник транспортных компаний</h2>
            </section>
-
-           <div class="row clearfix">
+           <div  id="transportCompanyView" style="height: 100%; width: 100%;"></div>
+         @*  <div class="row clearfix">
                <div class="col-lg-12">
                    <section class="well">
                        <h2 class="ra-well-title">Транспортные компании</h2>
@@ -18,7 +19,7 @@
                            </div>
                        </div>
                    </section>
-               </div>
+               </div>*@
 
       @*         <div class="col-lg-5">
                    <section class="well">
@@ -31,8 +32,8 @@
                        </div>
                    </section>
 
-               </div>*@
-           </div>
+               </div>
+           </div>*@
 
 
            </div>
@@ -137,7 +138,7 @@
                    mode: "inline",
                    confirmation: false
                },*/
-               height: '400px',
+              // height: '100%',
                sortable: true,
 
 
