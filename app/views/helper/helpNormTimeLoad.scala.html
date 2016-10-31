@@ -45,6 +45,11 @@
                             type: "DELETE",
                             url: "api/normload/"+options.data.id,
                             contentType: "application/json; charset=utf-8",
+                            beforeSend: function (request)
+                            {
+                                request.setRequestHeader( "token",userService.login());
+                            },
+
                             dataType: 'json',
                             data: kendo.stringify(options.data),
                             success: function(data) {
@@ -97,10 +102,19 @@
            var grid =  $("#gridNormTimeView").kendoGrid({
                toolbar: ["create"],
                dataSource: dataSourceDB,
-               editable: {
+               editable: function(){
+                   if(@isLoggedIn){
+                       return {
+                           mode: "inline",
+                           confirmation: false
+                       }
+                   } else {
+                       return false;
+                   }
+               }()/* if(@isLoggedIn){{
                    mode: "inline",
                    confirmation: false
-               },
+               } else false}*/,
              //  height: '300px',
                sortable: true,
 
@@ -143,7 +157,7 @@
 
 
                    },
-                   { command: ["edit", {
+                   { command:  ["edit", {
                        name: "myDelete",
                        text: "Удалить"
                    }], title: "&nbsp;", width: "350px" }
@@ -172,12 +186,14 @@
             $("#gridNormTimeView").on("click", ".k-grid-myDelete", function(e) {
                 e.preventDefault();
 
-                var command = $(this);
-                var cell = command.closest("td");
+                   var command = $(this);
+                   var cell = command.closest("td");
 
-                command.remove();
-                cell.append('<a class="k-button k-button-icontext k-grid-myConfirm" href="#"><span class="k-icon k-update"></span>Подтвердить</a>');
-                cell.append('<a class="k-button k-button-icontext k-grid-myCancel" href="#"><span class="k-icon k-cancel"></span>Отмена</a>');
+                   command.remove();
+                   cell.append('<a class="k-button k-button-icontext k-grid-myConfirm" href="#"><span class="k-icon k-update"></span>Подтвердить</a>');
+                   cell.append('<a class="k-button k-button-icontext k-grid-myCancel" href="#"><span class="k-icon k-cancel"></span>Отмена</a>');
+
+
             });
 
             $("#gridNormTimeView").on("click", ".k-grid-myConfirm", function(e){

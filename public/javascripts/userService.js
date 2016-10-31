@@ -6,9 +6,12 @@ var userService = (
        function(){
 
            var getJwt =  function (){
+               var token =""
                axios.get('api/jwt').then(function(response){
-                   console.log(response.data);
+
+                   token =  response.data;
                })
+              return token;
            }
            return {
                login:getJwt
