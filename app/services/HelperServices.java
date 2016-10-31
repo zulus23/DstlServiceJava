@@ -17,6 +17,7 @@ import java.sql.Time;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static com.avaje.ebean.Ebean.find;
 import static java.util.stream.Collectors.toList;
@@ -37,15 +38,14 @@ public class HelperServices {
     );
 
 
-    public List<Enterprise> listEnterprise() {
+    public List<Enterprise> listEnterprise(Optional<Enterprise> enterprise) {
         Query<Enterprise> enterpriseQuery = find(Enterprise.class);
 
-        if (enterpriseQuery.findList().size() > 0) {
-            return enterpriseQuery.findList();
-        } else {
+        if (enterpriseQuery.findList().size() == 0) {
             Ebean.saveAll(enterpriseList);
-            return enterpriseQuery.findList();
         }
+
+        return enterprise.map(e ->enterpriseQuery.where().eq("BelongToService",e.getId()).findList()).orElse(enterpriseQuery.findList());
 
     }
 
@@ -197,6 +197,7 @@ public class HelperServices {
          transportCompanyWithDriver.setPhoneContactPersonCompany(sqlRow.getString("phone"));
          transportCompanyWithDriver.setDriverFullName(sqlRow.getString("driver"));
          transportCompanyWithDriver.setDriverPhone(sqlRow.getString("driverPhone"));
+         transportCompanyWithDriver.setEnterpriseName(sqlRow.getString("EnterpriseName"));
 
         return transportCompanyWithDriver;
     }

@@ -8,6 +8,7 @@ create table gtk_dstl_enterprise (
   name                          varchar(255),
   sldb                          varchar(255),
   servicedstl                   bit default 0,
+  belongtoservice               integer,
   constraint pk_gtk_dstl_enterprise primary key (id)
 );
 

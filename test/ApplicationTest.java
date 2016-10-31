@@ -174,6 +174,7 @@ public class ApplicationTest {
     public void nameMustEquelEnterprise() throws Exception {
         getObjectLocal();
         assertEquals("SL_SPB",DbUtils.enterpriseFromUser("ЗАО ГОТЭК-СЕВЕРО-ЗАПАД").getNameInDb());
+        assertEquals("ЗАО ГОТЭК-ЦПУ",Optional.ofNullable(DbUtils.enterpriseFromUser("ЗАО ГОТЭК-ЦПУ").getBelongToService()));
     }
 
     @Test

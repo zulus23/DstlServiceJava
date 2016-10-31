@@ -106,6 +106,7 @@
                         fields: {
                             id:{type:"string",editable:false},
                             nameCompany: { type:"string" },
+                            enterpriseName:{type:"string" },
                             codeCompany:{type:"string"},
                             fullName: { type: "string" },
                             addressCompany:{type:"string"},
@@ -152,6 +153,14 @@
                    });
                },
                columns: [
+                   {
+                       field: "enterpriseName",
+                       title: "Предприятие",
+                       width: "100px",
+                       filterable: { multi: true, search: true, search: true }
+                       // editor: enterpriseDropDownEditor, template: "#=enterprise.name#"
+
+                   },
                    {
                        field: "nameCompany",
                        title: "Наименование ТЭК",

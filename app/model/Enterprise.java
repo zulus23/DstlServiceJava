@@ -2,10 +2,8 @@ package model;
 
 import com.avaje.ebean.Model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Optional;
 
 /**
  * Created by Gukov on 05.08.2016.
@@ -24,11 +22,23 @@ public class Enterprise extends Model{
     @Column(name = "ServiceDSTL")
     private Boolean service;
 
+
+    @Column(name = "BelongToService")
+    private Integer belongToService;
+
     public Enterprise(int id, String name, String nameInDb, Boolean service) {
         this.id = id;
         this.name = name;
         this.nameInDb = nameInDb;
         this.service = service;
+    }
+
+    public Integer getBelongToService() {
+        return belongToService;
+    }
+
+    public void setBelongToService(Integer belongToService) {
+        this.belongToService = belongToService;
     }
 
     public Boolean isService() {
@@ -81,4 +91,6 @@ public class Enterprise extends Model{
     public String getNameInDb() {
         return nameInDb;
     }
+
+
 }

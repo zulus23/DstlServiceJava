@@ -15,7 +15,7 @@ public class TransportCompanyWithDriver {
     private String phoneContactPersonCompany;
 
 
-    private Enterprise serviceDstl;
+    private String enterpriseName;
 
 
     public String getId() {
@@ -82,11 +82,11 @@ public class TransportCompanyWithDriver {
         this.phoneContactPersonCompany = phoneContactPersonCompany;
     }
 
-    public Enterprise getServiceDstl() {
-        return serviceDstl;
+    public String getEnterpriseName() {
+        return enterpriseName;
     }
 
-    public void setServiceDstl(Enterprise serviceDstl) {
-        this.serviceDstl = serviceDstl;
+    public void setEnterpriseName(String enterpriseName) {
+        this.enterpriseName = enterpriseName;
     }
 }

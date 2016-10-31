@@ -9,6 +9,8 @@ import play.mvc.Http;
 import javax.inject.Inject;
 import java.util.Optional;
 
+import static javax.swing.text.html.CSS.getAttribute;
+
 /**
  * Created by Gukov on 26.10.2016.
  */
@@ -28,8 +30,7 @@ public class AuthService {
         return profileManager.get(true);
     }
     public String nameServiceDstl(){
-        CommonProfile commonProfile =  getUserInfo().orElse(null);
-        return commonProfile.getAttribute(AuthConstants.SERVICE_DSTL).toString();
+       return getUserInfo().map(e -> e.getAttribute(AuthConstants.SERVICE_DSTL).toString()).orElse("");
     }
 
 
