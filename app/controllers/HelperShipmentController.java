@@ -5,6 +5,7 @@ import auth.AuthService;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import model.NormaTimeLoading;
+import org.pac4j.play.java.Secure;
 import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
@@ -46,6 +47,7 @@ public class HelperShipmentController extends Controller {
     public Result update(Integer id){
         return ok(Json.toJson(helperServices.updateNormaTimeLoading(request().body().asJson())));
     }
+    @Secure(clients = "HeaderClient")
     public Result delete(Integer id){
 
         return ok(Json.toJson(helperServices.deleteNormaTimeLoading(id)));

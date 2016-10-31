@@ -47,7 +47,7 @@
                             contentType: "application/json; charset=utf-8",
                             beforeSend: function (request)
                             {
-                                token = userService.login()
+                                console.log('beforeSend '+request);
                                 request.setRequestHeader( "token",token);
                             },
 
@@ -55,7 +55,12 @@
                             data: kendo.stringify(options.data),
                             success: function(data) {
                                 options.success(data);
-                            }
+                            },
+                            error: function (request, status, error) {
+                                    console.log('error '+error);
+                                $("#gridNormTimeView").data("kendoGrid").dataSource.fetch();
+
+                             }
                         });
                     },
                     create: function(options){
@@ -103,7 +108,10 @@
            var grid =  $("#gridNormTimeView").kendoGrid({
                toolbar: ["create"],
                dataSource: dataSourceDB,
-               editable: function(){
+               editable: {
+                   mode: "inline",
+                   confirmation: false
+               }/*function(){
                    if(@isLoggedIn){
                        return {
                            mode: "inline",
@@ -112,10 +120,7 @@
                    } else {
                        return false;
                    }
-               }()/* if(@isLoggedIn){{
-                   mode: "inline",
-                   confirmation: false
-               } else false}*/,
+               }()*/,
              //  height: '300px',
                sortable: true,
 
@@ -206,7 +211,11 @@
                 e.preventDefault();
                 grid.refresh();
             })
-      var token  = userService.login();
+
+       var token = "";
+       userService.login(function(response){
+           token =  response.data;
+       });
 
    </script>
 
