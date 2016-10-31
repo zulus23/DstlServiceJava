@@ -47,7 +47,8 @@
                             contentType: "application/json; charset=utf-8",
                             beforeSend: function (request)
                             {
-                                request.setRequestHeader( "token",userService.login());
+                                token = userService.login()
+                                request.setRequestHeader( "token",token);
                             },
 
                             dataType: 'json',
@@ -205,7 +206,7 @@
                 e.preventDefault();
                 grid.refresh();
             })
-
+      var token  = userService.login();
 
    </script>
 
