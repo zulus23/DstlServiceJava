@@ -66,12 +66,14 @@ span.k-picker-wrap.k-state-default{
     margin-left: 5px;
     margin-top: 8px;
 }
+
 label#labelPlanShipmentDay.pull-left {
     padding-top: 15px;
     padding-left: 15px;
 }
 button#bSavePlan.k-button.k-state-default,button#bCancelPlan.k-button.k-state-default,
 button#bExportPlan.k-button.k-state-default,
+
 button#bExportJournalPlan.k-button.k-state-default{
     margin-left: 1px;
     margin-top: 8px;
@@ -85,10 +87,7 @@ div.k-content.wide{
 div.col-lg-5, div.col-lg-7 {
     padding-right: 0px;
 }
-span.k-picker-wrap.k-state-default{
-    margin-left: 0px;
-    margin-top: 0px;
-}
+
 /*td.k-input.k-textbox{
 
 }*/

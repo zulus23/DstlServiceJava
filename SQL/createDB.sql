@@ -47,6 +47,59 @@ ALTER TABLE GTK_DSTL_WorkTime ADD CONSTRAINT FK_constraint_IdServiceDstl foreign
 CREATE INDEX IX_GTK_DSTL_WorkTime_IdServiceDstl on GTK_DSTL_WorkTime (IdServiceDstl);
 
 
+CREATE TABLE  GTK_DSTL_PlanLoadDay(
+  ID                            integer identity(1,1) not null,
+  DatePLan                      DATE,
+  IdEnterprise                  INTEGER NOT NULL,
+
+  DateDeliveryDispatcher      DATE,
+  DateDeliveryFact            DATE,
+  DeviationDelivery            VARCHAR(50),
+  OnStore                       BIT, -- На складе
+  EnterToStore                  DATETIME,
+  PlaceShipment                 VARCHAR(10),
+  StatusDispatcher             VARCHAR(20),
+  NumberOrderDispatcher        VARCHAR(20),
+  DateCreateDispatcher         DATETIME,
+  Co_num                       VARCHAR(25),
+  Co_line                      VARCHAR(25),
+  Item                         VARCHAR(25),
+  Co_Name                      VARCHAR(255),
+  Грузополучатель              VARCHAR(25),
+  PlaceDelivery                VARCHAR(25),
+  Co_Capacity                  INTEGER,
+  SizePallet                   VARCHAR(50),
+  KindPackage                  VARCHAR(50),
+  CountPlace                   INTEGER,
+
+  TypeTransport                VARCHAR(50),
+  TimeForLoading               INTEGER,
+  DeliveryCompanyPlan          VARCHAR(50),
+  DeliveryCompanyFact          VARCHAR(50),
+  CostDelivery                 DECIMAL(15,3),
+  TimeLoading                  TIME,
+  BackManager                  VARCHAR(50),
+  Note                         VARCHAR(255)
+)
+CREATE TABLE GTK_DSTL_PlanLoadDayDetail (
+   ID                          integer identity(1,1) not null,
+   IDPLAN                      INTEGER NOT NULL
+)
+ALTER TABLE GTK_DSTL_PlanLoadDayDetail ADD CONSTRAINT FK_Constraint_IDPLAN foreign key (IDPLAN) REFERENCES GTK_DSTL_PlanLoadDay (ID);
+
+
+
+
+GRANT SELECT ON dbo.GTK_DSTL_User TO report
+GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_Enterprise TO report
+GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_WorkTime TO report
+GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_NormaTimeLoading TO report
+
+
+
+
+
+
 CREATE VIEW GTK_ALL_CAR
 AS
   SELECT 'ПРИНТ' AS Enterprise,v.vend_num ,v.name,SL_Print.dbo.GTKFormatAddress(v.vend_num,0,'vendaddr') AS address,

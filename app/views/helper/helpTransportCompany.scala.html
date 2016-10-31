@@ -132,7 +132,7 @@
               // toolbar: ["create"],
                dataSource: dataSourceDB,
                pageable: true,
-
+               filterable: true,
 
                /*editable: {
                    mode: "inline",
@@ -155,7 +155,8 @@
                    {
                        field: "nameCompany",
                        title: "Наименование ТЭК",
-                       width: "200px"
+                       width: "200px",
+                       filterable: { multi: true, search: true, search: true }
                       // editor: enterpriseDropDownEditor, template: "#=enterprise.name#"
 
                    },
@@ -181,7 +182,7 @@
                        field: "driverFullName",
                        title: "Водитель",
                        width: "80px",
-
+                       filterable: { multi: true, search: true, search: true }
                    },
                    {
                        field: "driverPhone",
