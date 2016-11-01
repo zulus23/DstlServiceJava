@@ -2,8 +2,36 @@
 @import org.pac4j.core.profile.CommonProfile
 @(param: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: CommonProfile)
 @main(param) {
-<div class="k-content" style="height: 100%">
-    <div style="height:50px; width: 100%;">
+
+  @*  <div style="height:50px; width: 100%;">
+        <div class="row">
+            <div id="toolBarPlanDay" class="col-lg-5 col-md-10 col-sm-12">
+                <label id="labelPlanShipmentDay" for="planShipmentDay" class="pull-left">План на: </label>
+                <section id="planShipmentDay1" >
+                    <input id="planShipmentDay"  type="date">
+
+                    <button id="bSavePlan" class="k-button k-state-default red-tooltip red-tooltip"
+                    data-toggle="tooltip" data-placement="bottom"
+                    title="Сохранить план"><i class="fa fa-lg fa-floppy-o" aria-hidden="true"></i></button>
+                    <button id="bCancelPlan" class="k-button k-state-default red-tooltip"
+                    data-toggle="tooltip" data-placement="bottom"
+                    title="Отменить изменения"><i class="fa fa-lg fa-times" aria-hidden="true"></i></button>
+                    <button id="bExportPlan" class="k-button k-state-default red-tooltip"
+                    data-toggle="tooltip" data-placement="bottom"
+                    title="Экспортировать план на сутки(Еxcel)">
+                        <i class="fa fa-lg fa-download fa-rotate-90" aria-hidden="true"></i></button>
+                    <button id="bExportJournalPlan" class="k-button k-state-default red-tooltip"
+                    data-toggle="tooltip" data-placement="bottom"
+                    title="Экспортировать журнал отгрузок(Еxcel)"><i class="fa fa-lg fa-download fa-rotate-270" aria-hidden="true"></i></button>
+                </section>
+
+            </div>
+
+        </div>
+    </div>*@
+
+<div class="k-content " style="height: 100%">
+    <div class="nav" style="height:50px; width: 100%;">
         <div class="row">
             <div id="toolBarPlanDay" class="col-lg-5 col-md-10 col-sm-12">
                 <label id="labelPlanShipmentDay" for="planShipmentDay" class="pull-left">План на: </label>
@@ -29,14 +57,16 @@
 
         </div>
     </div>
-   @* <div id="planShipmentSplitter">
+    <div id="planShipmentSplitter">
         <div id="planShipmentByDay" >
           @planshipment.plandays()
-        </div>*@
-        <div id="journalShipment" >
-           @planshipment.journalshipment()
         </div>
-   @* </div>*@
+        <div id="journalShipment" >
+
+              @planshipment.journalshipment()
+
+        </div>
+    </div>
 
     </div>
 
@@ -48,7 +78,7 @@
                     panes: [
                         {collapsible: false},
                         {collapsible: false, size: "60%"},
-                        {collapsible: false, resizable: false, size: "350"}
+                        {collapsible: false, resizable: true, size: "40%"}
                     ]
                 });
                 kendo.culture("ru-RU");

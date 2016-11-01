@@ -71,7 +71,7 @@
 
 
 
-        $("#journalGridView").kendoGrid({
+      var journalGrid =    $("#journalGridView").kendoGrid({
 
             dataSource: dataSourceDBPlanDay,
              height: '100%',
@@ -287,6 +287,46 @@
 
 
             ]
-        });
+        }).data("kendoGrid");
         /* ======================================================================================= */
+        $(journalGrid.element).kendoDraggable({
+            filter: "tr",
+            hint: function (e) {
+                console.log("------------------------");
+                var item = $('<div class="k-grid k-widget" style="background-color: DarkOrange; color: black;"><table><tbody><tr>' + e.html() + '</tr></tbody></table></div>');
+                return item;
+            },
+            group: "gridGroupJournal",
+        });
+
+
+        $(planGrid.element).kendoDraggable({
+            filter: "tr",
+            hint: function (e) {
+                var item = $('<div class="k-grid k-widget" style="background-color: MediumVioletRed; color: black;"><table><tbody><tr>' + e.html() + '</tr></tbody></table></div>');
+                return item;
+            },
+            group: "gridGroupPlan",
+        });
+        planGrid.table.kendoDropTarget({
+            drop: function (e) {
+                console.log("===============");
+                var dataItem = dataSourceDBPlanDay.getByUid(e.draggable.currentTarget.data("uid"));
+               /* dataSource2.remove(dataItem);
+                dataSource1.add(dataItem);*/
+            },
+            group: "gridGroupJournal",
+        });
+
+        journalGrid.table.kendoDropTarget({
+            drop: function (e) {
+                console.log("++++++++++++++++++++++++++");
+               // var dataItem = dataSource1.getByUid(e.draggable.currentTarget.data("uid"));
+                /*dataSource1.remove(dataItem);
+                dataSource2.add(dataItem);*/
+            },
+            group: "gridGroupPlan",
+        });
+
+
 </script>
