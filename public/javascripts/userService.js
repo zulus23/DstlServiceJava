@@ -10,7 +10,7 @@ var userService = (
 
            }
            return {
-               login:getJwt
+               token:getJwt
 
            }
        }

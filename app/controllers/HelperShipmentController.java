@@ -41,9 +41,12 @@ public class HelperShipmentController extends Controller {
         return ok(Json.toJson(helperServices.normaTimeLoadingList()));
     }
 
+    @Secure(clients = "HeaderClient")
     public Result create(){
         return ok(Json.toJson(helperServices.saveNormaTimeLoading(request().body().asJson())));
     }
+
+    @Secure(clients = "HeaderClient")
     public Result update(Integer id){
         return ok(Json.toJson(helperServices.updateNormaTimeLoading(request().body().asJson())));
     }

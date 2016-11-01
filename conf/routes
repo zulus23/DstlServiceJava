@@ -10,6 +10,12 @@ GET         /transports                  controllers.HelperTransportCompanyContr
 GET         /deviation                   controllers.HelperDeviationController.show()
 GET         /worktime                    controllers.HelperWorkTimeController.show()
 
+
+
+#Журнал отгрузок
+GET         /api/journalship               controllers.JournalShipmentController.index()
+
+
 #Норма времени погрузки
 GET         /normtime                    controllers.HelperShipmentController.show()
 GET         /api/normloads               controllers.HelperShipmentController.index()

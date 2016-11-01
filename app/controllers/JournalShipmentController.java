@@ -7,8 +7,10 @@ import org.pac4j.core.profile.ProfileManager;
 import org.pac4j.play.PlayWebContext;
 import org.pac4j.play.java.Secure;
 import org.pac4j.play.store.PlaySessionStore;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
+import services.PlanDayService;
 
 import javax.inject.Inject;
 
@@ -30,6 +32,9 @@ public class JournalShipmentController extends Controller {
     @Inject
     private AuthService authService;
 
+    @Inject
+    private PlanDayService planDayService;
+
     /*@Inject
     private PlaySessionStore playSessionStore;
 
@@ -47,8 +52,14 @@ public class JournalShipmentController extends Controller {
 */
 
 
-    @Secure(clients = "ServiceDstlFormClient")
+   // @Secure(clients = "ServiceDstlFormClient")
     public Result show() {
         return ok(views.html.planShipment.render("",webJarAssets, authService.isLoggedIn(),authService.getUserInfo().orElse(null)));
     }
+
+    public Result index(){
+        return ok(Json.toJson(planDayService.journalShipmentList()));
+    }
+
+
 }

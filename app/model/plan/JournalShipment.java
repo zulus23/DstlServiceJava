@@ -1,32 +1,39 @@
-package model;
+package model.plan;
+
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
- * Created by Zhukov on 22.10.2016.
+ * Created by Gukov on 01.11.2016.
  */
 public class JournalShipment {
+
     private Long id;
+    private String senderEnterprise;
     private String kindShipment;
     private String numberDispatcher;
-    private Date dateCreateDispatcher;
-    private Date dateShipDispatcher;
-    private Date dateDeliveryDispatcher;
+    private Boolean inPlanDay;
+    private String dateCreateDispatcher;
+    private String dateShipmentDispatcher;
+    private String dateDeliveryDispatcher;
     private Boolean existInStore;
-    private Date dateToStore;
+    private String dateToStore;
     private String placeLoading;
     private String statusDispatcher;
     private String numberOrder;
     private String numberItem;
     private String nameOrder;
-    /*Грузополучатель*/
-    private String consignee;
+    private String nameCustomer;
+    private String codeCustomer;
+    //private String consignee; //грузополучатель
     private String placeDelivery;
     private Integer sizeOrder;
     private String sizePallet;
     private String packingMethod;
     private Integer countPlace;
-    private Integer sizeOrder1;
+    private Integer capacityOrder;
     private String typeTransport;
     private String managerBackOffice;
     private String note;
@@ -38,6 +45,14 @@ public class JournalShipment {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getSenderEnterprise() {
+        return senderEnterprise;
+    }
+
+    public void setSenderEnterprise(String senderEnterprise) {
+        this.senderEnterprise = senderEnterprise;
     }
 
     public String getKindShipment() {
@@ -56,27 +71,35 @@ public class JournalShipment {
         this.numberDispatcher = numberDispatcher;
     }
 
-    public Date getDateCreateDispatcher() {
+    public Boolean getInPlanDay() {
+        return inPlanDay;
+    }
+
+    public void setInPlanDay(Boolean inPlanDay) {
+        this.inPlanDay = inPlanDay;
+    }
+
+    public String getDateCreateDispatcher() {
         return dateCreateDispatcher;
     }
 
-    public void setDateCreateDispatcher(Date dateCreateDispatcher) {
+    public void setDateCreateDispatcher(String dateCreateDispatcher) {
         this.dateCreateDispatcher = dateCreateDispatcher;
     }
 
-    public Date getDateShipDispatcher() {
-        return dateShipDispatcher;
+    public String getDateShipmentDispatcher() {
+        return dateShipmentDispatcher;
     }
 
-    public void setDateShipDispatcher(Date dateShipDispatcher) {
-        this.dateShipDispatcher = dateShipDispatcher;
+    public void setDateShipmentDispatcher(String dateShipmentDispatcher) {
+        this.dateShipmentDispatcher = dateShipmentDispatcher;
     }
 
-    public Date getDateDeliveryDispatcher() {
+    public String getDateDeliveryDispatcher() {
         return dateDeliveryDispatcher;
     }
 
-    public void setDateDeliveryDispatcher(Date dateDeliveryDispatcher) {
+    public void setDateDeliveryDispatcher(String dateDeliveryDispatcher) {
         this.dateDeliveryDispatcher = dateDeliveryDispatcher;
     }
 
@@ -88,11 +111,11 @@ public class JournalShipment {
         this.existInStore = existInStore;
     }
 
-    public Date getDateToStore() {
+    public String getDateToStore() {
         return dateToStore;
     }
 
-    public void setDateToStore(Date dateToStore) {
+    public void setDateToStore(String dateToStore) {
         this.dateToStore = dateToStore;
     }
 
@@ -136,14 +159,30 @@ public class JournalShipment {
         this.nameOrder = nameOrder;
     }
 
-    public String getConsignee() {
+    public String getNameCustomer() {
+        return nameCustomer;
+    }
+
+    public void setNameCustomer(String nameCustomer) {
+        this.nameCustomer = nameCustomer;
+    }
+
+    public String getCodeCustomer() {
+        return codeCustomer;
+    }
+
+    public void setCodeCustomer(String codeCustomer) {
+        this.codeCustomer = codeCustomer;
+    }
+
+  /*  public String getConsignee() {
         return consignee;
     }
 
     public void setConsignee(String consignee) {
         this.consignee = consignee;
     }
-
+*/
     public String getPlaceDelivery() {
         return placeDelivery;
     }
@@ -184,12 +223,12 @@ public class JournalShipment {
         this.countPlace = countPlace;
     }
 
-    public Integer getSizeOrder1() {
-        return sizeOrder1;
+    public Integer getCapacityOrder() {
+        return capacityOrder;
     }
 
-    public void setSizeOrder1(Integer sizeOrder1) {
-        this.sizeOrder1 = sizeOrder1;
+    public void setCapacityOrder(Integer capacityOrder) {
+        this.capacityOrder = capacityOrder;
     }
 
     public String getTypeTransport() {
@@ -214,5 +253,21 @@ public class JournalShipment {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof JournalShipment)) return false;
+
+        JournalShipment that = (JournalShipment) o;
+
+        return getId().equals(that.getId());
+
+    }
+
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
     }
 }

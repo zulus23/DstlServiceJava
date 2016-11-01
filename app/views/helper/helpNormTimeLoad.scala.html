@@ -20,6 +20,7 @@
                             type: "GET",
                             url: "api/normloads",
                             contentType: "application/json; charset=utf-8",
+                            //beforeSend: setHeaderRequest,
                             dataType: 'json',
                             @*data:{dateBegin: '@select.getDateBegin',dateEnd:'@select.getDateEnd', site:'@select.getEnterprise'},*@
                             success: function(data) {
@@ -34,9 +35,15 @@
                             url: "api/normload/"+options.data.id,
                             contentType: "application/json; charset=utf-8",
                             dataType: 'json',
+                            beforeSend: setHeaderRequest,
                             data: kendo.stringify(options.data),
                             success: function(data) {
                                 options.success(data);
+                            },
+                            error: function (request, status, error) {
+
+                                $("#gridNormTimeView").data("kendoGrid").dataSource.fetch();
+
                             }
                         });
                     },
@@ -45,11 +52,12 @@
                             type: "DELETE",
                             url: "api/normload/"+options.data.id,
                             contentType: "application/json; charset=utf-8",
-                            beforeSend: function (request)
+                            beforeSend: setHeaderRequest,/*function (request)
                             {
-                                console.log('beforeSend '+request);
-                                request.setRequestHeader( "token",token);
-                            },
+                                if(!!token) {
+                                    request.setRequestHeader("token", token);
+                                }
+                            },*/
 
                             dataType: 'json',
                             data: kendo.stringify(options.data),
@@ -57,7 +65,7 @@
                                 options.success(data);
                             },
                             error: function (request, status, error) {
-                                    console.log('error '+error);
+
                                 $("#gridNormTimeView").data("kendoGrid").dataSource.fetch();
 
                              }
@@ -70,10 +78,15 @@
                             url: "api/normload",
                             contentType: "application/json; charset=utf-8",
                             dataType: 'json',
+                            beforeSend: setHeaderRequest,
                             data :kendo.stringify(options.data)
                             ,
                             success: function(data) {
                                 options.success(data);
+                            },
+                            error: function (request, status, error) {
+                                $("#gridNormTimeView").data("kendoGrid").dataSource.fetch();
+
                             }
                         });
                     }
@@ -94,8 +107,8 @@
                 },
 
                 change: function(e) {
-                    var data = this.data();
-                    console.log(data.length); // displays "77"
+
+
                 }
 
 
@@ -212,10 +225,16 @@
                 grid.refresh();
             })
 
-       var token = "";
-       userService.login(function(response){
+       var token;
+       userService.token(function(response){
            token =  response.data;
        });
+       function setHeaderRequest(request) {
+           if (!!token) {
+               request.setRequestHeader("token", token);
+           }
+       }
+
 
    </script>
 

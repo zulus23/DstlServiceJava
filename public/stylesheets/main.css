@@ -27,19 +27,19 @@ body{
 }
 
 
-#vertical,
-#horizontal
+#planShipmentSplitter
 {
     height:100%;
-}
-
-#vertical
-{
     border-width: 0;
 }
-#paneljournal{
+#journalShipment{
+    height: 100%;
+}
+
+#planShipmentByDay{
     padding-left: 0;
     padding-right: 0;
+    height: 100%;
 }
 
 .navbar-default .navbar-nav>li .k-widget {
