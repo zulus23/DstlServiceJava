@@ -168,7 +168,7 @@ public class ApplicationTest {
     public void createDeviationDelivery(){
         getObjectLocal();
         DeviationDelivery deviationDelivery = new DeviationDelivery();
-        deviationDelivery.setDecription("TEst");
+        deviationDelivery.setDescription("TEst");
         Ebean.save(deviationDelivery);
         assertNotEquals(-1,deviationDelivery.getId());
 
@@ -177,7 +177,7 @@ public class ApplicationTest {
     public void createDeviationShipment(){
         getObjectLocal();
         DeviationShipment deviationDelivery = new DeviationShipment();
-        deviationDelivery.setDecription("Тест отгрузкм");
+        deviationDelivery.setDescription("Тест отгрузкм");
         Ebean.save(deviationDelivery);
         assertNotEquals(-1,deviationDelivery.getId());
         //Ebean.delete(deviationDelivery);
