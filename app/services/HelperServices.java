@@ -38,14 +38,14 @@ public class HelperServices {
     );
 
 
-    public List<Enterprise> listEnterprise(Optional<Enterprise> enterprise) {
+    public List<Enterprise> listEnterprise(Optional<Enterprise> serviceDstl) {
         Query<Enterprise> enterpriseQuery = find(Enterprise.class);
 
         if (enterpriseQuery.findList().size() == 0) {
             Ebean.saveAll(enterpriseList);
         }
 
-        return enterprise.map(e ->enterpriseQuery.where().eq("BelongToService",e.getId()).findList()).orElse(enterpriseQuery.findList());
+        return serviceDstl.map(e ->enterpriseQuery.where().eq("BelongToService",e.getId()).findList()).orElse(enterpriseQuery.findList());
 
     }
 

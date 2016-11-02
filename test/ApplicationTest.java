@@ -10,6 +10,8 @@ import com.avaje.ebean.config.ServerConfig;
 import com.fasterxml.jackson.databind.JsonNode;
 import model.Enterprise;
 import model.WorkTime;
+import model.plan.PlanShipment;
+import model.plan.PlanShipmentItem;
 import org.avaje.datasource.DataSourceConfig;
 import org.junit.*;
 
@@ -24,6 +26,7 @@ import play.i18n.Lang;
 import play.libs.F;
 import play.libs.F.*;
 import play.twirl.api.Content;
+import services.DstlService;
 import services.HelperServices;
 import services.PlanDayService;
 import utils.DbUtils;
@@ -163,8 +166,16 @@ public class ApplicationTest {
     public void mustCreatePlanShipment(){
         getObjectLocal();
         PlanDayService planDayService = new PlanDayService();
-        assertNotNull(planDayService.createPlan(java.sql.Date.valueOf(LocalDate.now().plusDays(1)),"ЗАО ГОТЭК-ЦПУ"));
-
+        DstlService dstlService = new DstlService();
+        PlanShipment planShipment =  planDayService.createPlan(java.sql.Date.valueOf(LocalDate.now().plusDays(1)),"ЗАО ГОТЭК-ЦПУ");
+        assertNotNull(planShipment);
+        PlanShipmentItem planShipmentItem = new PlanShipmentItem();
+        planShipmentItem.setCodeCustomer("Test");
+        planShipmentItem.setSenderEnterprise(dstlService.getEnterprise("ГОТЭК"));
+        planShipment.getPlanShipmentItems().add(planShipmentItem);
+        Ebean.save(planShipment);
+        assertNotEquals(0,planShipment.getPlanShipmentItems().size());
+        assertEquals(planShipment.getId(),planShipment.getPlanShipmentItems().get(0).getPlanShipment().getId());
     }
 
 

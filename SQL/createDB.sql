@@ -67,7 +67,7 @@ CREATE INDEX IX_GTK_DSTL_PlanShipment_IdServiceDate ON GTK_DSTL_PlanShipment (Id
 
 CREATE TABLE  GTK_DSTL_PlanShipmentItem(
   ID                          integer identity(1,1) not null PRIMARY KEY ,
-  IDPLAN                      INTEGER NOT NULL,
+  IdPlan                      INTEGER NOT NULL,
   IdEnterprise                INTEGER NOT NULL,
   TypeShipment                VARCHAR(50),
   PlanLoad                    INTEGER,
@@ -87,6 +87,7 @@ CREATE TABLE  GTK_DSTL_PlanShipmentItem(
   Item                         VARCHAR(25),
   Co_Name                       VARCHAR(255),
   Cust_Num                     VARCHAR(25),
+  Cust_Name                     VARCHAR(255),
   Cust_seq                     INTEGER,
   PlaceDelivery                VARCHAR(25),
   Co_Count                     INTEGER,
@@ -104,11 +105,15 @@ CREATE TABLE  GTK_DSTL_PlanShipmentItem(
   CostDelivery                 DECIMAL(15,3),
   TimeLoading                  TIME,
   BackManager                  VARCHAR(50),
-  Note                         VARCHAR(255)
+  Note                         VARCHAR(255),
+  CreatePlanItem               DATETIME2,
+  CreateBy                     INTEGER,
+  UpdatePlanItem               DATETIME2,
+  UpdateBy                     INTEGER
 )
 ALTER TABLE GTK_DSTL_PlanShipmentItem ADD CONSTRAINT FK_GTK_DSTL_PlanShipmentItemEnterprise foreign key (IdEnterprise)
 references GTK_DSTL_Enterprise (ID);
-ALTER TABLE GTK_DSTL_PlanShipmentItem ADD CONSTRAINT FK_GTK_DSTL_PlanShipmentItemPLan foreign key (IDPLAN)
+ALTER TABLE GTK_DSTL_PlanShipmentItem ADD CONSTRAINT FK_GTK_DSTL_PlanShipmentItemPLan foreign key (IdPlan)
 references GTK_DSTL_PlanShipment (ID);
 
 

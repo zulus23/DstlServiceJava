@@ -22,7 +22,7 @@ public class PlanShipment extends Model {
     private String name;
     @Column(name = "DatePlan")
     private Date datePlan;
-    @OneToMany(mappedBy = "PlanShipment")
+    @OneToMany(mappedBy = "planShipment",cascade = CascadeType.ALL)
     List<PlanShipmentItem> planShipmentItems;
     @ManyToOne
     @JoinColumn(name = "idService")
