@@ -2,21 +2,15 @@ package model;
 
 import com.avaje.ebean.Model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by Zhukov on 22.10.2016.
  */
+@Entity
+@DiscriminatorValue(value = "Отгрузка")
+public class DeviationShipment extends BaseDeviation {
 
 
-public class DeviationShipment extends Deviation {
-
-    public DeviationShipment(int id, String decription) {
-        super(id,decription,"Отгрузка");
-
-    }
 
 }

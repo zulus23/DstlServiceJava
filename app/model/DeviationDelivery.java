@@ -1,18 +1,14 @@
 package model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by Zhukov on 22.10.2016.
  */
+@Entity
+@DiscriminatorValue(value = "Доставка")
+public class DeviationDelivery extends BaseDeviation {
 
-public class DeviationDelivery extends Deviation {
 
-    public DeviationDelivery(int id, String decription) {
-        super(id,decription,"Доставка" );
-    }
 
 }

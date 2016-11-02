@@ -1,8 +1,11 @@
 package model;
 
+import javax.persistence.MappedSuperclass;
+
 /**
  * Created by Gukov on 28.10.2016.
  */
+
 public class Deviation {
     protected int id;
     protected String decription;

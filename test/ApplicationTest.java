@@ -8,6 +8,8 @@ import com.avaje.ebean.EbeanServerFactory;
 import com.avaje.ebean.SqlRow;
 import com.avaje.ebean.config.ServerConfig;
 import com.fasterxml.jackson.databind.JsonNode;
+import model.DeviationDelivery;
+import model.DeviationShipment;
 import model.Enterprise;
 import model.WorkTime;
 import model.plan.PlanShipment;
@@ -161,6 +163,26 @@ public class ApplicationTest {
         }
 
     }
+
+    @Test
+    public void createDeviationDelivery(){
+        getObjectLocal();
+        DeviationDelivery deviationDelivery = new DeviationDelivery();
+        deviationDelivery.setDecription("TEst");
+        Ebean.save(deviationDelivery);
+        assertNotEquals(-1,deviationDelivery.getId());
+
+    }
+    @Test
+    public void createDeviationShipment(){
+        getObjectLocal();
+        DeviationShipment deviationDelivery = new DeviationShipment();
+        deviationDelivery.setDecription("Тест отгрузкм");
+        Ebean.save(deviationDelivery);
+        assertNotEquals(-1,deviationDelivery.getId());
+        //Ebean.delete(deviationDelivery);
+    }
+
 
     @Test
     public void mustCreatePlanShipment(){

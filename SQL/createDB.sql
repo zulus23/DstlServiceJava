@@ -1,6 +1,5 @@
 /*Предприятия*/
 
-
 CREATE TABLE GTK_DSTL_Enterprise (
   ID           integer not null PRIMARY KEY IDENTITY ,
   Name         VARCHAR(50),
@@ -20,6 +19,14 @@ CREATE TABLE GTK_DSTL_User (
 ALTER TABLE GTK_DSTL_User ADD CONSTRAINT FK_GTK_DSTL_User_IdService foreign key (IdService)
 references GTK_DSTL_Enterprise (ID);
 CREATE INDEX IX_GTK_DSTL_User_IdService ON GTK_DSTL_User (IdService);
+
+CREATE TABLE GTK_DSTL_Deviation (
+  ID                            integer not null PRIMARY KEY IDENTITY ,
+  Description                   VARCHAR(100),
+  TypeDeviation                 VARCHAR(25)
+)
+
+
 
 CREATE TABLE GTK_DSTL_NormaTimeLoading (
   ID                            integer not null PRIMARY KEY IDENTITY ,
