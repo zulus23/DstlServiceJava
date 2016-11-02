@@ -14,7 +14,7 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name = "GTK_DSTL_PlanShipmentItem")
-public class PlanShipmentDetail {
+public class PlanShipmentItem {
     @Id
     @Column(name = "ID")
     private Long id;

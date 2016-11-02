@@ -3,7 +3,6 @@ package model.plan;
 import com.avaje.ebean.Model;
 import com.avaje.ebean.annotation.CreatedTimestamp;
 import com.avaje.ebean.annotation.UpdatedTimestamp;
-import com.avaje.ebean.annotation.WhenModified;
 import model.Enterprise;
 import model.UserDstl;
 
@@ -24,7 +23,7 @@ public class PlanShipment extends Model {
     @Column(name = "DatePlan")
     private Date datePlan;
     @Transient
-    List<PlanShipmentDetail> planShipmentDetails;
+    List<PlanShipmentItem> planShipmentItems;
     @ManyToOne
     @JoinColumn(name = "idService")
     private Enterprise serviceDstl;
@@ -66,12 +65,12 @@ public class PlanShipment extends Model {
         this.datePlan = datePlan;
     }
 
-    public List<PlanShipmentDetail> getPlanShipmentDetails() {
-        return planShipmentDetails;
+    public List<PlanShipmentItem> getPlanShipmentItems() {
+        return planShipmentItems;
     }
 
-    public void setPlanShipmentDetails(List<PlanShipmentDetail> planShipmentDetails) {
-        this.planShipmentDetails = planShipmentDetails;
+    public void setPlanShipmentItems(List<PlanShipmentItem> planShipmentItems) {
+        this.planShipmentItems = planShipmentItems;
     }
 
     public Enterprise getServiceDstl() {

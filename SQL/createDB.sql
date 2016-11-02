@@ -46,6 +46,24 @@ CREATE TABLE GTK_DSTL_WorkTime (
 ALTER TABLE GTK_DSTL_WorkTime ADD CONSTRAINT FK_constraint_IdServiceDstl foreign key (IdServiceDstl) REFERENCES GTK_DSTL_Enterprise (ID);
 CREATE INDEX IX_GTK_DSTL_WorkTime_IdServiceDstl on GTK_DSTL_WorkTime (IdServiceDstl);
 
+ALTER TABLE GTK_DSTL_PlanShipmentDetail ADD CONSTRAINT FK_Constraint_IDPLAN foreign key (IDPLAN) REFERENCES GTK_DSTL_PlanShipment (ID);
+CREATE TABLE GTK_DSTL_PlanShipment (
+   ID                          integer identity(1,1) not null PRIMARY KEY ,
+   IdService                INTEGER NOT NULL,
+   Name                        VARCHAR(100),
+   DatePlan                    DATE NOT NULL,
+   CreatePlan                  DATETIME2,
+   CreateBy                    INTEGER,
+   UpdatePlan                  DATETIME2,
+   UpdateBy                    INTEGER
+
+)
+ALTER TABLE GTK_DSTL_PlanShipment ADD CONSTRAINT FK_GTK_DSTL_PlanShipment foreign key (IdService)
+references GTK_DSTL_Enterprise (ID);
+ALTER  TABLE GTK_DSTL_PlanShipment ADD CONSTRAINT   UQ_GTK_DSTL_PlanShipment UNIQUE(IdService,DatePlan)
+
+--CREATE INDEX IX_GTK_DSTL_PlanShipment_IdService ON GTK_DSTL_PlanShipment (IdService);
+CREATE INDEX IX_GTK_DSTL_PlanShipment_IdServiceDate ON GTK_DSTL_PlanShipment (IdService,DatePlan);
 
 CREATE TABLE  GTK_DSTL_PlanShipmentItem(
   ID                          integer identity(1,1) not null,
@@ -88,24 +106,7 @@ CREATE TABLE  GTK_DSTL_PlanShipmentItem(
   BackManager                  VARCHAR(50),
   Note                         VARCHAR(255)
 )
-ALTER TABLE GTK_DSTL_PlanShipmentDetail ADD CONSTRAINT FK_Constraint_IDPLAN foreign key (IDPLAN) REFERENCES GTK_DSTL_PlanShipment (ID);
-CREATE TABLE GTK_DSTL_PlanShipment (
-   ID                          integer identity(1,1) not null PRIMARY KEY ,
-   IdService                INTEGER NOT NULL,
-   Name                        VARCHAR(100),
-   DatePlan                    DATE NOT NULL,
-   CreatePlan                  DATETIME2,
-   CreateBy                    INTEGER,
-   UpdatePlan                  DATETIME2,
-   UpdateBy                    INTEGER
 
-)
-ALTER TABLE GTK_DSTL_PlanShipment ADD CONSTRAINT FK_GTK_DSTL_PlanShipment foreign key (IdService)
-references GTK_DSTL_Enterprise (ID);
-ALTER  TABLE GTK_DSTL_PlanShipment ADD CONSTRAINT   UQ_GTK_DSTL_PlanShipment UNIQUE(IdService,DatePlan)
-
---CREATE INDEX IX_GTK_DSTL_PlanShipment_IdService ON GTK_DSTL_PlanShipment (IdService);
-CREATE INDEX IX_GTK_DSTL_PlanShipment_IdServiceDate ON GTK_DSTL_PlanShipment (IdService,DatePlan);
 
 
 
@@ -121,6 +122,7 @@ GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_Enterprise TO report
 GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_WorkTime TO report
 GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_NormaTimeLoading TO report
 GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_PlanShipment TO report
+GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_PlanShipmentItem TO report
 
 
 
