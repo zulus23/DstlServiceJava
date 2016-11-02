@@ -293,6 +293,7 @@
             filter: "tr",
             hint: function (e) {
                 console.log("------------------------");
+                console.log(planGrid)
                 var item = $('<div class="k-grid k-widget" style="background-color: DarkOrange; color: black;"><table><tbody><tr>' + e.html() + '</tr></tbody></table></div>');
                 return item;
             },
@@ -306,16 +307,17 @@
                 var item = $('<div class="k-grid k-widget" style="background-color: MediumVioletRed; color: black;"><table><tbody><tr>' + e.html() + '</tr></tbody></table></div>');
                 return item;
             },
-            group: "gridGroupPlan",
+            group: "gridGroupPlan"
         });
-        planGrid.table.kendoDropTarget({
+        $(planGrid.element).kendoDropTarget({
+
             drop: function (e) {
                 console.log("===============");
                 var dataItem = dataSourceDBPlanDay.getByUid(e.draggable.currentTarget.data("uid"));
                /* dataSource2.remove(dataItem);
                 dataSource1.add(dataItem);*/
             },
-            group: "gridGroupJournal",
+            group: "gridGroupJournal"
         });
 
         journalGrid.table.kendoDropTarget({
@@ -325,7 +327,7 @@
                 /*dataSource1.remove(dataItem);
                 dataSource2.add(dataItem);*/
             },
-            group: "gridGroupPlan",
+            group: "gridGroupPlan"
         });
 
 
