@@ -66,7 +66,7 @@ ALTER  TABLE GTK_DSTL_PlanShipment ADD CONSTRAINT   UQ_GTK_DSTL_PlanShipment UNI
 CREATE INDEX IX_GTK_DSTL_PlanShipment_IdServiceDate ON GTK_DSTL_PlanShipment (IdService,DatePlan);
 
 CREATE TABLE  GTK_DSTL_PlanShipmentItem(
-  ID                          integer identity(1,1) not null,
+  ID                          integer identity(1,1) not null PRIMARY KEY ,
   IDPLAN                      INTEGER NOT NULL,
   IdEnterprise                INTEGER NOT NULL,
   TypeShipment                VARCHAR(50),
@@ -106,6 +106,10 @@ CREATE TABLE  GTK_DSTL_PlanShipmentItem(
   BackManager                  VARCHAR(50),
   Note                         VARCHAR(255)
 )
+ALTER TABLE GTK_DSTL_PlanShipmentItem ADD CONSTRAINT FK_GTK_DSTL_PlanShipmentItemEnterprise foreign key (IdEnterprise)
+references GTK_DSTL_Enterprise (ID);
+ALTER TABLE GTK_DSTL_PlanShipmentItem ADD CONSTRAINT FK_GTK_DSTL_PlanShipmentItemPLan foreign key (IDPLAN)
+references GTK_DSTL_PlanShipment (ID);
 
 
 
