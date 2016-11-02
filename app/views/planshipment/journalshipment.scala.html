@@ -292,8 +292,7 @@
         $(journalGrid.element).kendoDraggable({
             filter: "tr",
             hint: function (e) {
-                console.log("------------------------");
-                console.log(planGrid)
+
                 var item = $('<div class="k-grid k-widget" style="background-color: DarkOrange; color: black;"><table><tbody><tr>' + e.html() + '</tr></tbody></table></div>');
                 return item;
             },
@@ -312,7 +311,7 @@
         $(planGrid.element).kendoDropTarget({
 
             drop: function (e) {
-                console.log("===============");
+
                 var dataItem = dataSourceDBPlanDay.getByUid(e.draggable.currentTarget.data("uid"));
                 console.log(dataItem);
                /* dataSource2.remove(dataItem);
@@ -323,13 +322,40 @@
 
         journalGrid.table.kendoDropTarget({
             drop: function (e) {
-                console.log("++++++++++++++++++++++++++");
+
                // var dataItem = dataSource1.getByUid(e.draggable.currentTarget.data("uid"));
                 /*dataSource1.remove(dataItem);
                 dataSource2.add(dataItem);*/
             },
             group: "gridGroupPlan"
         });
-
+       var addToPlan = function(item){
+           return {
+               senderEnterprise ,
+               kindShipment ,
+               numberDispatcher: { type: "string" },
+               inPlanDay:{type:"boolean"},
+               dateCreateDispatcher:{type:"string"},
+               dateShipmentDispatcher:{type:"string"},
+               dateDeliveryDispatcher:{type:"string"},
+               existInStore:{type:"boolean"},
+               dateToStore:{type:"string"},
+               placeLoading:{type:"string"},
+               statusDispatcher:{type:"string"},
+               numberOrder:{type:"string"},
+               numberItem:{type:"string"},
+               nameOrder:{type:"string"},
+               nameCustomer:{type:"string"},
+               placeDelivery:{type:"string"},
+               sizeOrder:{type:"number"},
+               sizePallet:{type:"string"},
+               packingMethod:{type:"string"},
+               countPlace:{type:"number"},
+               capacityOrder:{type:"number"},
+               typeTransport:{type:"string"},
+               managerBackOffice:{type:"string"},
+               note:{type:"string"}
+           }
+       }
 
 </script>

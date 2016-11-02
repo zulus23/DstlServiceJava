@@ -1,7 +1,12 @@
 package services;
 
+import com.avaje.ebean.Ebean;
+import model.Enterprise;
 import model.plan.JournalShipment;
+import model.plan.PlanShipment;
+import utils.DbUtils;
 
+import javax.inject.Singleton;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -10,11 +15,17 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import static java.util.Optional.ofNullable;
 
 /**
  * Created by Gukov on 01.11.2016.
  */
+@Singleton
 public class PlanDayService {
+
+
 
     public List<JournalShipment> journalShipmentList(){
 
@@ -81,6 +92,26 @@ public class PlanDayService {
         return _journalShipments;
     }
 
+
+    public PlanShipment createPlan(Date datePlan,String nameServiceDstl){
+        Enterprise _enterprise = DbUtils.enterpriseFromUser(nameServiceDstl);
+       PlanShipment planShipment =  Optional.ofNullable(Ebean.createQuery(PlanShipment.class)
+                                 .where()
+                                 .eq("serviceDstl.id",_enterprise.getId())
+                                 .eq("datePlan",datePlan).findUnique())
+                 .orElseGet(() -> {
+                     PlanShipment _planShipment = new PlanShipment();
+                     _planShipment.setDatePlan(datePlan);
+                     _planShipment.setServiceDstl(_enterprise);
+                  //   _planShipment.setCreatePlan(Date.valueOf(LocalDate.now()));
+                     _planShipment.setName("No name");
+                     Ebean.save(_planShipment);
+                     return _planShipment;
+                 });
+
+
+       return planShipment;
+    }
 
 
 

@@ -5,7 +5,76 @@
 
 
 <script>
-        /* ========================================== Grid ======================================= */
+     var dataSourceDBPlanDay = new kendo.data.DataSource({
+         serverAggregates: true,
+         transport: {
+             read: function(options) {
+                 $.ajax({
+                     type: "GET",
+                     url: "api/planship",
+                     contentType: "application/json; charset=utf-8",
+                     //beforeSend: setHeaderRequest,
+                     dataType: 'json',
+                     @*data:{dateBegin: '@select.getDateBegin',dateEnd:'@select.getDateEnd', site:'@select.getEnterprise'},*@
+                     success: function(data) {
+                         options.success(data);
+                     }
+                 });
+             }
+         },
+         //batch: true,
+         schema: {
+             model: {
+                 id:"id",
+
+                 fields: {
+                     id:{type:"number",editable:false},
+                     idPlan:{},
+                     senderEnterprise: { type:"string"},
+                     kindShipment: { type:"string"},
+                     inPlanLoad:{type:"boolean"},
+                     dateShipmentDispatcher:{type:"string"},
+                     deviationShipment:{},
+                     dateDeliveryDispatcher:{type:"string"},
+                     dateDeliveryFact:{},
+                     deviationDelivery:{},
+                     existInStore:{type:"boolean"},
+                     dateToStore:{type:"string"},
+                     placeLoading:{type:"string"},
+                     statusDispatcher:{type:"string"},
+                     numberDispatcher: { type: "string" },
+                     dateCreateDispatcher:{type:"string"},
+                     numberOrder:{type:"string"},
+                     numberItem:{type:"string"},
+                     nameOrder:{type:"string"},
+                     nameCustomer:{type:"string"},
+                     placeDelivery:{type:"string"},
+                     sizeOrder:{type:"number"},
+                     sizePallet:{type:"string"},
+                     packingMethod:{type:"string"},
+                     countPlace:{type:"number"},
+                     capacityOrder:{type:"number"},
+                     typeTransport:{type:"string"},
+                     timeToLoad:{},
+                     transportCompanyPlan:{},
+                     transportCompanyFact:{},
+                     numberGate:{},
+                     deliveryDistance:{},
+                     costTrip:{},
+                     timeLoad:{},
+                     managerBackOffice:{type:"string"},
+                     note:{type:"string"}
+
+                 }
+             }
+         }
+
+     });
+
+
+
+
+     /* ========================================== Grid ======================================= */
 
       var planGrid = $("#plandayGrid").kendoGrid({
            // toolbar: ["excel"],
@@ -21,7 +90,7 @@
             },
             columns: [
                 {
-                    field: "",
+                    field: "senderEnterprise",
                     title: "Предприятие отправитель",
                     width: "70px",
                     headerAttributes: gridUtils.headerFormat,
@@ -29,7 +98,7 @@
                     groupable: false
                 },
                 {
-                    field: "",
+                    field: "kindShipment",
                     title: "Вид отгрузки",
                     width: "60px",
                     headerAttributes: gridUtils.headerFormat,
@@ -47,13 +116,13 @@
                     groupable: false
                 },
                 {
-                    field: "",
+                    field: "inPlanLoad",
                     title: "В плане погрузки",
                     width: "180px",
                     aggregates: ["count"],
                     headerAttributes: gridUtils.headerFormat,
-                    attributes: gridUtils.columnFormat,
-                    groupHeaderTemplate: "Клиент: #=value# : #=count#: (#= calcAll(data,field,value,count)#)"
+                    attributes: gridUtils.columnFormat
+
                 },
                 {
                     field: "",
@@ -61,9 +130,8 @@
                     width: "50px",
                     headerAttributes: gridUtils.headerFormat,
                     attributes: gridUtils.columnFormat,
-                    groupable: false,
-                    groupHeaderTemplate: "Месяц отгрузки: #=value# : (#= calcAll(data,field,value)#)"
-                    //groupHeaderTemplate: "Месяц отгрузки: #=value# : (#= count#)"
+                    groupable: false
+
                 },
                 {
                     field: "",

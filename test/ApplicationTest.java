@@ -1,3 +1,5 @@
+import java.sql.*;
+import java.time.LocalDate;
 import java.util.*;
 
 import com.avaje.ebean.Ebean;
@@ -23,6 +25,7 @@ import play.libs.F;
 import play.libs.F.*;
 import play.twirl.api.Content;
 import services.HelperServices;
+import services.PlanDayService;
 import utils.DbUtils;
 
 import static org.bouncycastle.asn1.x500.style.RFC4519Style.c;
@@ -155,6 +158,16 @@ public class ApplicationTest {
         }
 
     }
+
+    @Test
+    public void mustCreatePlanShipment(){
+        getObjectLocal();
+        PlanDayService planDayService = new PlanDayService();
+        assertNotNull(planDayService.createPlan(java.sql.Date.valueOf(LocalDate.now().plusDays(1)),"ЗАО ГОТЭК-ЦПУ"));
+
+    }
+
+
 
 
     @Test
