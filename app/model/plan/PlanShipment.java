@@ -22,7 +22,7 @@ public class PlanShipment extends Model {
     private String name;
     @Column(name = "DatePlan")
     private Date datePlan;
-    @Transient
+    @OneToMany(mappedBy = "PlanShipment")
     List<PlanShipmentItem> planShipmentItems;
     @ManyToOne
     @JoinColumn(name = "idService")

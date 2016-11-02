@@ -18,7 +18,7 @@ public class PlanShipmentItem {
     @Id
     @Column(name = "ID")
     private Long id;
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "IDPLAN")
     private PlanShipment planShipment;
     @ManyToOne
