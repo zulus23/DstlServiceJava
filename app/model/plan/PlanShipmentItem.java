@@ -1,5 +1,6 @@
 package model.plan;
 
+import com.avaje.ebean.Model;
 import com.avaje.ebean.annotation.CreatedTimestamp;
 import com.avaje.ebean.annotation.UpdatedTimestamp;
 import model.*;
@@ -14,7 +15,7 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name = "GTK_DSTL_PlanShipmentItem")
-public class PlanShipmentItem {
+public class PlanShipmentItem  extends Model {
     @Id
     @Column(name = "ID")
     private Long id;
