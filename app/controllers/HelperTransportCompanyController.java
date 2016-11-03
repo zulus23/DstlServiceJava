@@ -21,7 +21,7 @@ public class HelperTransportCompanyController extends Controller {
     private HelperServices helperServices;
 
   public Result show(){
-      return  ok(views.html.helper.helpTransportCompany.render("Транспортные компании",webJarAssets,authService.isLoggedIn(),authService.getUserInfo().orElse(null)));
+      return  ok(views.html.helper.helpTransportCompany.render("Транспортные компании",webJarAssets, authService.isLoggedIn(), authService.getUserInfo().orElse(null)));
   }
 
     public Result index(){

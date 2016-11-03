@@ -1,20 +1,12 @@
 package controllers;
 
 import auth.AuthService;
-import org.pac4j.core.config.Config;
-import org.pac4j.core.profile.CommonProfile;
-import org.pac4j.core.profile.ProfileManager;
-import org.pac4j.play.PlayWebContext;
-import org.pac4j.play.java.Secure;
-import org.pac4j.play.store.PlaySessionStore;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import services.PlanDayService;
 
 import javax.inject.Inject;
-
-import java.util.Optional;
 
 import static play.mvc.Results.ok;
 
@@ -54,7 +46,7 @@ public class JournalShipmentController extends Controller {
 
    // @Secure(clients = "ServiceDstlFormClient")
     public Result show() {
-        return ok(views.html.planShipment.render("",webJarAssets, authService.isLoggedIn(),authService.getUserInfo().orElse(null)));
+        return ok(views.html.planShipment.render("",webJarAssets, authService.isLoggedIn(), authService.getUserInfo().orElse(null)));
     }
 
     public Result index(){

@@ -1,10 +1,12 @@
 @import org.pac4j.core.profile.CommonProfile
-@(param: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: CommonProfile)
+@import auth.DstlProfile
+@(param: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: DstlProfile)
 @main(param) {
 
        <div class="k-content wide">
            <section class="well">
-               <h2>Справочник отклонений</h2>
+
+               <h2>Справочник отклонений @userInfo</h2>
            </section>
               <div id="gridDeviationView"></div>
        </div>

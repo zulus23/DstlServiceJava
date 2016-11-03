@@ -19,8 +19,7 @@ public class ApiController extends Controller {
     @Inject
     WebJarAssets webJarAssets;
 
-    @Inject
-    private PlaySessionStore playSessionStore;
+   
 
     @Inject
     private HelperServices helperServices;

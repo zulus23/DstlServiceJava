@@ -1,17 +1,14 @@
 package controllers;
 
+import auth.AuthService;
+import auth.DstlProfile;
 import auth.ServiceDstlFormClient;
 import modules.SecurityModule;
 import org.pac4j.core.config.Config;
-import org.pac4j.core.profile.CommonProfile;
-import org.pac4j.core.profile.ProfileManager;
 
-import org.pac4j.http.client.indirect.FormClient;
 import org.pac4j.jwt.config.encryption.SecretEncryptionConfiguration;
 import org.pac4j.jwt.config.signature.SecretSignatureConfiguration;
 import org.pac4j.jwt.profile.JwtGenerator;
-import org.pac4j.play.PlayWebContext;
-import org.pac4j.play.store.PlaySessionStore;
 import play.mvc.Controller;
 import play.mvc.Result;
 import services.HelperServices;
@@ -19,7 +16,6 @@ import services.HelperServices;
 
 import javax.inject.Inject;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -32,8 +28,11 @@ public class ApplicationController extends Controller {
     @Inject
     private Config config;
 
+   /* @Inject
+    private PlaySessionStore playSessionStore;*/
+
     @Inject
-    private PlaySessionStore playSessionStore;
+    private AuthService authService;
 
     @Inject
     WebJarAssets webJarAssets;
@@ -43,7 +42,7 @@ public class ApplicationController extends Controller {
 
 
 
-    private List<CommonProfile> getProfiles() {
+   /* private List<CommonProfile> getProfiles() {
         final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
         final ProfileManager<CommonProfile> profileManager = new ProfileManager(context);
         return profileManager.getAll(true);
@@ -55,18 +54,18 @@ public class ApplicationController extends Controller {
         return profileManager.isAuthenticated();
     }
 
-    private Optional<CommonProfile> getUserInfo(){
+    private Optional<DstlProfile> getUserInfo(){
         final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
-        final ProfileManager<CommonProfile> profileManager = new ProfileManager(context);
+        final ProfileManager<DstlProfile> profileManager = new ProfileManager(context);
         return profileManager.get(true);
-    }
+    }*/
     public  Result loginForm() {
         final ServiceDstlFormClient formClient = (ServiceDstlFormClient) config.getClients().findClient("ServiceDstlFormClient");
-        return ok(views.html.loginForm.render(formClient.getCallbackUrl(),webJarAssets,isLoggedIn(),getUserInfo().orElse(null), helperServices.serviceDstl()));
+        return ok(views.html.loginForm.render(formClient.getCallbackUrl(),webJarAssets,authService.isLoggedIn(),authService.getUserInfo().orElse(null), helperServices.serviceDstl()));
     }
 
     public Result jwt() {
-        final Optional<CommonProfile> profiles = getUserInfo();
+        final Optional<DstlProfile> profiles = authService.getUserInfo();
         final JwtGenerator generator = new JwtGenerator(new SecretSignatureConfiguration(SecurityModule.JWT_SALT), new SecretEncryptionConfiguration(SecurityModule.JWT_SALT));
         String token = "";
         if (profiles.isPresent()) {
@@ -78,7 +77,7 @@ public class ApplicationController extends Controller {
 
     public Result index() {
 
-        return ok(views.html.index.render("Your new application is ready.",webJarAssets,isLoggedIn(),getUserInfo().orElse(null)));
+        return ok(views.html.index.render("Your new application is ready.",webJarAssets,authService.isLoggedIn(),authService.getUserInfo().orElse(null)));
     }
 
 

@@ -1,6 +1,7 @@
 
-@import org.pac4j.core.profile.CommonProfile
-@(param: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: CommonProfile)
+
+@import auth.DstlProfile
+@(param: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: DstlProfile)
 @main(param) {
 
   @*  <div style="height:50px; width: 100%;">

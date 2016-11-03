@@ -1,5 +1,6 @@
 @import org.pac4j.core.profile.CommonProfile
-@(param: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: CommonProfile)
+@import auth.DstlProfile
+@(param: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: DstlProfile)
 @main(param) {
       <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/helper.css")">
        <div class="k-content wide">

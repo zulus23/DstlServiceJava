@@ -1,6 +1,7 @@
 @import org.pac4j.core.profile.CommonProfile
 @import model.Enterprise
-@(url: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: CommonProfile,listServiceDstl:List[Enterprise])
+@import auth.DstlProfile
+@(url: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: DstlProfile,listServiceDstl:List[Enterprise])
 @main("Вход в приложение") {
     <div id="login">
         <form class="form-vertical well well-raised clearfix" action="@url" method="POST">

@@ -1,14 +1,10 @@
 package controllers;
 
-import auth.AuthConstants;
 import auth.AuthService;
-import model.Enterprise;
-import org.pac4j.core.profile.CommonProfile;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import services.HelperServices;
-import utils.DbUtils;
 
 import javax.inject.Inject;
 
@@ -28,7 +24,7 @@ public class HelperWorkTimeController extends Controller {
 
 
     public Result show(){
-        return ok(views.html.helper.helperWorkTime.render("Рабочие время",webJarAssets,authService.isLoggedIn(),authService.getUserInfo().orElse(null)));
+        return ok(views.html.helper.helperWorkTime.render("Рабочие время",webJarAssets, authService.isLoggedIn(), authService.getUserInfo().orElse(null)));
     }
 
 
@@ -39,14 +35,14 @@ public class HelperWorkTimeController extends Controller {
 
     public Result create(){
 
-        return ok(Json.toJson(helperServices.saveWorkTime(request().body().asJson(),authService.nameServiceDstl())));
+        return ok(Json.toJson(helperServices.saveWorkTime(request().body().asJson(), authService.nameServiceDstl())));
     }
     public Result update(Integer id){
-        return ok(Json.toJson(helperServices.updateWorkTime(request().body().asJson(),authService.nameServiceDstl())));
+        return ok(Json.toJson(helperServices.updateWorkTime(request().body().asJson(), authService.nameServiceDstl())));
     }
     public Result delete(Integer id){
 
-        return ok(Json.toJson(helperServices.deleteWorkTime(id,authService.nameServiceDstl())));
+        return ok(Json.toJson(helperServices.deleteWorkTime(id, authService.nameServiceDstl())));
     }
 
     public Result read(Integer id){
