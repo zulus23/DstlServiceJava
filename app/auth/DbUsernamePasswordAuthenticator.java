@@ -25,7 +25,7 @@ public class DbUsernamePasswordAuthenticator implements Authenticator<UsernamePa
 
 
     protected static final Logger logger = LoggerFactory.getLogger(DbUsernamePasswordAuthenticator.class);
-    private Database database;
+
     private Configuration configuration;
 
     @Inject
@@ -68,18 +68,24 @@ public class DbUsernamePasswordAuthenticator implements Authenticator<UsernamePa
     private boolean userExistInDb(String user,String password,String serviceName){
         Configuration _configuration= configuration.getConfig("login");
 
-        try {
+        try(Connection conn =  DriverManager.getConnection(_configuration.getString("url"),
+                _configuration.getString("username"),
+                _configuration.getString("password"));
+            PreparedStatement preparedStatement = conn.prepareStatement("select u.name ,u.password,e.name  from gtk_dstl.dbo.gtk_dstl_user u " +
+                    " join gtk_dstl_enterprise e on u.idService = e.id where u.Name = ? AND  u.Password = ? AND e.name = ?");) {
 
-            Connection conn =  DriverManager.getConnection(_configuration.getString("url"),
-                                                           _configuration.getString("username"),
-                                                           _configuration.getString("password"));
-            PreparedStatement preparedStatement = conn.prepareStatement("select u.name as 'userName',u.password,e.name as 'servicename' from gtk_dstl.dbo.gtk_dstl_user u " +
-                    " join gtk_dstl_enterprise e on u.idService = e.id where u.Name = ? AND  u.Password = ? AND e.name = ?");
+            /*preparedStatement.executeQuery("select u.name ,u.password,e.name  from gtk_dstl.dbo.gtk_dstl_user u " +
+                            " join gtk_dstl_enterprise e on u.idService = e.id where u.Name = ? AND  u.Password = ? AND e.name = ?");*/
+
             preparedStatement.setString(1,user);
             preparedStatement.setString(2,password);
             preparedStatement.setString(3,serviceName);
-            ResultSet resultSet =  preparedStatement.executeQuery();
-            return  resultSet.getRow()!= 0  ;
+            ResultSet  result = preparedStatement.executeQuery();
+            while ( result.next() ){
+               return true;
+            }
+
+            //return  resultSet.getRow()!= 0  ;
 
         } catch (SQLException e) {
             e.printStackTrace();

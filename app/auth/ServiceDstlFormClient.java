@@ -103,6 +103,9 @@ public class ServiceDstlFormClient extends IndirectClientV2<UsernamePasswordEnte
         } else {
             String redirectionUrl = CommonHelper.addParameter(this.loginUrl, this.usernameParameter, username);
             redirectionUrl = CommonHelper.addParameter(redirectionUrl, ERROR_PARAMETER, errorMessage);
+            String service = context.getRequestParameter(this.serviceDstlParameter).replace("+"," ");
+
+            redirectionUrl = CommonHelper.addParameter(redirectionUrl, "service",service);
             logger.debug("redirectionUrl: {}", redirectionUrl);
             logger.debug(message);
             return HttpAction.redirect(message, context, redirectionUrl);

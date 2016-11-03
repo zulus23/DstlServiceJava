@@ -9,16 +9,27 @@
                 <legend>Вход <small class="pull-right">Нужен логин? <a href="signup.html">Sign Up</a></small></legend>
                 @if(request().getQueryString("error")!= null){
                   <p class="bg-danger"><b>Ошибка.</b> Пользователь @request().getQueryString("username") с введенным паролем не существует</p>
+
                 }
                 <div class="control-group">
                     <label for="servicedstl" class="control-label">Предприятие</label>
                     <div class="controls">
                         <select id="servicedstl" class="input-full" name="servicedstl">
                            @for( i <-  0 to listServiceDstl.length -1 ){
-                              @if(i == 0 ) { <option selected>@listServiceDstl(i).getName()</option>
-                               } else {
-                                <option>@listServiceDstl(i).getName()</option>
+                             @if(request().getQueryString("service")!= null){
+                               @if(listServiceDstl(i).getName.equals(request().getQueryString("service"))){
+                                   <option selected>@listServiceDstl(i).getName()</option>
+                                 }else {
+                                   <option>@listServiceDstl(i).getName()</option>
                                }
+
+                             } else {
+                             @if(i == 0) {
+                               <option selected>@listServiceDstl(i).getName()</option>
+                             } else {
+                               <option>@listServiceDstl(i).getName()</option>
+                              }
+                             }
                            }
 
                         </select>
@@ -27,7 +38,11 @@
                 <div class="control-group">
                     <label for="email" class="control-label">Имя пользователя</label>
                     <div class="controls">
-                        <input type="text" id="email" name="username" class="input-full" autofocus="autofocus">
+                        @if(request().getQueryString("username")!= null){
+                         <input type="text" id="email" name="username" value='@request().getQueryString("username")' class="input-full" autofocus="autofocus">
+                         } else{
+                            <input type="text" id="email" name="username" class="input-full" autofocus="autofocus">
+                        }
                     </div>
                 </div>
 
