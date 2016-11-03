@@ -38,7 +38,7 @@ public class HelperWorkTimeController extends Controller {
     }
 
     public Result create(){
-        CommonProfile commonProfile =  authService.getUserInfo().orElse(null);
+
         return ok(Json.toJson(helperServices.saveWorkTime(request().body().asJson(),authService.nameServiceDstl())));
     }
     public Result update(Integer id){

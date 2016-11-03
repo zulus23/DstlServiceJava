@@ -17,7 +17,7 @@ import org.pac4j.core.util.CommonHelper;
 /**
  * Created by Zhukov on 25.10.2016.
  */
-public class ServiceDstlFormClient extends IndirectClientV2<UsernamePasswordEnterpriseCredentials, CommonProfile> {
+public class ServiceDstlFormClient extends IndirectClientV2<UsernamePasswordEnterpriseCredentials, DstlProfile> {
 
 
     private String loginUrl;

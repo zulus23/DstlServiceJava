@@ -24,9 +24,9 @@ public class AuthService {
         return profileManager.isAuthenticated();
     }
 
-    public Optional<CommonProfile> getUserInfo(){
+    public Optional<DstlProfile> getUserInfo(){
         final PlayWebContext context = new PlayWebContext(Http.Context.current(), playSessionStore);
-        final ProfileManager<CommonProfile> profileManager = new ProfileManager(context);
+        final ProfileManager<DstlProfile> profileManager = new ProfileManager(context);
         return profileManager.get(true);
     }
     public String nameServiceDstl(){

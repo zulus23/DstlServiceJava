@@ -34,7 +34,7 @@ public class DbUsernamePasswordAuthenticator implements Authenticator<UsernamePa
         if (CommonHelper.areNotEquals(username, password)) {
             throwsException("Username : '" + username + "' does not match password");
         }
-        final CommonProfile profile = new CommonProfile();
+        final DstlProfile profile = new DstlProfile();
         profile.setId(username);
         profile.addAttribute(Pac4jConstants.USERNAME, username);
         profile.addAttribute(AuthConstants.SERVICE_DSTL,service);
