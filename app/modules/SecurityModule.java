@@ -22,6 +22,7 @@ import org.pac4j.play.store.PlayCacheStore;
 import org.pac4j.play.store.PlaySessionStore;
 import play.Configuration;
 import play.Environment;
+import play.db.NamedDatabase;
 
 /**
  * Created by Zhukov on 23.10.2016.
@@ -41,7 +42,7 @@ public class SecurityModule extends AbstractModule {
     protected void configure() {
         bind(PlaySessionStore.class).to(PlayCacheStore.class);
 
-        ServiceDstlFormClient serviceDstlFormClient = new ServiceDstlFormClient("/loginForm", new DbUsernamePasswordAuthenticator());
+        ServiceDstlFormClient serviceDstlFormClient = new ServiceDstlFormClient("/loginForm", new DbUsernamePasswordAuthenticator(configuration));
        FormClient formClient =  new FormClient("/loginForm", new SimpleTestUsernamePasswordAuthenticator());
         //IndirectBasicAuthClient basicAuthClient = new IndirectBasicAuthClient(new SimpleTestUsernamePasswordAuthenticator());
 

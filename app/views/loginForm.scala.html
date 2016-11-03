@@ -7,6 +7,9 @@
         <form class="form-vertical well well-raised clearfix" action="@url" method="POST">
             <fieldset>
                 <legend>Вход <small class="pull-right">Нужен логин? <a href="signup.html">Sign Up</a></small></legend>
+                @if(request().getQueryString("error")!= null){
+                  <p class="bg-danger"><b>Ошибка.</b> Пользователь @request().getQueryString("username") с введенным паролем не существует</p>
+                }
                 <div class="control-group">
                     <label for="servicedstl" class="control-label">Предприятие</label>
                     <div class="controls">

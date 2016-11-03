@@ -1,21 +1,39 @@
 package auth;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.google.common.collect.ImmutableMap;
 import org.pac4j.core.context.Pac4jConstants;
 import org.pac4j.core.context.WebContext;
 import org.pac4j.core.credentials.authenticator.Authenticator;
 import org.pac4j.core.exception.CredentialsException;
 import org.pac4j.core.exception.HttpAction;
-import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.util.CommonHelper;
-import org.pac4j.http.credentials.authenticator.test.SimpleTestUsernamePasswordAuthenticator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import play.Configuration;
+import play.db.Database;
+import play.db.Databases;
+import play.libs.Json;
+
+import javax.inject.Inject;
+import java.sql.*;
 
 /**
  * Created by Zhukov on 24.10.2016.
  */
 public class DbUsernamePasswordAuthenticator implements Authenticator<UsernamePasswordEnterpriseCredentials> {
+
+
     protected static final Logger logger = LoggerFactory.getLogger(DbUsernamePasswordAuthenticator.class);
+    private Database database;
+    private Configuration configuration;
+
+    @Inject
+    public DbUsernamePasswordAuthenticator(Configuration configuration) {
+      super();
+      this.configuration = configuration;
+
+    }
 
     @Override
     public void validate(UsernamePasswordEnterpriseCredentials credentials, WebContext context) throws HttpAction {
@@ -31,8 +49,11 @@ public class DbUsernamePasswordAuthenticator implements Authenticator<UsernamePa
         if (CommonHelper.isBlank(password)) {
             throwsException("Password cannot be blank");
         }
-        if (CommonHelper.areNotEquals(username, password)) {
+        /*if (CommonHelper.areNotEquals(username, password)) {
             throwsException("Username : '" + username + "' does not match password");
+        }*/
+        if(!userExistInDb(username,password,service)){
+            throwsException("Ошибка. Пользователь : '" + username + "' с таким паролем отсутствует");
         }
         final DstlProfile profile = new DstlProfile();
         profile.setId(username);
@@ -43,5 +64,26 @@ public class DbUsernamePasswordAuthenticator implements Authenticator<UsernamePa
 
     protected void throwsException(final String message) {
         throw new CredentialsException(message);
+    }
+    private boolean userExistInDb(String user,String password,String serviceName){
+        Configuration _configuration= configuration.getConfig("login");
+
+        try {
+
+            Connection conn =  DriverManager.getConnection(_configuration.getString("url"),
+                                                           _configuration.getString("username"),
+                                                           _configuration.getString("password"));
+            PreparedStatement preparedStatement = conn.prepareStatement("select u.name as 'userName',u.password,e.name as 'servicename' from gtk_dstl.dbo.gtk_dstl_user u " +
+                    " join gtk_dstl_enterprise e on u.idService = e.id where u.Name = ? AND  u.Password = ? AND e.name = ?");
+            preparedStatement.setString(1,user);
+            preparedStatement.setString(2,password);
+            preparedStatement.setString(3,serviceName);
+            ResultSet resultSet =  preparedStatement.executeQuery();
+            return  resultSet.getRow()!= 0  ;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return  false;
     }
 }
