@@ -4,6 +4,9 @@
 @(param: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: DstlProfile)
 @main(param) {
 
+
+
+
   @*  <div style="height:50px; width: 100%;">
         <div class="row">
             <div id="toolBarPlanDay" class="col-lg-5 col-md-10 col-sm-12">
@@ -30,6 +33,7 @@
 
         </div>
     </div>*@
+
 
 <div class="k-content " style="height: 100%">
     <div class="nav" style="height:50px; width: 100%;">
@@ -64,33 +68,51 @@
         </div>
         <div id="journalShipment" >
 
-              @planshipment.journalshipment()
+          @planshipment.journalshipment()
 
         </div>
     </div>
 
     </div>
-
-
     <script>
             $(document).ready(function () {
+                /* ----------------------------------------------------------------------------*/
+
+                var datePlan;
+
+
                 $("#planShipmentSplitter").kendoSplitter({
                     orientation: "vertical",
                     panes: [
                         {collapsible: false},
                         {collapsible: false, size: "60%"},
-                        {collapsible: false, resizable: true, size: "40%"}
+                        {collapsible: false, resizable: false, size: "40%"}
                     ]
                 });
-                kendo.culture("ru-RU");
-                // create DatePicker from input HTML element
-                $("#planShipmentDay").kendoDatePicker({
-                    format: kendo.culture().calendar.patterns.d
-                });
 
+                // create DatePicker from input HTML element
+                kendo.culture("ru-RU");
+
+                 $("#planShipmentDay").kendoDatePicker({
+                    format: kendo.culture().calendar.patterns.d,
+                    /* change: function() {
+                     var value = this.value();
+                     console.log(value); //value is the selected date in the datepicker
+                     }*/
+
+                });
+                datePlan = $("#planShipmentDay").data("kendoDatePicker");
+                datePlan.bind("change", function() {
+                    var value = this.value();
+                    console.log(value); //value is the selected date in the datepicker
+                });
 
             });
 
 
+
+
+
     </script>
+
 }

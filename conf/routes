@@ -13,7 +13,9 @@ GET         /worktime                    controllers.HelperWorkTimeController.sh
 
 
 #Журнал отгрузок
-GET         /api/journalship               controllers.JournalShipmentController.index()
+GET         /api/journalship               controllers.JournalShipmentController.index
+
+GET         /api/plandayshipment/:datePlan               controllers.JournalShipmentController.planDayIndex(datePlan:String)
 
 
 #Норма времени погрузки

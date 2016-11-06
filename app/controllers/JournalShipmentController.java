@@ -4,9 +4,12 @@ import auth.AuthService;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
+import scala.Option;
 import services.PlanDayService;
 
 import javax.inject.Inject;
+
+import java.sql.Date;
 
 import static play.mvc.Results.ok;
 
@@ -52,6 +55,8 @@ public class JournalShipmentController extends Controller {
     public Result index(){
         return ok(Json.toJson(planDayService.journalShipmentList()));
     }
-
+    public Result planDayIndex(String dateValue){
+        return ok(Json.toJson(planDayService.journalShipmentList()));
+    }
 
 }
