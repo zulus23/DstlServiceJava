@@ -769,7 +769,7 @@ var planShipmentUtil = (
                     {
                         field: "dateCreateDispatcher",
                         title: "Дата и время создания ПЭ",
-                        width: "110px",
+                        width: "80px",
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
                         filterable: false,
@@ -964,7 +964,7 @@ var planShipmentUtil = (
                     {
                         field: "senderEnterprise",
                         title: "Предприятие отправитель",
-                        width: "70px",
+                        width: "100px",
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
                         groupable: false
@@ -972,7 +972,7 @@ var planShipmentUtil = (
                     {
                         field: "kindShipment",
                         title: "Вид отгрузки",
-                        width: "60px",
+                        width: "100px",
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
                         //filterable: false,
@@ -999,9 +999,10 @@ var planShipmentUtil = (
                     {
                         field: "dateShipmentDispatcher",
                         title: "Дата отгрузки в ПЭ",
-                        width: "50px",
+                        width: "100px",
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
+                        filterable: false,
                         groupable: false
 
                     },
@@ -1046,12 +1047,14 @@ var planShipmentUtil = (
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
                         filterable: false,
-                        groupable: false
+                        groupable: false,
+                        template: '<input type="checkbox" #= existInStore ? "checked=checked" : "" # disabled="disabled" ></input>'
                     },
                     {
                         field: "dateToStore",
                         title: "Сдача на склад",
-                        width: "65px",
+                        width: "100px",
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
                         groupable: false
@@ -1059,34 +1062,35 @@ var planShipmentUtil = (
                     {
                         field: "placeLoading",
                         title: "Площадка отгрузки",
-                        width: "65px",
+                        width: "95px",
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
                         groupable: true,
+                        filterable: false
 
-                        groupHeaderTemplate: "Причина отклонений: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
                     },
                     {
                         field: "statusDispatcher",
                         title: "Статус ПЭ",
                         width: "80px",
-
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "numberDispatcher",
                         title: "№ поручения экспедитору",
-                        width: "80px",
+                        width: "100px",
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Менеджер: #=value#: #=count# : (#=  Math.round((count/calcAll(data,field,value))*100)#%): Count : #=count#"
+
                     },
                     {
                         field: "dateCreateDispatcher",
                         title: "Дата и время создания ПЭ",
-                        width: "130px",
+                        width: "80px",
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
                         filterable: false,
@@ -1095,209 +1099,209 @@ var planShipmentUtil = (
                     {
                         field: "numberOrder",
                         title: "№ заказа",
-                        width: "80px",
-
+                        width: "70px",
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "numberItem",
                         title: "№ изделия",
                         width: "80px",
-
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "nameOrder",
                         title: "Наименование заказа",
-                        width: "80px",
-
+                        width: "180px",
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "nameCustomer",
                         title: "Грузополучатель",
-                        width: "80px",
-
+                        width: "120px",
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "placeDelivery",
                         title: "Пункт доставки",
-                        width: "80px",
-
+                        width: "100px",
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "sizeOrder",
                         title: "Объем заказа",
                         width: "80px",
-
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "sizePallet",
                         title: "Размер палетты",
                         width: "80px",
-
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "packingMethod",
                         title: "Способ упаковки",
                         width: "80px",
-
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "countPlace",
                         title: "Количество мест",
                         width: "80px",
-
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "capacityOrder",
                         title: "Объем заказа",
                         width: "80px",
-
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "typeTransport",
                         title: "Вид транспорта",
                         width: "80px",
-
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "",
                         title: "Время на погрузку",
                         width: "80px",
-
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "",
                         title: "Наименование ТЭК план",
                         width: "80px",
-
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "",
                         title: "Наименование ТЭК факт",
                         width: "80px",
-
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "",
                         title: "Гос. номер ТС",
                         width: "80px",
-
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "",
                         title: "Водитель",
                         width: "80px",
-
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "",
                         title: "Телефон водителя",
                         width: "80px",
-
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "",
                         title: "Доклевеллер",
                         width: "80px",
-
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "",
                         title: "Расстояние доставки",
                         width: "80px",
-
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "",
                         title: "Ставка рейса",
                         width: "80px",
-
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "",
                         title: "Время погрузки ТС",
                         width: "80px",
-
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "managerBackOffice",
                         title: "Менеджер Back-Office",
                         width: "80px",
-
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     },
                     {
                         field: "note",
                         title: "Примечание",
                         width: "80px",
-
+                        filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Состояние: #=value#: #=count# : (#= calcAll(data,field,value,count)#)"
+
                     }
 
 

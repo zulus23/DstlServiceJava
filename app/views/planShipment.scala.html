@@ -64,11 +64,11 @@
     </div>
     <div id="planShipmentSplitter">
         <div id="planShipmentByDay" >
-          @planshipment.plandays()
+            <div id="planDayGrid" > </div> @* @planshipment.plandays() *@
         </div>
         <div id="journalShipment" >
 
-          @planshipment.journalshipment()
+            <div id="journalGridView"></div>  @*  @planshipment.journalshipment() *@
 
         </div>
     </div>
@@ -109,6 +109,10 @@
 
             });
 
+
+            planShipmentUtil.journalShipmentView();
+            planShipmentUtil.planGrid();
+            planShipmentUtil.createDragAndDrop();
 
 
 
