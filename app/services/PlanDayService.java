@@ -98,7 +98,7 @@ public class PlanDayService {
     public List<PlanShipmentItem> selectItemPlan(Date datePlan, String nameServiceDstl){
 
         return Optional.ofNullable(Ebean.createQuery(PlanShipment.class).where().eq("datePlan",datePlan).findUnique())
-                        .map(e -> e.getPlanShipmentItems()).orElse(Arrays.asList(new PlanShipmentItem()) );
+                        .map(e -> e.getPlanShipmentItems()).orElse(null);
     }
 
 

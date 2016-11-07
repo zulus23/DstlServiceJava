@@ -16,6 +16,7 @@ GET         /worktime                    controllers.HelperWorkTimeController.sh
 GET         /api/journalship               controllers.JournalShipmentController.index
 
 GET         /api/plandayshipment               controllers.JournalShipmentController.planDayIndex(datePlan:Option[String])
+POST        /api/plandayshipment                controllers.JournalShipmentController.create()
 
 
 #Норма времени погрузки

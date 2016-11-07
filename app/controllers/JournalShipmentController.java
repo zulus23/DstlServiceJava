@@ -37,6 +37,8 @@ public class JournalShipmentController extends Controller {
     @Inject
     private PlanDayService planDayService;
 
+
+
     /*@Inject
     private PlaySessionStore playSessionStore;
 
@@ -61,6 +63,10 @@ public class JournalShipmentController extends Controller {
 
     public Result index(){
         return ok(Json.toJson(planDayService.journalShipmentList()));
+    }
+    public Result create() {
+        System.out.println(request().body().asJson());
+        return play.mvc.Results.TODO;
     }
     public Result planDayIndex(Option<String> dateValue){
         LocalDate localDate = LocalDate.now();
