@@ -5,36 +5,6 @@
 @main(param) {
 
 
-
-
-  @*  <div style="height:50px; width: 100%;">
-        <div class="row">
-            <div id="toolBarPlanDay" class="col-lg-5 col-md-10 col-sm-12">
-                <label id="labelPlanShipmentDay" for="planShipmentDay" class="pull-left">План на: </label>
-                <section id="planShipmentDay1" >
-                    <input id="planShipmentDay"  type="date">
-
-                    <button id="bSavePlan" class="k-button k-state-default red-tooltip red-tooltip"
-                    data-toggle="tooltip" data-placement="bottom"
-                    title="Сохранить план"><i class="fa fa-lg fa-floppy-o" aria-hidden="true"></i></button>
-                    <button id="bCancelPlan" class="k-button k-state-default red-tooltip"
-                    data-toggle="tooltip" data-placement="bottom"
-                    title="Отменить изменения"><i class="fa fa-lg fa-times" aria-hidden="true"></i></button>
-                    <button id="bExportPlan" class="k-button k-state-default red-tooltip"
-                    data-toggle="tooltip" data-placement="bottom"
-                    title="Экспортировать план на сутки(Еxcel)">
-                        <i class="fa fa-lg fa-download fa-rotate-90" aria-hidden="true"></i></button>
-                    <button id="bExportJournalPlan" class="k-button k-state-default red-tooltip"
-                    data-toggle="tooltip" data-placement="bottom"
-                    title="Экспортировать журнал отгрузок(Еxcel)"><i class="fa fa-lg fa-download fa-rotate-270" aria-hidden="true"></i></button>
-                </section>
-
-            </div>
-
-        </div>
-    </div>*@
-
-
 <div class="k-content " style="height: 100%">
     <div class="nav" style="height:50px; width: 100%;">
         <div class="row">
@@ -74,6 +44,45 @@
     </div>
 
     </div>
+    <script id="popup_editor" type="text/x-kendo-template">
+            <p>Custom editor template</p>
+            <div class="k-edit-label">
+            <label for="FirstName">First Name</label>
+            </div>
+            <!-- autoComplete editor for field: "FirstName" -->
+            <input name="FirstName"
+            data-bind="value:FirstName"
+            data-value-field="firstName"
+            data-text-field="firstName"
+            data-source="autoCompleteDS"
+            data-role="autocomplete" />
+
+            <div class="k-edit-label">
+            <label for="LastName" style="color: red;">Last Name</label>
+            </div>
+            <!-- textbox editor for field: "LastName" -->
+            <!-- field: "LastName" is not included as a grid column -->
+            <input type="text" class="k-input k-textbox" name="LastName" data-bind="value:LastName">
+
+            <div class="k-edit-label">
+            <label for="BirthDate">Birth Date</label>
+            </div>
+            <!-- datepicker editor for field: "BirthDate" -->
+            <input type="text"
+            name="BirthDate"
+            data-type="date"
+            data-bind="value:BirthDate"
+            data-role="datepicker" />
+
+            <div class="k-edit-label">
+            <label for="Age">Age</label>
+            </div>
+            <!-- numeric textbox editor for field: "Age" -->
+            <input type="text" name="Age" data-type="number" data-bind="value:Age" data-role="numerictextbox" />
+
+    </script>
+
+
     <script>
             $(document).ready(function () {
                 /* ----------------------------------------------------------------------------*/
@@ -105,16 +114,41 @@
                 datePlan.bind("change", function() {
                     var value = this.value();
                     console.log(value); //value is the selected date in the datepicker
+                    planShipmentUtil.setDatePlan(value);
+                    planShipmentUtil.dataSourcePlanDay().fetch(function (data) {
+                        planShipmentUtil.planGrid().refresh();
+                    });
                 });
 
             });
 
 
             planShipmentUtil.journalShipmentView();
-            planShipmentUtil.planGrid();
+            var plangrid =  planShipmentUtil.planGrid();
             planShipmentUtil.createDragAndDrop();
 
 
+
+            $("#planDayGrid tbody > tr[data-uid]").bind('dblclick', function (e) {
+                alert(planShipmentUtil.selectPlanDetailID());
+            });
+            $("#planDayGrid tbody").bind('dblclick', function (e) {
+                console.log(plangrid);
+                alert(planShipmentUtil.selectPlanDetailID());
+            });
+
+            function grid_edit(e) {
+
+                console.log(e);
+                if (!e.model.isNew()) {
+                    // Disable the editor of the "id" column when editing data items
+                    var numeric = e.container.find("input[name=id]").data("kendoNumericTextBox");
+                    numeric.enable(false);
+                }
+            }
+
+
+            plangrid.bind("edit", grid_edit);
 
 
     </script>

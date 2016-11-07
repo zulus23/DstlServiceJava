@@ -2,6 +2,7 @@ package model.plan;
 
 import com.avaje.ebean.Model;
 import com.avaje.ebean.annotation.CreatedTimestamp;
+import com.avaje.ebean.annotation.JsonIgnore;
 import com.avaje.ebean.annotation.UpdatedTimestamp;
 import model.*;
 import play.db.NamedDatabase;
@@ -19,8 +20,11 @@ public class PlanShipmentItem  extends Model {
     @Id
     @Column(name = "ID")
     private Long id;
+
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "IDPLAN")
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private PlanShipment planShipment;
     @ManyToOne
     @JoinColumn(name = "IdEnterprise")

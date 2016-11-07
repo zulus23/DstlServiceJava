@@ -4,6 +4,8 @@
 var planShipmentUtil = (
     function() {
 
+        var datePlan;
+
         function UpdateJournalShipment(item) {
             item.set('inPlanDay', true);
         }
@@ -285,7 +287,13 @@ var planShipmentUtil = (
                 ]
             }).data("kendoGrid");
         }*/
-
+        var setDatePlan  = function(value){
+            console.log("setDatePlan");
+            datePlan = value;
+        }
+        function getPlanDay(){
+            return moment(datePlan).format("DD-MM-YYYY") ;
+        }
 
         var dataSourcePlanDay =  function() {
             return new kendo.data.DataSource({
@@ -296,16 +304,12 @@ var planShipmentUtil = (
                         var sentdatePlan;
                         $.ajax({
                             type: "GET",
-                            url: "api/plandayshipment",
+                            url: "api/plandayshipment"+"/"+getPlanDay(),
                             contentType: "application/json; charset=utf-8",
-                            beforeSend: function () {
-                                sentdatePlan = $("#planShipmentDay").data("kendoDatePicker");
-                                console.log(sentdatePlan);
-                            },
                             dataType: 'json',
-                            data: {
-                                datePlan: sentdatePlan
-                            },
+                            /*data: {
+                                datePlan: getPlanDay()
+                            },*/
                             success: function (data) {
                                 options.success(data);
                             }
@@ -320,7 +324,7 @@ var planShipmentUtil = (
                         fields: {
                             id: {type: "number", editable: false},
                             idPlan: {},
-                            senderEnterprise: {type: "string"},
+                            senderEnterprise: { defaultValue: { id: 0,name:''}} ,
                             kindShipment: {type: "string"},
                             inPlanLoad: {type: "boolean"},
                             dateShipmentDispatcher: {type: "string"},
@@ -947,16 +951,31 @@ var planShipmentUtil = (
             }).data("kendoGrid");
         }
 
+        var ID;
+        function onChange(args) {
+            var model = this.dataItem(this.select());
+            ID = model.uid; //gets the value of the field "ID"
+        }
+        var  selectPlanDetailID = function(){
+            return ID;
+        }
+
         var planGrid =  function(){
             return $("#planDayGrid").kendoGrid({
-                // toolbar: ["excel"],
+                // toolbar: ["edit"],
                 dataSource: planShipmentUtil.dataSourcePlanDay(),
+
                 height: '100%',
                 groupable: true,
                 sortable: true,
                 filterable: true,
                 resizable: true,
-
+                selectable:"true",
+                editable: {
+                    mode:"popup",
+                 //   template: $("#popup_editor").html()
+                },
+                change:onChange,
                 dataBound: function (e) {
                     $("#gridView").find('.k-icon.k-i-collapse').trigger('click');
                 },
@@ -1390,7 +1409,9 @@ var planShipmentUtil = (
             journalShipmentView:journalShipmentView,
             planGrid:planGrid,
             addToPlan:addToPlan,
-            updateJournalShipment:UpdateJournalShipment
+            updateJournalShipment:UpdateJournalShipment,
+            selectPlanDetailID:selectPlanDetailID,
+            setDatePlan:setDatePlan
         }
     }
 )();

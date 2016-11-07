@@ -1,6 +1,7 @@
 package controllers;
 
 import auth.AuthService;
+import model.plan.PlanShipmentItem;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -10,7 +11,13 @@ import services.PlanDayService;
 import javax.inject.Inject;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
+import static java.util.Optional.ofNullable;
 import static play.mvc.Results.ok;
 
 /**
@@ -56,7 +63,12 @@ public class JournalShipmentController extends Controller {
         return ok(Json.toJson(planDayService.journalShipmentList()));
     }
     public Result planDayIndex(String dateValue){
-        return ok(Json.toJson(planDayService.journalShipmentList()));
+        LocalDate localDate =  LocalDate.parse(dateValue, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        List<PlanShipmentItem> result =  planDayService.selectItemPlan(Date.valueOf(localDate),authService.nameServiceDstl());
+        if (Objects.nonNull(result)){
+            return ok(Json.toJson(result));
+        }
+        return  ok();
     }
 
 }

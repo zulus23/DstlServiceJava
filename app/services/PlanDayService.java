@@ -4,6 +4,7 @@ import com.avaje.ebean.Ebean;
 import model.Enterprise;
 import model.plan.JournalShipment;
 import model.plan.PlanShipment;
+import model.plan.PlanShipmentItem;
 import utils.DbUtils;
 
 import javax.inject.Singleton;
@@ -14,10 +15,12 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by Gukov on 01.11.2016.
@@ -91,6 +94,13 @@ public class PlanDayService {
 
         return _journalShipments;
     }
+
+    public List<PlanShipmentItem> selectItemPlan(Date datePlan, String nameServiceDstl){
+
+        return Optional.ofNullable(Ebean.createQuery(PlanShipment.class).where().eq("datePlan",datePlan).findUnique())
+                        .map(e -> e.getPlanShipmentItems()).orElse(Arrays.asList(new PlanShipmentItem()) );
+    }
+
 
 
     public PlanShipment createPlan(Date datePlan,String nameServiceDstl){

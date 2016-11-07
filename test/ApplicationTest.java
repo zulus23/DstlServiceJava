@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -19,6 +20,7 @@ import org.junit.*;
 
 import play.Application;
 import play.inject.guice.GuiceApplicationBuilder;
+import play.libs.Json;
 import play.mvc.*;
 import play.test.*;
 import play.data.DynamicForm;
@@ -200,7 +202,15 @@ public class ApplicationTest {
         assertEquals(planShipment.getId(),planShipment.getPlanShipmentItems().get(0).getPlanShipment().getId());
     }
 
-
+    @Test
+    public void getListPlanitemFromPlan(){
+        getObjectLocal();
+        PlanDayService planDayService = new PlanDayService();
+        LocalDate.of(2016,11,8);
+        List<PlanShipmentItem> planShipmentItems =  planDayService.selectItemPlan(Date.valueOf(LocalDate.of(2016,11,8)),"");
+        assertNotNull(planShipmentItems);
+        assertNotNull(Json.toJson(planShipmentItems));
+    }
 
 
     @Test
