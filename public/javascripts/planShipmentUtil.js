@@ -304,12 +304,12 @@ var planShipmentUtil = (
                         var sentdatePlan;
                         $.ajax({
                             type: "GET",
-                            url: "api/plandayshipment"+"/"+getPlanDay(),
+                            url: "api/plandayshipment",
                             contentType: "application/json; charset=utf-8",
                             dataType: 'json',
-                            /*data: {
+                            data: {
                                 datePlan: getPlanDay()
-                            },*/
+                            },
                             success: function (data) {
                                 options.success(data);
                             }

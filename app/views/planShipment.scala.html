@@ -111,14 +111,15 @@
 
                 });
                 datePlan = $("#planShipmentDay").data("kendoDatePicker");
+
                 datePlan.bind("change", function() {
                     var value = this.value();
                     console.log(value); //value is the selected date in the datepicker
                     planShipmentUtil.setDatePlan(value);
-                    planShipmentUtil.dataSourcePlanDay().fetch(function (data) {
-                        planShipmentUtil.planGrid().refresh();
-                    });
+                    planShipmentUtil.planGrid().refresh();
+
                 });
+                $("#planShipmentDay").attr("readonly", true);
 
             });
 
@@ -127,28 +128,12 @@
             var plangrid =  planShipmentUtil.planGrid();
             planShipmentUtil.createDragAndDrop();
 
-
-
-            $("#planDayGrid tbody > tr[data-uid]").bind('dblclick', function (e) {
-                alert(planShipmentUtil.selectPlanDetailID());
-            });
             $("#planDayGrid tbody").bind('dblclick', function (e) {
                 console.log(plangrid);
                 alert(planShipmentUtil.selectPlanDetailID());
             });
 
-            function grid_edit(e) {
 
-                console.log(e);
-                if (!e.model.isNew()) {
-                    // Disable the editor of the "id" column when editing data items
-                    var numeric = e.container.find("input[name=id]").data("kendoNumericTextBox");
-                    numeric.enable(false);
-                }
-            }
-
-
-            plangrid.bind("edit", grid_edit);
 
 
     </script>

@@ -62,8 +62,11 @@ public class JournalShipmentController extends Controller {
     public Result index(){
         return ok(Json.toJson(planDayService.journalShipmentList()));
     }
-    public Result planDayIndex(String dateValue){
-        LocalDate localDate =  LocalDate.parse(dateValue, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+    public Result planDayIndex(Option<String> dateValue){
+        LocalDate localDate = LocalDate.now();
+        if(dateValue.isDefined()){
+           localDate =  LocalDate.parse(dateValue.get(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        }
         List<PlanShipmentItem> result =  planDayService.selectItemPlan(Date.valueOf(localDate),authService.nameServiceDstl());
         if (Objects.nonNull(result)){
             return ok(Json.toJson(result));
