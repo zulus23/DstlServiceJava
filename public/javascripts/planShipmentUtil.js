@@ -68,8 +68,6 @@ var planShipmentUtil = (
         }
 
 
-
-
         var setDatePlan  = function(value){
             console.log("setDatePlan");
             datePlan = value;
@@ -662,14 +660,14 @@ var planShipmentUtil = (
 
                     },
                     {
-                        field: "",
+                        field: "timeToLoad",
                         title: "Время на погрузку",
                         width: "80px",
                         filterable: false,
                         aggregates: ["count"],
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                       // footerTemplate: "Всего часов: #=count# "
+                        footerTemplate: "Всего часов: #=count# "
 
                     },
                     {

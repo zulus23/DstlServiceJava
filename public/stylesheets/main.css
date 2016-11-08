@@ -88,6 +88,10 @@ div.col-lg-5, div.col-lg-7 {
     padding-right: 0px;
 }
 
+.k-grid-pager {
+    height: 35px;
+}
+
 /*td.k-input.k-textbox{
 
 }*/
