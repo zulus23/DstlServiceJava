@@ -27,6 +27,9 @@ import static java.util.stream.Collectors.toList;
  */
 @Singleton
 public class HelperServices {
+
+    private static java.time.LocalDateTime timeUpdateDeviation = java.time.LocalDateTime.now();
+
     private final List<Enterprise> enterpriseList = Arrays.asList(new Enterprise(0, "ЗАО ГОТЭК-ЦПУ", "SL_CPU", true),
             new Enterprise(0, "ЗАО ГОТЭК-СЕВЕРО-ЗАПАД", "SL_SPB", true),
             new Enterprise(0, "ГОТЭК", "SL_GOTEK", false),
@@ -100,7 +103,7 @@ public class HelperServices {
     }
 
     public List<Deviation> listDeviation() {
-        String _query = "SELECT TypeName,Value,Description FROM UserDefinedTypeValues\n" +
+        String _query = "SELECT TypeName,Value,Description,RowPointer FROM UserDefinedTypeValues\n" +
                 "  WHERE TypeName IN ( 'UDTOtmena','UDTOtmenaDost')";
         List<SqlRow> sqlRowList =  DbUtils.connectToSLGotek().map(e -> e.createSqlQuery(_query).findList()).orElse(null);
 
@@ -117,7 +120,7 @@ public class HelperServices {
 
 
     private Deviation mapSqlRowToDeviation(SqlRow row) {
-        Deviation deviation = new Deviation(0, row.getString("Value"), "");
+        Deviation deviation = new Deviation(0, row.getString("Value"), "",row.getUUID("RowPointer"));
         if(row.getString("TypeName").equals("UDTOtmena")){
             deviation.setType("Отгрузка");
         }else {
@@ -202,4 +205,23 @@ public class HelperServices {
         return transportCompanyWithDriver;
     }
 
+    public List<DeviationShipment> deviationShipmentList(){
+       /* if(java.time.Duration.between(timeUpdateDeviation,LocalTime.now()).toMinutes() > 60){
+            updateTimeUpdateDeviation();
+        }*/
+        return  Ebean.find(DeviationShipment.class).findList();
+    }
+
+    private void updateTimeUpdateDeviation() {
+        timeUpdateDeviation = java.time.LocalDateTime.now();
+        listDeviation().stream().filter(d -> d.getType() == "Отгрузка")
+                       .collect(toList());
+
+
+    }
+
+
+    public List<DeviationDelivery> deviationDeliveryList() {
+        return  Ebean.find(DeviationDelivery.class).findList();
+    }
 }

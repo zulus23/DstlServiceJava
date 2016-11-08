@@ -32,6 +32,7 @@
 
         </div>
     </div>
+
     <div id="planShipmentSplitter">
         <div id="planShipmentByDay" >
             <div id="planDayGrid" > </div> @* @planshipment.plandays() *@
@@ -44,50 +45,28 @@
     </div>
 
     </div>
-    <script id="popup_editor" type="text/x-kendo-template">
-            <p>Custom editor template</p>
-            <div class="k-edit-label">
-            <label for="FirstName">First Name</label>
-            </div>
-            <!-- autoComplete editor for field: "FirstName" -->
-            <input name="FirstName"
-            data-bind="value:FirstName"
-            data-value-field="firstName"
-            data-text-field="firstName"
-            data-source="autoCompleteDS"
-            data-role="autocomplete" />
 
-            <div class="k-edit-label">
-            <label for="LastName" style="color: red;">Last Name</label>
-            </div>
-            <!-- textbox editor for field: "LastName" -->
-            <!-- field: "LastName" is not included as a grid column -->
-            <input type="text" class="k-input k-textbox" name="LastName" data-bind="value:LastName">
-
-            <div class="k-edit-label">
-            <label for="BirthDate">Birth Date</label>
-            </div>
-            <!-- datepicker editor for field: "BirthDate" -->
-            <input type="text"
-            name="BirthDate"
-            data-type="date"
-            data-bind="value:BirthDate"
-            data-role="datepicker" />
-
-            <div class="k-edit-label">
-            <label for="Age">Age</label>
-            </div>
-            <!-- numeric textbox editor for field: "Age" -->
-            <input type="text" name="Age" data-type="number" data-bind="value:Age" data-role="numerictextbox" />
-
-    </script>
 
 
     <script>
             $(document).ready(function () {
                 /* ----------------------------------------------------------------------------*/
 
-                var datePlan;
+                var datePlan,  wnd,
+                        detailsTemplate;
+
+            /*    wnd = $("#details")
+                        .kendoWindow({
+                            title: "Customer Details",
+                            modal: true,
+                            visible: false,
+                            resizable: false,
+                            width: 300
+                        }).data("kendoWindow");
+
+                detailsTemplate = kendo.template($("#popup_editor").html());*/
+
+
 
 
                 $("#planShipmentSplitter").kendoSplitter({
@@ -122,17 +101,30 @@
                 });
                 $("#planShipmentDay").attr("readonly", true);
 
+                function showDetails(e) {
+                   //  e.preventDefault();
+
+                   // var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                   // dataItem.set("FirstName", "James") //set the property of the dataItem
+                    wnd.content(detailsTemplate(e));
+                    wnd.center().open();
+                }
+
+                planShipmentUtil.journalShipmentView();
+                var plangrid =  planShipmentUtil.planGrid();
+                planShipmentUtil.createDragAndDrop();
+
+               /* $("#planDayGrid tbody").bind('dblclick', function (e) {
+                    console.log("-----------------------");
+                    showDetails(planShipmentUtil.selectPlanDetailID());
+
+                });*/
+
+
             });
 
 
-            planShipmentUtil.journalShipmentView();
-            var plangrid =  planShipmentUtil.planGrid();
-            planShipmentUtil.createDragAndDrop();
 
-            $("#planDayGrid tbody").bind('dblclick', function (e) {
-
-                alert(planShipmentUtil.selectPlanDetailID());
-            });
 
 
 

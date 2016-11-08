@@ -21,10 +21,17 @@ public class HelperController extends Controller{
     @Inject
     private AuthService authService;
 
+
+
     public Result deviations() {
         return ok(Json.toJson(helperServices.listDeviation()));
     }
-
+    public Result deviationShipment() {
+        return ok(Json.toJson(helperServices.deviationShipmentList()));
+    }
+    public  Result deviationDelivery() {
+        return ok(Json.toJson(helperServices.deviationDeliveryList()));
+    }
 
     public Result serviceDstl() {
         return ok(Json.toJson(helperServices.serviceDstl()));
@@ -33,5 +40,7 @@ public class HelperController extends Controller{
     public Result listEnterprise(){
         return ok(Json.toJson(helperServices.listEnterprise(Optional.ofNullable(DbUtils.enterpriseFromUser(authService.nameServiceDstl())))));
     }
+
+
 
 }

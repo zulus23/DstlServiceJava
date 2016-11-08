@@ -3,6 +3,7 @@ package model;
 import com.avaje.ebean.Model;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 /**
  * Created by Gukov on 28.10.2016.
@@ -18,7 +19,8 @@ public  abstract class BaseDeviation  extends Model {
     protected int id;
     @Column(name = "Description")
     protected String description;
-
+    @Column(name = "RefToSL")
+    protected UUID refToSL;
 
     public int getId() {
         return id;
@@ -37,4 +39,11 @@ public  abstract class BaseDeviation  extends Model {
     }
 
 
+    public UUID getRefToSL() {
+        return refToSL;
+    }
+
+    public void setRefToSL(UUID refToSL) {
+        this.refToSL = refToSL;
+    }
 }

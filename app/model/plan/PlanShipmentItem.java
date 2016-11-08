@@ -36,13 +36,15 @@ public class PlanShipmentItem  extends Model {
     private Boolean PlanLoad;
     @Column(name = "DateShipmentDispatcher")
     private Date dateShipmentDispatcher;
-    @Column(name = "DeviationShipment")
+    @ManyToOne
+    @JoinColumn(name = "IdDeviationShipment")
     private DeviationShipment deviationShipment;
     @Column(name = "DateDeliveryDispatcher")
     private Date dateDeliveryDispatcher;
     @Column(name = "DateDeliveryFact")
     private String dateDeliveryFact;
-    @Column(name = "DeviationDelivery")
+    @ManyToOne
+    @JoinColumn(name = "IdDeviationDelivery")
     private DeviationDelivery deviationDelivery;
     @Column(name = "ExistInStore")
     private Boolean existInStore;

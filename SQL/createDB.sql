@@ -23,9 +23,11 @@ CREATE INDEX IX_GTK_DSTL_User_IdService ON GTK_DSTL_User (IdService);
 CREATE TABLE GTK_DSTL_Deviation (
   ID                            integer not null PRIMARY KEY IDENTITY ,
   Description                   VARCHAR(100),
-  TypeDeviation                 VARCHAR(25)
+  TypeDeviation                 VARCHAR(25),
+  RefToSL                       UNIQUEIDENTIFIER
 )
-
+ALTER  TABLE GTK_DSTL_Deviation ADD CONSTRAINT   UQ_GTK_DSTL_Deviation UNIQUE(RefToSL)
+ALTER  TABLE GTK_DSTL_Deviation ADD CONSTRAINT   UQ_GTK_DSTL_DeviationIDType UNIQUE(ID,TypeDeviation)
 
 
 CREATE TABLE GTK_DSTL_NormaTimeLoading (
@@ -79,11 +81,11 @@ CREATE TABLE  GTK_DSTL_PlanShipmentItem(
   TypeShipment                VARCHAR(50),
   PlanLoad                    INTEGER,
   DateShipmentDispatcher      DATE,
-  DeviationShipment           VARCHAR(150),
+  IdDeviationShipment         INTEGER NOT NULL DEFAULT  -1,
   DateDeliveryDispatcher      DATE,
   DateDeliveryFact            DATE,
-  DeviationDelivery            VARCHAR(50),
-  ExistInStore                       BIT, -- На складе
+  IdDeviationDelivery         INTEGER NOT NULL DEFAULT  -1,
+  ExistInStore                BIT, -- На складе
   DateToStore                  DATETIME2,
   PlaceShipment                 VARCHAR(10),
   StatusDispatcher             VARCHAR(20),
@@ -123,6 +125,10 @@ references GTK_DSTL_Enterprise (ID);
 ALTER TABLE GTK_DSTL_PlanShipmentItem ADD CONSTRAINT FK_GTK_DSTL_PlanShipmentItemPLan foreign key (IdPlan)
 references GTK_DSTL_PlanShipment (ID);
 
+ALTER TABLE GTK_DSTL_PlanShipmentItem ADD CONSTRAINT FK_GTK_DSTL_PlanShipmentItemDeviationShipment foreign key (IdDeviationShipment)
+references GTK_DSTL_Deviation (ID);
+ALTER TABLE GTK_DSTL_PlanShipmentItem ADD CONSTRAINT FK_GTK_DSTL_PlanShipmentItemDeviationDelivery foreign key (IdDeviationDelivery)
+references GTK_DSTL_Deviation (ID);
 
 
 

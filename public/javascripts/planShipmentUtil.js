@@ -4,8 +4,75 @@
 var planShipmentUtil = (
     function() {
 
-        var datePlan;
+        var datePlan,ID;
 
+        function enterpriseDropDownEditor(container, options) {
+            console.log(options);
+            $('<input required name="' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    autoBind: false,
+                    dataTextField: "name",
+                    dataValueField: "id",
+                    dataSource: {
+                        transport: {
+                            read: function(options){
+                                axios.get('/api/enterprises').then(function(response){
+                                    options.success(response.data);
+                                });
+                            }
+                        }
+                    }
+                });
+        }
+
+        function deviationShipmentDropDownEditor(container, options) {
+            console.log(options);
+            $('<input required name="' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    autoBind: false,
+                    dataTextField: "description",
+                    dataValueField: "id",
+                    dataSource: {
+                        transport: {
+                            read: function(options){
+                                axios.get('/api/deviationShipment').then(function(response){
+                                    options.success(response.data);
+                                });
+                            }
+                        }
+                    }
+                });
+        }
+        function deviationDeliveryDropDownEditor(container, options) {
+            console.log(options);
+            $('<input required name="' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    autoBind: false,
+                    dataTextField: "description",
+                    dataValueField: "id",
+
+                    dataSource: {
+                        transport: {
+                            read: function(options){
+                                axios.get('/api/deviationDelivery').then(function(response){
+                                    options.success(response.data);
+                                });
+                            }
+                        }
+                    }
+                });
+        }
+
+        function selectDeviation (deviationDelivery){
+            if(deviationDelivery !== null){
+                return deviationDelivery.description;
+            } else {
+                return '';
+            }
+        };
         function UpdateJournalShipment(item) {
             item.set('inPlanDay', true);
         }
@@ -78,11 +145,11 @@ var planShipmentUtil = (
 
         var dataSourcePlanDay =  function() {
             return new kendo.data.DataSource({
-                serverAggregates: true,
+                //serverAggregates: true,
                 transport: {
 
                     read: function (options) {
-                        var sentdatePlan;
+
                         $.ajax({
                             type: "GET",
                             url: "api/plandayshipment",
@@ -92,12 +159,13 @@ var planShipmentUtil = (
                                 datePlan: getPlanDay()
                             },
                             success: function (data) {
+                                console.log(data);
                                 options.success(data);
                             }
                         });
                     },
                     create: function(options){
-                        console.log(options);
+
                         $.ajax({
                             type: "POST",
                             url: "api/plandayshipment",
@@ -122,40 +190,40 @@ var planShipmentUtil = (
 
                         fields: {
                             id: {type: "number", editable: false},
-                            idPlan: {},
-                            senderEnterprise: { defaultValue: { id: 0,name:''}} ,
-                            kindShipment: {type: "string"},
-                            inPlanLoad: {type: "boolean"},
-                            dateShipmentDispatcher: {type: "string"},
-                            deviationShipment: {},
-                            dateDeliveryDispatcher: {type: "string"},
+                            idPlan: {editable: false,type:"number"},
+                            senderEnterprise: { editable: false,defaultValue: { id: 0,name:''}} ,
+                            kindShipment: {editable: false,type: "string"},
+                            inPlanLoad: {editable: false,type: "boolean"},
+                            dateShipmentDispatcher: {editable: false,type: "string"},
+                            'deviationShipment.description': {defaultValue:{id:-1,description:''}, nullable: true},
+                            dateDeliveryDispatcher: {editable: false,type: "string"},
                             dateDeliveryFact: {},
-                            deviationDelivery: {},
-                            existInStore: {type: "boolean"},
-                            dateToStore: {type: "string"},
+                            deviationDelivery: {defaultValue:{id:-1,description:''}, nullable: true},
+                            existInStore: {editable: false,type: "boolean"},
+                            dateToStore: {editable: false,type: "string"},
                             placeLoading: {type: "string"},
-                            statusDispatcher: {type: "string"},
-                            numberDispatcher: {type: "string"},
-                            dateCreateDispatcher: {type: "string"},
-                            numberOrder: {type: "string"},
-                            numberItem: {type: "string"},
-                            nameOrder: {type: "string"},
-                            nameCustomer: {type: "string"},
-                            placeDelivery: {type: "string"},
-                            sizeOrder: {type: "number"},
-                            sizePallet: {type: "string"},
-                            packingMethod: {type: "string"},
-                            countPlace: {type: "number"},
-                            capacityOrder: {type: "number"},
-                            typeTransport: {type: "string"},
-                            timeToLoad: {type:"number"},
+                            statusDispatcher: {editable: false,type: "string"},
+                            numberDispatcher: {editable: false,type: "string"},
+                            dateCreateDispatcher: {editable: false,type: "string"},
+                            numberOrder: {editable: false,type: "string"},
+                            numberItem: {editable: false,type: "string"},
+                            nameOrder: {editable: false,type: "string"},
+                            nameCustomer: {editable: false,type: "string"},
+                            placeDelivery: {editable: false,type: "string"},
+                            sizeOrder: {editable: false,type: "number"},
+                            sizePallet: {editable: false,type: "string"},
+                            packingMethod: {editable: false,type: "string"},
+                            countPlace: {editable: false,type: "number"},
+                            capacityOrder: {editable: false,type: "number"},
+                            typeTransport: {editable: false,type: "string"},
+                            timeToLoad: {editable: false,type:"number"},
                             transportCompanyPlan: {},
                             transportCompanyFact: {},
-                            numberGate: {},
-                            deliveryDistance: {},
-                            costTrip: {},
+                            numberGate: {type:"number"},
+                            deliveryDistance: {type:"number"},
+                            costTrip: {type:"number",editable: true, nullable: false},
                             timeLoad: {},
-                            managerBackOffice: {type: "string"},
+                            managerBackOffice: {editable: false,type: "string"},
                             note: {type: "string"}
 
                         }
@@ -232,7 +300,7 @@ var planShipmentUtil = (
                         attributes: gridUtils.columnFormat,
                         groupable: false,
                         filterable: false,
-                        groupHeaderTemplate: "Месяц отгрузки: #=value# : (#= calcAll(data,field,value)#)"
+
                         //groupHeaderTemplate: "Месяц отгрузки: #=value# : (#= count#)"
                     },
                     {
@@ -396,7 +464,7 @@ var planShipmentUtil = (
             }).data("kendoGrid");
         }
 
-        var ID;
+
         function onChange(args) {
             var model = this.dataItem(this.select());
             ID = model.uid; //gets the value of the field "ID"
@@ -406,6 +474,7 @@ var planShipmentUtil = (
         }
 
         var planGrid =  function(){
+
             return $("#planDayGrid").kendoGrid({
                 // toolbar: ["edit"],
                 dataSource: planShipmentUtil.dataSourcePlanDay(),
@@ -415,11 +484,8 @@ var planShipmentUtil = (
                 sortable: true,
                 filterable: true,
                 resizable: true,
-                selectable:"true",
-                editable: {
-                    mode:"popup",
-                 //   template: $("#popup_editor").html()
-                },
+               // selectable:"true",
+                editable: true,
                 change:onChange,
                 dataBound: function (e) {
                     $("#gridView").find('.k-icon.k-i-collapse').trigger('click');
@@ -431,7 +497,8 @@ var planShipmentUtil = (
                         width: "100px",
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupable: false
+                        groupable: false,
+                        editor: enterpriseDropDownEditor, template: "#=senderEnterprise.name#"
                     },
                     {
                         field: "kindShipment",
@@ -471,12 +538,13 @@ var planShipmentUtil = (
 
                     },
                     {
-                        field: "",
+                        field: "deviationShipment",
                         title: "Классификатор отклонений отгрузки",
-                        width: "80px",
+                        width: "120px",
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Менеджер: #=value#: #=count# : (#=  Math.round((count/calcAll(data,field,value))*100)#%): Count : #=count#"
+                        editor: deviationShipmentDropDownEditor, template: "#=deviationShipment.description#"
+
                     },
                     {
                         field: "dateDeliveryDispatcher",
@@ -497,12 +565,13 @@ var planShipmentUtil = (
                         groupable: false
                     },
                     {
-                        field: "",
+                        field: "deviationDelivery",
                         title: "Классификатор отклонений доставки",
-                        width: "80px",
+                        width: "120px",
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupHeaderTemplate: "Менеджер: #=value#: #=count# : (#=  Math.round((count/calcAll(data,field,value))*100)#%): Count : #=count#"
+                        editor: deviationDeliveryDropDownEditor, template: "#=deviationDelivery#"
+
                     },
                     {
                         field: "existInStore",
@@ -667,7 +736,7 @@ var planShipmentUtil = (
                         aggregates: ["count"],
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        footerTemplate: "Всего часов: #=count# "
+                        footerTemplate: "#=count# "
 
                     },
                     {
@@ -716,7 +785,7 @@ var planShipmentUtil = (
 
                     },
                     {
-                        field: "",
+                        field: "numberGate",
                         title: "Доклевеллер",
                         width: "80px",
                         filterable: false,
@@ -725,7 +794,7 @@ var planShipmentUtil = (
 
                     },
                     {
-                        field: "",
+                        field: "deliveryDistance",
                         title: "Расстояние доставки",
                         width: "80px",
                         filterable: false,
@@ -734,7 +803,7 @@ var planShipmentUtil = (
 
                     },
                     {
-                        field: "",
+                        field: "costTrip",
                         title: "Ставка рейса",
                         width: "80px",
                         filterable: false,
@@ -782,8 +851,10 @@ var planShipmentUtil = (
                 numberDispatcher: item.numberDispatcher,
                 inPlanDay: false,
                 dateCreateDispatcher: item.dateCreateDispatcher,
+                deviationShipment:{id:0,description:''},
                 dateShipmentDispatcher: item.dateShipmentDispatcher,
                 dateDeliveryDispatcher: item.dateDeliveryDispatcher,
+                deviationDelivery:{id:0,description:''},
                 existInStore: item.existInStore,
                 dateToStore: item.dateToStore,
                 placeLoading: item.placeLoading,
@@ -799,6 +870,7 @@ var planShipmentUtil = (
                 countPlace: item.countPlace,
                 capacityOrder: item.capacityOrder,
                 typeTransport: item.typeTransport,
+                costTrip: 0,
                 managerBackOffice: item.managerBackOffice,
                 note: item.note
             }
