@@ -230,11 +230,11 @@ var planShipmentUtil = (
                             idPlan: {editable: false,type:"number"},
                             senderEnterprise: { editable: false,defaultValue: { id: 0,name:''}} ,
                             typeShipment: {editable: false,type: "string"},
-                            inPlanLoad: {editable: false,type: "boolean"},
+                            planLoad: {editable: false,type: "boolean"},
                             dateShipmentDispatcher: {editable: false,type: "date",format:"{0:dd-MM-yyyy}"},
                             deviationShipment: {defaultValue:{id:-1,description:''}, nullable: true},
                             dateDeliveryDispatcher: {editable: false,type: "string"},
-                            dateDeliveryFact: {},
+                            dateDeliveryFact: {type:"date"},
                             deviationDelivery: {defaultValue:{id:-1,description:''}, nullable: true},
                             existInStore: {editable: false,type: "boolean"},
                             dateToStore: {editable: false,type: "string"},
@@ -557,10 +557,10 @@ var planShipmentUtil = (
                         groupable: false
                     },
                     {
-                        field: "inPlanLoad",
+                        field: "planLoad",
                         title: "В плане погрузки",
                         width: "180px",
-                        aggregates: ["count"],
+
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat
 
@@ -593,16 +593,18 @@ var planShipmentUtil = (
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormatChangeDeliveryDate,
                         filterable: false,
-                        groupable: false
+                        groupable: false,
+
                     },
                     {
-                        field: "",
+                        field: "dateDeliveryFact",
                         title: "Дата доставки факт",
                         width: "80px",
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormatChangeDeliveryDate,
                         filterable: false,
-                        groupable: false
+                        groupable: false,
+                        format:"{0:dd-MM-yyyy}"
                     },
                     {
                         field: "deviationDelivery",
@@ -887,9 +889,9 @@ var planShipmentUtil = (
         var addToPlan = function (item) {
             return {
                 senderEnterprise: item.senderEnterprise,
-                kindShipment: item.kindShipment,
+                typeShipment: item.typeShipment,
                 numberDispatcher: item.numberDispatcher,
-                inPlanDay: false,
+                planLoad: false,
                 dateCreateDispatcher: item.dateCreateDispatcher,
                 deviationShipment:{id:-1,description:''},
                 dateShipmentDispatcher: item.dateShipmentDispatcher,

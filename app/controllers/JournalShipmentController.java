@@ -66,6 +66,8 @@ public class JournalShipmentController extends Controller {
     }
     public Result create() {
         System.out.println(request().body().asJson());
+        planDayService.savePlanShipmentItem(request().body().asJson(),"ЗАО ГОТЭК-СЕВЕРО-ЗАПАД");
+
         return play.mvc.Results.TODO;
     }
     public Result planDayIndex(Option<String> dateValue){

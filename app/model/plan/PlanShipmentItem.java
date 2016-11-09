@@ -33,7 +33,7 @@ public class PlanShipmentItem  extends Model {
     private String typeShipment;
     /*ССылка на план погрузки*/
     @Transient
-    private Boolean PlanLoad;
+    private Boolean planLoad;
     @Column(name = "DateShipmentDispatcher")
     private Date dateShipmentDispatcher;
     @ManyToOne
@@ -159,11 +159,11 @@ public class PlanShipmentItem  extends Model {
     }
 
     public Boolean getPlanLoad() {
-        return PlanLoad;
+        return planLoad;
     }
 
     public void setPlanLoad(Boolean planLoad) {
-        PlanLoad = planLoad;
+        this.planLoad = planLoad;
     }
 
     public Date getDateShipmentDispatcher() {
