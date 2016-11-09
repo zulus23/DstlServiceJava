@@ -9,6 +9,13 @@ import javax.persistence.*;
 @DiscriminatorValue(value = "Доставка")
 public class DeviationDelivery extends BaseDeviation {
 
+    public DeviationDelivery() {
+    }
 
+    public DeviationDelivery(Integer id,String description) {
+        super();
+        this.setId(id);
+        this.setDescription(description);
+    }
 
 }

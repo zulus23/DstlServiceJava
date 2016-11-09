@@ -11,6 +11,12 @@ import javax.persistence.*;
 @DiscriminatorValue(value = "Отгрузка")
 public class DeviationShipment extends BaseDeviation {
 
+    public DeviationShipment() {
+    }
 
-
+    public DeviationShipment(Integer id,String description) {
+        super();
+        this.setId(id);
+        this.setDescription(description);
+    }
 }

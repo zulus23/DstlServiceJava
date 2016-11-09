@@ -17,32 +17,70 @@ var planShipmentUtil = (
                     dataSource: {
                         transport: {
                             read: function(options){
-                                axios.get('/api/enterprises').then(function(response){
-                                    options.success(response.data);
+                                $.ajax({
+                                    type:"GET",
+                                    url:'/api/enterprises',
+                                    contentType: "application/json; charset=utf-8",
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        options.success(data);
+                                    }
                                 });
+
                             }
                         }
                     }
                 });
         }
+        var  getField = function (value) {
+            console.log(value);
+            if(value === null){
+                return "";
+            } else{
+                return 'deviationShipment.description'
+            }
+
+        }
 
         function deviationShipmentDropDownEditor(container, options) {
-            console.log(options);
+
             $('<input required name="' + options.field + '"/>')
                 .appendTo(container)
                 .kendoDropDownList({
                     autoBind: false,
                     dataTextField: "description",
                     dataValueField: "id",
+/*
+                    optionLabel: {
+                        description: " ",
+                        Id: "-1"
+                    },*/
                     dataSource: {
                         transport: {
                             read: function(options){
-                                axios.get('/api/deviationShipment').then(function(response){
-                                    options.success(response.data);
+                                $.ajax({
+                                     type:"GET",
+                                     url:'/api/deviationShipment',
+                                    contentType: "application/json; charset=utf-8",
+                                    dataType: 'json',
+                                    success: function (data) {
+
+                                        options.success(data);
+                                    }
                                 });
                             }
                         }
-                    }
+                    },
+                   /* change: function (e) {
+
+                        var dataItem = e.sender.dataItem();
+                        if(parseInt(dataItem.Id) === -1 ){
+                            options.model.set("deviationShipment",{id:-1,description:" "})
+                        }
+                        console.log(options);
+                        console.log(dataItem);
+
+                    }*/
                 });
         }
         function deviationDeliveryDropDownEditor(container, options) {
@@ -57,9 +95,16 @@ var planShipmentUtil = (
                     dataSource: {
                         transport: {
                             read: function(options){
-                                axios.get('/api/deviationDelivery').then(function(response){
-                                    options.success(response.data);
+                                $.ajax({
+                                    type:"GET",
+                                    url:'/api/deviationDelivery',
+                                    contentType: "application/json; charset=utf-8",
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        options.success(data);
+                                    }
                                 });
+
                             }
                         }
                     }
@@ -195,7 +240,7 @@ var planShipmentUtil = (
                             kindShipment: {editable: false,type: "string"},
                             inPlanLoad: {editable: false,type: "boolean"},
                             dateShipmentDispatcher: {editable: false,type: "string"},
-                            'deviationShipment.description': {defaultValue:{id:-1,description:''}, nullable: true},
+                            deviationShipment: {defaultValue:{id:-1,description:''}, nullable: true},
                             dateDeliveryDispatcher: {editable: false,type: "string"},
                             dateDeliveryFact: {},
                             deviationDelivery: {defaultValue:{id:-1,description:''}, nullable: true},
@@ -474,7 +519,7 @@ var planShipmentUtil = (
         }
 
         var planGrid =  function(){
-
+            var  self = this;
             return $("#planDayGrid").kendoGrid({
                 // toolbar: ["edit"],
                 dataSource: planShipmentUtil.dataSourcePlanDay(),
@@ -543,7 +588,7 @@ var planShipmentUtil = (
                         width: "120px",
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        editor: deviationShipmentDropDownEditor, template: "#=deviationShipment.description#"
+                        editor: deviationShipmentDropDownEditor, template: "#= deviationShipment.description#"
 
                     },
                     {
@@ -570,7 +615,7 @@ var planShipmentUtil = (
                         width: "120px",
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        editor: deviationDeliveryDropDownEditor, template: "#=deviationDelivery#"
+                        editor: deviationDeliveryDropDownEditor, template: "#=deviationDelivery.description#"
 
                     },
                     {
@@ -930,7 +975,8 @@ var planShipmentUtil = (
             addToPlan:addToPlan,
             updateJournalShipment:UpdateJournalShipment,
             selectPlanDetailID:selectPlanDetailID,
-            setDatePlan:setDatePlan
+            setDatePlan:setDatePlan,
+            getField:getField
         }
     }
 )();

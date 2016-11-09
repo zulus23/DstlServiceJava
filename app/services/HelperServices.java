@@ -209,7 +209,12 @@ public class HelperServices {
        /* if(java.time.Duration.between(timeUpdateDeviation,LocalTime.now()).toMinutes() > 60){
             updateTimeUpdateDeviation();
         }*/
-        return  Ebean.find(DeviationShipment.class).findList();
+        List<DeviationShipment> _deviationShipmentList = Ebean.find(DeviationShipment.class).findList();
+        DeviationShipment nullDeviation =  new DeviationShipment();
+         nullDeviation.setId(-1);
+         nullDeviation.setDescription(" ");
+        _deviationShipmentList.add(nullDeviation);
+        return  _deviationShipmentList.stream().sorted((o1, o2) ->  o1.getId() - o2.getId() ).collect(toList());
     }
 
     private void updateTimeUpdateDeviation() {
@@ -222,6 +227,11 @@ public class HelperServices {
 
 
     public List<DeviationDelivery> deviationDeliveryList() {
-        return  Ebean.find(DeviationDelivery.class).findList();
+        List<DeviationDelivery> _deviationDeliveriList = Ebean.find(DeviationDelivery.class).findList();
+        DeviationDelivery nullDeviationDelivery = new DeviationDelivery();
+        nullDeviationDelivery.setId(-1);
+        nullDeviationDelivery.setDescription("");
+        _deviationDeliveriList.add(nullDeviationDelivery);
+        return  _deviationDeliveriList.stream().sorted((o1, o2) ->  o1.getId() - o2.getId() ).collect(toList());
     }
 }

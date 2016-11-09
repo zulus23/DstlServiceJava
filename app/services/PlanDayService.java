@@ -1,6 +1,8 @@
 package services;
 
 import com.avaje.ebean.Ebean;
+import model.DeviationDelivery;
+import model.DeviationShipment;
 import model.Enterprise;
 import model.plan.JournalShipment;
 import model.plan.PlanShipment;
@@ -14,10 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
@@ -96,9 +95,22 @@ public class PlanDayService {
     }
 
     public List<PlanShipmentItem> selectItemPlan(Date datePlan, String nameServiceDstl){
+        List<PlanShipmentItem> _items = Optional.ofNullable(Ebean.createQuery(PlanShipment.class).where().eq("datePlan",datePlan).findUnique())
+                .map(e -> e.getPlanShipmentItems()).orElse(null);
+        if (Objects.nonNull(_items)){
+            _items.stream().forEach(e -> {
+                if(Objects.isNull(e.getDeviationShipment())){
 
-        return Optional.ofNullable(Ebean.createQuery(PlanShipment.class).where().eq("datePlan",datePlan).findUnique())
-                        .map(e -> e.getPlanShipmentItems()).orElse(null);
+                    e.setDeviationShipment(new DeviationShipment(-1,""));
+                }
+                if(Objects.isNull(e.getDeviationDelivery())){
+                    e.setDeviationDelivery(new DeviationDelivery(-1,""));
+                }
+            });
+        }
+
+
+        return _items;
     }
 
 
