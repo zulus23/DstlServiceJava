@@ -32,15 +32,7 @@ var planShipmentUtil = (
                     }
                 });
         }
-        var  getField = function (value) {
-            console.log(value);
-            if(value === null){
-                return "";
-            } else{
-                return 'deviationShipment.description'
-            }
 
-        }
 
         function deviationShipmentDropDownEditor(container, options) {
 
@@ -148,7 +140,7 @@ var planShipmentUtil = (
                         fields: {
                             id: {type: "number", editable: false},
                             senderEnterprise: {type: "string"},
-                            kindShipment: {type: "string"},
+                            typeShipment: {type: "string"},
                             numberDispatcher: {type: "string"},
                             inPlanDay: {type: "boolean"},
                             dateCreateDispatcher: {type: "string"},
@@ -237,9 +229,9 @@ var planShipmentUtil = (
                             id: {type: "number", editable: false},
                             idPlan: {editable: false,type:"number"},
                             senderEnterprise: { editable: false,defaultValue: { id: 0,name:''}} ,
-                            kindShipment: {editable: false,type: "string"},
+                            typeShipment: {editable: false,type: "string"},
                             inPlanLoad: {editable: false,type: "boolean"},
-                            dateShipmentDispatcher: {editable: false,type: "string"},
+                            dateShipmentDispatcher: {editable: false,type: "date",format:"{0:dd-MM-yyyy}"},
                             deviationShipment: {defaultValue:{id:-1,description:''}, nullable: true},
                             dateDeliveryDispatcher: {editable: false,type: "string"},
                             dateDeliveryFact: {},
@@ -269,7 +261,8 @@ var planShipmentUtil = (
                             costTrip: {type:"number",editable: true, nullable: false},
                             timeLoad: {},
                             managerBackOffice: {editable: false,type: "string"},
-                            note: {type: "string"}
+                            note: {type: "string"},
+                            dataPlan:{type:"string"}
 
                         }
                     }
@@ -304,7 +297,7 @@ var planShipmentUtil = (
                         groupable: false
                     },
                     {
-                        field: "kindShipment",
+                        field: "typeShipment",
                         title: "Вид отгрузки",
                         width: "100px",
                         headerAttributes: gridUtils.headerFormat,
@@ -546,7 +539,7 @@ var planShipmentUtil = (
                         editor: enterpriseDropDownEditor, template: "#=senderEnterprise.name#"
                     },
                     {
-                        field: "kindShipment",
+                        field: "typeShipment",
                         title: "Вид отгрузки",
                         width: "100px",
                         headerAttributes: gridUtils.headerFormat,
@@ -579,7 +572,9 @@ var planShipmentUtil = (
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
                         filterable: false,
-                        groupable: false
+                        groupable: false,
+                        format:"{0:dd-MM-yyyy}"
+
 
                     },
                     {
@@ -896,10 +891,10 @@ var planShipmentUtil = (
                 numberDispatcher: item.numberDispatcher,
                 inPlanDay: false,
                 dateCreateDispatcher: item.dateCreateDispatcher,
-                deviationShipment:{id:0,description:''},
+                deviationShipment:{id:-1,description:''},
                 dateShipmentDispatcher: item.dateShipmentDispatcher,
                 dateDeliveryDispatcher: item.dateDeliveryDispatcher,
-                deviationDelivery:{id:0,description:''},
+                deviationDelivery:{id:-1,description:''},
                 existInStore: item.existInStore,
                 dateToStore: item.dateToStore,
                 placeLoading: item.placeLoading,
@@ -917,7 +912,9 @@ var planShipmentUtil = (
                 typeTransport: item.typeTransport,
                 costTrip: 0,
                 managerBackOffice: item.managerBackOffice,
-                note: item.note
+                note: item.note,
+                datePlan: getPlanDay()
+
             }
         }
 
@@ -975,8 +972,7 @@ var planShipmentUtil = (
             addToPlan:addToPlan,
             updateJournalShipment:UpdateJournalShipment,
             selectPlanDetailID:selectPlanDetailID,
-            setDatePlan:setDatePlan,
-            getField:getField
+            setDatePlan:setDatePlan
         }
     }
 )();

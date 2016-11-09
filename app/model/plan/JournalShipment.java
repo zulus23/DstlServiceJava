@@ -1,10 +1,5 @@
 package model.plan;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
-import java.sql.Date;
-import java.sql.Timestamp;
-
 /**
  * Created by Gukov on 01.11.2016.
  */
@@ -12,7 +7,7 @@ public class JournalShipment {
 
     private Long id;
     private String senderEnterprise;
-    private String kindShipment;
+    private String typeShipment;
     private String numberDispatcher;
     private Boolean inPlanDay;
     private String dateCreateDispatcher;
@@ -55,12 +50,12 @@ public class JournalShipment {
         this.senderEnterprise = senderEnterprise;
     }
 
-    public String getKindShipment() {
-        return kindShipment;
+    public String getTypeShipment() {
+        return typeShipment;
     }
 
-    public void setKindShipment(String kindShipment) {
-        this.kindShipment = kindShipment;
+    public void setTypeShipment(String typeShipment) {
+        this.typeShipment = typeShipment;
     }
 
     public String getNumberDispatcher() {

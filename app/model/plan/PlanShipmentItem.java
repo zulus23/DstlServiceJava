@@ -42,7 +42,7 @@ public class PlanShipmentItem  extends Model {
     @Column(name = "DateDeliveryDispatcher")
     private Date dateDeliveryDispatcher;
     @Column(name = "DateDeliveryFact")
-    private String dateDeliveryFact;
+    private Date dateDeliveryFact;
     @ManyToOne
     @JoinColumn(name = "IdDeviationDelivery")
     private DeviationDelivery deviationDelivery;
@@ -69,7 +69,7 @@ public class PlanShipmentItem  extends Model {
     @Column(name = "Cust_Num")
     private String codeCustomer;
     @Column(name = "Cust_Seq")
-    private String seqCustomer;
+    private Integer seqCustomer;
 
     @Column(name = "Cust_Name")
     private String nameCustomer;
@@ -190,11 +190,11 @@ public class PlanShipmentItem  extends Model {
         this.dateDeliveryDispatcher = dateDeliveryDispatcher;
     }
 
-    public String getDateDeliveryFact() {
+    public Date getDateDeliveryFact() {
         return dateDeliveryFact;
     }
 
-    public void setDateDeliveryFact(String dateDeliveryFact) {
+    public void setDateDeliveryFact(Date dateDeliveryFact) {
         this.dateDeliveryFact = dateDeliveryFact;
     }
 
@@ -294,11 +294,11 @@ public class PlanShipmentItem  extends Model {
         this.codeCustomer = codeCustomer;
     }
 
-    public String getSeqCustomer() {
+    public Integer getSeqCustomer() {
         return seqCustomer;
     }
 
-    public void setSeqCustomer(String seqCustomer) {
+    public void setSeqCustomer(Integer seqCustomer) {
         this.seqCustomer = seqCustomer;
     }
 
