@@ -1,6 +1,7 @@
 package services;
 
 import com.avaje.ebean.Ebean;
+import com.avaje.ebean.config.JsonConfig;
 import com.fasterxml.jackson.databind.JsonNode;
 import model.DeviationDelivery;
 import model.DeviationShipment;
@@ -153,7 +154,8 @@ public class PlanDayService {
 
         PlanShipmentItem _newPlanShipmentItem = new PlanShipmentItem();
         Optional.ofNullable(value.findValue("senderEnterprise")).ifPresent(e -> {
-            Enterprise _enterprise = dstlService.getEnterprise(value.findValue("senderEnterprise").asText());
+
+            Enterprise _enterprise = dstlService.getEnterprise(e.findValue("name").asText());
             _newPlanShipmentItem.setSenderEnterprise(_enterprise);
         });
 
@@ -188,6 +190,8 @@ public class PlanDayService {
                                                        dateTime.getHourOfDay(),
                                                        dateTime.getMinuteOfHour());
            _newPlanShipmentItem.setDateToStore(Timestamp.valueOf(localTime));
+            //_newPlanShipmentItem.setDateToStore(localTime);
+
         });
         Optional.ofNullable(value.findValue("placeShipment")).ifPresent(e -> {
             _newPlanShipmentItem.setPlaceShipment(e.asText());
@@ -287,7 +291,10 @@ public class PlanDayService {
 
     @NotNull
     private Date dateFromStringInFormat_dd_MM_yyyy(String dateValue) {
-        return Date.valueOf(LocalDate.parse(dateValue, DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        DateTime dateTime = DateTime.parse(dateValue);
+        LocalDate localDate = LocalDate.of(dateTime.getYear(),dateTime.getMonthOfYear(),dateTime.getDayOfMonth());
+        //Date.valueOf(LocalDate.parse(dateValue, DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        return Date.valueOf(localDate);
     }
 
 

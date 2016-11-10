@@ -119,7 +119,10 @@
                     showDetails(planShipmentUtil.selectPlanDetailID());
 
                 });*/
+               $("#bSavePlan").bind( "click", function() {
 
+                   $("#planDayGrid").data("kendoGrid").dataSource.sync();
+                })
 
             });
 

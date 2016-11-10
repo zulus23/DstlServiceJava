@@ -37,6 +37,15 @@ public class JournalShipmentController extends Controller {
     @Inject
     private PlanDayService planDayService;
 
+    public Result deletePlanDayItem(Integer id) {
+        return play.mvc.Results.TODO;
+    }
+
+    public  Result updatePlanDayItem(Integer id) {
+        System.out.println(request().body().asJson());
+        return play.mvc.Results.TODO;
+    }
+
 
 
     /*@Inject

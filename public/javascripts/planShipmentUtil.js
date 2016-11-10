@@ -213,7 +213,41 @@ var planShipmentUtil = (
                                 options.success(data);
                             }
                         });
-                    }
+                    },
+                    update: function(options){
+
+                        $.ajax({
+                            type: "PATCH",
+                            url: "/api/plandayshipment/"+options.data.id,
+                            contentType: "application/json; charset=utf-8",
+                            dataType: 'json',
+                            beforeSend: function(){
+                               options.data.dateDeliveryFact = moment(options.data.dateDeliveryFact).format("DD-MM-YYYY");
+                            },
+                            data:  kendo.stringify(options),
+                            success: function(data) {
+                                options.success(data);
+                            }
+                        });
+                    },
+                    destroy: function(options) {
+                        $.ajax({
+                            type: "DELETE",
+                            url: "/api/plandayshipment/"+options.data.id,
+                            contentType: "application/json; charset=utf-8",
+                            dataType: 'json',
+                            /*data:  kendo.stringify({
+                                "id":options.data.id,
+                                "name":options.data.name,
+                                "startTime":moment(options.data.startTime).format("DD-MM-YYYY HH:mm"),
+                                "endTime":moment(options.data.endTime).format("DD-MM-YYYY HH:mm"),
+                                "workTime":options.data.workTime
+                            }),*/
+                            success: function(data) {
+                                options.success(data);
+                            }
+                        });
+                    },
                 },
                 //batch: true,
                 aggregate:[
@@ -237,11 +271,11 @@ var planShipmentUtil = (
                             dateDeliveryFact: {type:"date"},
                             deviationDelivery: {defaultValue:{id:-1,description:''}, nullable: true},
                             existInStore: {editable: false,type: "boolean"},
-                            dateToStore: {editable: false,type: "string"},
+                            dateToStore: {editable: false},
                             placeLoading: {type: "string"},
                             statusDispatcher: {editable: false,type: "string"},
                             numberDispatcher: {editable: false,type: "string"},
-                            dateCreateDispatcher: {editable: false,type: "string"},
+                            dateCreateDispatcher: {editable: false},
                             numberOrder: {editable: false,type: "string"},
                             numberItem: {editable: false,type: "string"},
                             nameOrder: {editable: false,type: "string"},
@@ -369,7 +403,9 @@ var planShipmentUtil = (
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
                         filterable: false,
-                        groupable: false
+                        groupable: false,
+
+                      //  format:"{0:dd-MM-yyyy}"
                     },
                     {
                         field: "placeLoading",
@@ -504,9 +540,13 @@ var planShipmentUtil = (
         }
 
 
-        function onChange(args) {
+        function onChange(e) {
             var model = this.dataItem(this.select());
             ID = model.uid; //gets the value of the field "ID"
+            if(e.values.dateDeliveryFact !== e.model.dateDeliveryFact){
+                e.model.set('dateDeliveryFact',moment(values.dateDeliveryFact).format("DD-MM-YYYY"));
+            }
+
         }
         var  selectPlanDetailID = function(){
             return ID;
@@ -633,7 +673,8 @@ var planShipmentUtil = (
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupable: false
+                        groupable: false,
+                        template:'#=  moment(dateToStore).format("DD-MM-YYYY HH:mm")#'
                     },
                     {
                         field: "placeLoading",
@@ -670,7 +711,8 @@ var planShipmentUtil = (
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
                         filterable: false,
-                        groupable: false
+                        groupable: false,
+                        template:'#=  moment(dateCreateDispatcher).format("DD-MM-YYYY HH:mm")#'
                     },
                     {
                         field: "numberOrder",

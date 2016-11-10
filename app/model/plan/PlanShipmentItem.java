@@ -4,12 +4,15 @@ import com.avaje.ebean.Model;
 import com.avaje.ebean.annotation.CreatedTimestamp;
 import com.avaje.ebean.annotation.JsonIgnore;
 import com.avaje.ebean.annotation.UpdatedTimestamp;
+import com.avaje.ebean.config.JsonConfig;
 import model.*;
+import org.joda.time.DateTime;
 import play.db.NamedDatabase;
 
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * Created by Gukov on 02.11.2016.
