@@ -996,9 +996,10 @@ var planShipmentUtil = (
                     group: "gridGroupJournal"
                 });
 
-                $(journalShipmentView.element).kendoDropTarget({
+                $("#journalGridView").kendoDropTarget({
                     drop: function (e) {
-
+                        //var deleteItem =
+                        console.log(e);
 
                     },
                     group: "gridGroupPlan"

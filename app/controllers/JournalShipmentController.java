@@ -38,7 +38,7 @@ public class JournalShipmentController extends Controller {
     private PlanDayService planDayService;
 
     public Result deletePlanDayItem(Integer id) {
-        return play.mvc.Results.TODO;
+        return ok(Json.toJson(planDayService.deletePlandDayItem(id,authService.getUserInfo().orElse(null))));
     }
 
     public  Result updatePlanDayItem(Integer id) {
@@ -47,22 +47,6 @@ public class JournalShipmentController extends Controller {
     }
 
 
-
-    /*@Inject
-    private PlaySessionStore playSessionStore;
-
-    private Boolean isLoggedIn(){
-        final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
-        final ProfileManager<CommonProfile> profileManager = new ProfileManager(context);
-        return profileManager.isAuthenticated();
-    }
-
-    private Optional<CommonProfile> getUserInfo(){
-        final PlayWebContext context = new PlayWebContext(ctx(), playSessionStore);
-        final ProfileManager<CommonProfile> profileManager = new ProfileManager(context);
-        return profileManager.get(true);
-    }
-*/
 
 
    // @Secure(clients = "ServiceDstlFormClient")

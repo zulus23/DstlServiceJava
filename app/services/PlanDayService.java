@@ -1,5 +1,6 @@
 package services;
 
+import auth.DstlProfile;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.config.JsonConfig;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -25,6 +26,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static com.avaje.ebean.Ebean.find;
 import static java.util.Optional.ofNullable;
 import static play.mvc.Results.TODO;
 
@@ -147,7 +149,7 @@ public class PlanDayService {
         Enterprise _serviceDstl = DbUtils.enterpriseFromUser(nameServiceDstl);
         Date _datePlan =  dateFromStringInFormat_dd_MM_yyyy(value.findValue("datePlan").asText());
         PlanShipment planShipment =
-                  Optional.ofNullable(Ebean.find(PlanShipment.class)
+                  Optional.ofNullable(find(PlanShipment.class)
                                            .where().eq("datePlan",_datePlan).eq("serviceDstl",_serviceDstl)
                                            .findUnique())
                           .orElse(createPlan(_datePlan,_serviceDstl.getName()));
@@ -165,7 +167,7 @@ public class PlanDayService {
         _newPlanShipmentItem.setPlanLoad(value.findValue("planLoad").asBoolean(false));
        _newPlanShipmentItem.setDateShipmentDispatcher(dateFromStringInFormat_dd_MM_yyyy(value.findValue("dateShipmentDispatcher").asText()));
 
-        DeviationShipment deviationShipment =   Optional.ofNullable(Ebean.find(DeviationShipment.class).where().eq("id", value.findValue("deviationShipment")
+        DeviationShipment deviationShipment =   Optional.ofNullable(find(DeviationShipment.class).where().eq("id", value.findValue("deviationShipment")
                                                                 .findValue("id").asInt())
                                                                 .findUnique()).orElse(null);
        _newPlanShipmentItem.setDeviationShipment(deviationShipment);
@@ -177,7 +179,7 @@ public class PlanDayService {
         );
 
 
-        DeviationDelivery deviationDelivery =   Optional.ofNullable(Ebean.find(DeviationDelivery.class).where().eq("id", value.findValue("deviationDelivery")
+        DeviationDelivery deviationDelivery =   Optional.ofNullable(find(DeviationDelivery.class).where().eq("id", value.findValue("deviationDelivery")
                                                                                                                               .findValue("id").asInt())
                                       .findUnique()).orElse(null);
        _newPlanShipmentItem.setDeviationDelivery(deviationDelivery);
@@ -298,4 +300,9 @@ public class PlanDayService {
     }
 
 
+    public PlanShipmentItem deletePlandDayItem(Integer id, DstlProfile dstlProfile) {
+        PlanShipmentItem planShipmentItem =  Ebean.find(PlanShipmentItem.class,id);
+        Ebean.delete(planShipmentItem);
+        return planShipmentItem;
+    }
 }
