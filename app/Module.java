@@ -6,6 +6,7 @@ import java.time.Clock;
 import services.ApplicationTimer;
 import services.AtomicCounter;
 import services.Counter;
+import services.DstlService;
 
 /**
  * This class is a Guice module that tells Guice how to bind several
@@ -30,6 +31,7 @@ public class Module extends AbstractModule {
         // Set AtomicCounter as the implementation for Counter.
       //  bind(Counter.class).to(AtomicCounter.class);
         bind(AuthService.class).to(AuthServiceImpl.class);
+
     }
 
 }

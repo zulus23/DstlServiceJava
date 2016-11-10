@@ -139,7 +139,7 @@ var planShipmentUtil = (
 
                         fields: {
                             id: {type: "number", editable: false},
-                            senderEnterprise: {type: "string"},
+                            senderEnterprise: {},
                             typeShipment: {type: "string"},
                             numberDispatcher: {type: "string"},
                             inPlanDay: {type: "boolean"},
@@ -294,7 +294,8 @@ var planShipmentUtil = (
                         width: "100px",
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        groupable: false
+                        groupable: false,
+                        template: "#=senderEnterprise.name#"
                     },
                     {
                         field: "typeShipment",

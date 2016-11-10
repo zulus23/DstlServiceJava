@@ -1,12 +1,14 @@
 package model.plan;
 
+import model.Enterprise;
+
 /**
  * Created by Gukov on 01.11.2016.
  */
 public class JournalShipment {
 
     private Long id;
-    private String senderEnterprise;
+    private Enterprise senderEnterprise;
     private String typeShipment;
     private String numberDispatcher;
     private Boolean inPlanDay;
@@ -42,11 +44,11 @@ public class JournalShipment {
         this.id = id;
     }
 
-    public String getSenderEnterprise() {
+    public Enterprise getSenderEnterprise() {
         return senderEnterprise;
     }
 
-    public void setSenderEnterprise(String senderEnterprise) {
+    public void setSenderEnterprise(Enterprise senderEnterprise) {
         this.senderEnterprise = senderEnterprise;
     }
 

@@ -13,6 +13,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import utils.DbUtils;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.sql.Date;
 import java.sql.Time;
@@ -32,14 +33,15 @@ import static play.mvc.Results.TODO;
 @Singleton
 public class PlanDayService {
 
-
+    @Inject
+    private DstlService dstlService;
 
     public List<JournalShipment> journalShipmentList(){
 
         List<JournalShipment> _journalShipments = new ArrayList<>();
         JournalShipment journalShipment = new JournalShipment();
         journalShipment.setId(1L);
-        journalShipment.setSenderEnterprise("ГОТЭК");
+        journalShipment.setSenderEnterprise( dstlService.getEnterprise("ГОТЭК"));
         journalShipment.setTypeShipment("Доставка");
         journalShipment.setNumberDispatcher("5439");
         journalShipment.setInPlanDay(false);
@@ -67,7 +69,7 @@ public class PlanDayService {
      _journalShipments.add(journalShipment);
         JournalShipment journalShipment1 = new JournalShipment();
         journalShipment1.setId(2L);
-        journalShipment1.setSenderEnterprise("ГОТЭК");
+        journalShipment1.setSenderEnterprise(dstlService.getEnterprise("ГОТЭК"));
         journalShipment1.setTypeShipment("Самовывоз");
         journalShipment1.setNumberDispatcher("5438");
         journalShipment1.setInPlanDay(false);
@@ -141,15 +143,20 @@ public class PlanDayService {
     }
 
     public PlanShipmentItem savePlanShipmentItem(JsonNode value,String nameServiceDstl){
-        Enterprise _enterprise = DbUtils.enterpriseFromUser(nameServiceDstl);
+        Enterprise _serviceDstl = DbUtils.enterpriseFromUser(nameServiceDstl);
         Date _datePlan =  dateFromStringInFormat_dd_MM_yyyy(value.findValue("datePlan").asText());
         PlanShipment planShipment =
                   Optional.ofNullable(Ebean.find(PlanShipment.class)
-                                           .where().eq("datePlan",_datePlan).eq("serviceDstl",_enterprise)
+                                           .where().eq("datePlan",_datePlan).eq("serviceDstl",_serviceDstl)
                                            .findUnique())
-                          .orElse(createPlan(_datePlan,_enterprise.getName()));
+                          .orElse(createPlan(_datePlan,_serviceDstl.getName()));
+
         PlanShipmentItem _newPlanShipmentItem = new PlanShipmentItem();
-        _newPlanShipmentItem.setSenderEnterprise(_enterprise);
+        Optional.ofNullable(value.findValue("senderEnterprise")).ifPresent(e -> {
+            Enterprise _enterprise = dstlService.getEnterprise(value.findValue("senderEnterprise").asText());
+            _newPlanShipmentItem.setSenderEnterprise(_enterprise);
+        });
+
         _newPlanShipmentItem.setPlanShipment(planShipment);
         _newPlanShipmentItem.setTypeShipment(value.findValue("typeShipment").asText());
         // Необходимо держать ссылку на план отрузки
