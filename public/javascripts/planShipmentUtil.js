@@ -231,6 +231,7 @@ var planShipmentUtil = (
                         });
                     },
                     destroy: function(options) {
+                        console.log(options);
                         $.ajax({
                             type: "DELETE",
                             url: "/api/plandayshipment/"+options.data.id,
@@ -999,8 +1000,10 @@ var planShipmentUtil = (
                 $("#journalGridView").kendoDropTarget({
                     drop: function (e) {
                         //var deleteItem =
-                        console.log(e);
-
+                        var dataItem = $("#planDayGrid").data("kendoGrid").dataSource.getByUid(e.draggable.currentTarget.data("uid"));
+                        console.log(dataItem);
+                        $("#planDayGrid").data("kendoGrid").dataSource.remove(dataItem);
+                        $("#planDayGrid").data("kendoGrid").dataSource.sync();
                     },
                     group: "gridGroupPlan"
                 });

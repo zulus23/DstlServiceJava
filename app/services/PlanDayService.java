@@ -293,16 +293,23 @@ public class PlanDayService {
 
     @NotNull
     private Date dateFromStringInFormat_dd_MM_yyyy(String dateValue) {
-        DateTime dateTime = DateTime.parse(dateValue);
+        DateTime dateTime;
+        if(dateValue.length() < 11){
+            org.joda.time.format.DateTimeFormatter formatter =  new org.joda.time.format.DateTimeFormatterBuilder().appendDayOfMonth(2)
+                                                                                                         .appendLiteral("-")
+                                                                                                         .appendMonthOfYear(2).appendLiteral("-").appendYear(4,4).toFormatter();
+            dateTime = DateTime.parse(dateValue, formatter);
+        }else {
+            dateTime = DateTime.parse(dateValue);
+        }
         LocalDate localDate = LocalDate.of(dateTime.getYear(),dateTime.getMonthOfYear(),dateTime.getDayOfMonth());
         //Date.valueOf(LocalDate.parse(dateValue, DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         return Date.valueOf(localDate);
     }
 
 
-    public PlanShipmentItem deletePlandDayItem(Integer id, DstlProfile dstlProfile) {
-        PlanShipmentItem planShipmentItem =  Ebean.find(PlanShipmentItem.class,id);
-        Ebean.delete(planShipmentItem);
-        return planShipmentItem;
+    public Integer deletePlandDayItem(Integer id, DstlProfile dstlProfile) {
+        //PlanShipmentItem planShipmentItem =  Ebean.find(PlanShipmentItem.class,id);
+        return Ebean.delete(PlanShipmentItem.class,id);
     }
 }
