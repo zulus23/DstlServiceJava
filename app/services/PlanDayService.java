@@ -23,6 +23,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -48,11 +49,11 @@ public class PlanDayService {
         journalShipment.setTypeShipment("Доставка");
         journalShipment.setNumberDispatcher("5439");
         journalShipment.setInPlanDay(false);
-        journalShipment.setDateCreateDispatcher(LocalDateTime.of(2016,3,21,14,25).format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm")));
+        journalShipment.setDateCreateDispatcher(Timestamp.valueOf(LocalDateTime.of(2016,3,21,14,25,0,0)));
         journalShipment.setDateShipmentDispatcher(LocalDate.of(2016,3,23).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         journalShipment.setDateDeliveryDispatcher(LocalDate.of(2016,3,24).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         journalShipment.setExistInStore(true);
-        journalShipment.setDateToStore(LocalDateTime.of(2016,3,20,17,20).format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm")));
+        journalShipment.setDateToStore(Timestamp.valueOf(LocalDateTime.of(2016,3,20,17,20)));
         journalShipment.setPlaceLoading("ПЖ");
         journalShipment.setStatusDispatcher("заказано");
         journalShipment.setNumberOrder("2715");
@@ -76,11 +77,11 @@ public class PlanDayService {
         journalShipment1.setTypeShipment("Самовывоз");
         journalShipment1.setNumberDispatcher("5438");
         journalShipment1.setInPlanDay(false);
-        journalShipment1.setDateCreateDispatcher(LocalDateTime.of(2016,3,25,13,25).format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm")));
+        journalShipment1.setDateCreateDispatcher(Timestamp.valueOf(LocalDateTime.of(2016,3,25,13,25,0,0)));
         journalShipment1.setDateShipmentDispatcher(LocalDate.of(2016,3,26).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         journalShipment1.setDateDeliveryDispatcher(LocalDate.of(2016,3,27).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         journalShipment1.setExistInStore(true);
-        journalShipment1.setDateToStore(LocalDateTime.of(2016,3,24,16,21).format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm")));
+        journalShipment1.setDateToStore(Timestamp.valueOf(LocalDateTime.of(2016,3,24,16,21)));
         journalShipment1.setPlaceLoading("ПЖ");
         journalShipment1.setStatusDispatcher("заказано");
         journalShipment1.setNumberOrder("2714");
@@ -186,6 +187,7 @@ public class PlanDayService {
        _newPlanShipmentItem.setExistInStore(value.findValue("existInStore").asBoolean(false));
         Optional.ofNullable(value.findValue("dateToStore")).ifPresent(e -> {
             DateTime dateTime =   DateTime.parse(value.findValue("dateToStore").asText(), DateTimeFormat.forPattern("dd-MM-yyyy HH:mm"));
+            //DateTime dateTime =    new DateTime(value.findValue("dateToStore").asText());
             LocalDateTime localTime = LocalDateTime.of(dateTime.getYear(),
                                                        dateTime.getMonthOfYear(),
                                                        dateTime.getDayOfMonth(),
@@ -288,6 +290,15 @@ public class PlanDayService {
         });
 
         Ebean.save(_newPlanShipmentItem);
+        if(Objects.isNull(_newPlanShipmentItem.getDeviationShipment())){
+
+            _newPlanShipmentItem.setDeviationShipment(new DeviationShipment(-1,""));
+        }
+        if(Objects.isNull(_newPlanShipmentItem.getDeviationDelivery())){
+            _newPlanShipmentItem.setDeviationDelivery(new DeviationDelivery(-1,""));
+        }
+
+
         return _newPlanShipmentItem;
     }
 

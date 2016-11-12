@@ -143,11 +143,11 @@ var planShipmentUtil = (
                             typeShipment: {type: "string"},
                             numberDispatcher: {type: "string"},
                             inPlanDay: {type: "boolean"},
-                            dateCreateDispatcher: {type: "string"},
+                            dateCreateDispatcher: {editable:false},
                             dateShipmentDispatcher: {type: "string"},
                             dateDeliveryDispatcher: {type: "string"},
                             existInStore: {type: "boolean"},
-                            dateToStore: {type: "string"},
+                            dateToStore: {editable:false},
                             placeLoading: {type: "string"},
                             statusDispatcher: {type: "string"},
                             numberOrder: {type: "string"},
@@ -364,7 +364,9 @@ var planShipmentUtil = (
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
                         filterable: false,
-                        groupable: false
+                        groupable: false,
+                        //template:'#=  moment(dateCreateDispatcher).format("DD-MM-YYYY HH:mm")#'
+                       // template:'#=  moment(dateCreateDispatcher,"DD-MM-YYYY HH:mm")#'
                     },
                     {
                         field: "dateShipmentDispatcher",
@@ -405,7 +407,8 @@ var planShipmentUtil = (
                         attributes: gridUtils.columnFormat,
                         filterable: false,
                         groupable: false,
-
+                        //template:'#=  moment(dateToStore).format("DD-MM-YYYY HH:mm")#'
+                     //   template:'#=  moment(dateToStore,"DD-MM-YYYY HH:mm")#'
                       //  format:"{0:dd-MM-yyyy}"
                     },
                     {
@@ -675,7 +678,7 @@ var planShipmentUtil = (
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
                         groupable: false,
-                        template:'#=  moment(dateToStore).format("DD-MM-YYYY HH:mm")#'
+                       // template:'#=  moment(dateToStore).format("DD-MM-YYYY HH:mm")#'
                     },
                     {
                         field: "placeLoading",
@@ -713,7 +716,7 @@ var planShipmentUtil = (
                         attributes: gridUtils.columnFormat,
                         filterable: false,
                         groupable: false,
-                        template:'#=  moment(dateCreateDispatcher).format("DD-MM-YYYY HH:mm")#'
+                      //  template:'#=  moment(dateCreateDispatcher).format("DD-MM-YYYY HH:mm")#'
                     },
                     {
                         field: "numberOrder",
@@ -931,6 +934,7 @@ var planShipmentUtil = (
         }
 
         var addToPlan = function (item) {
+            console.log(item.dateToStore);
             return {
                 senderEnterprise: item.senderEnterprise,
                 typeShipment: item.typeShipment,

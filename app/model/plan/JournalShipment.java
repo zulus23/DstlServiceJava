@@ -1,6 +1,9 @@
 package model.plan;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import model.Enterprise;
+
+import java.sql.Timestamp;
 
 /**
  * Created by Gukov on 01.11.2016.
@@ -12,11 +15,17 @@ public class JournalShipment {
     private String typeShipment;
     private String numberDispatcher;
     private Boolean inPlanDay;
-    private String dateCreateDispatcher;
+    @JsonFormat(
+            shape = JsonFormat.Shape.STRING,
+            pattern = "dd-MM-yyyy hh:mm")
+    private Timestamp dateCreateDispatcher;
     private String dateShipmentDispatcher;
     private String dateDeliveryDispatcher;
     private Boolean existInStore;
-    private String dateToStore;
+    @JsonFormat(
+            shape = JsonFormat.Shape.STRING,
+            pattern = "dd-MM-yyyy hh:mm")
+    private Timestamp dateToStore;
     private String placeLoading;
     private String statusDispatcher;
     private String numberOrder;
@@ -76,11 +85,11 @@ public class JournalShipment {
         this.inPlanDay = inPlanDay;
     }
 
-    public String getDateCreateDispatcher() {
+    public Timestamp getDateCreateDispatcher() {
         return dateCreateDispatcher;
     }
 
-    public void setDateCreateDispatcher(String dateCreateDispatcher) {
+    public void setDateCreateDispatcher(Timestamp dateCreateDispatcher) {
         this.dateCreateDispatcher = dateCreateDispatcher;
     }
 
@@ -108,11 +117,11 @@ public class JournalShipment {
         this.existInStore = existInStore;
     }
 
-    public String getDateToStore() {
+    public Timestamp getDateToStore() {
         return dateToStore;
     }
 
-    public void setDateToStore(String dateToStore) {
+    public void setDateToStore(Timestamp dateToStore) {
         this.dateToStore = dateToStore;
     }
 
