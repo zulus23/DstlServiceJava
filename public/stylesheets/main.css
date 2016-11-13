@@ -102,3 +102,13 @@ div.col-lg-5, div.col-lg-7 {
     border-width: 0;
     height: 100%; !* DO NOT USE !important for setting the Grid height! *!
 }*/
+.table-cell-red  {
+text-align: center;
+font-size: 11px;
+color: red;
+}
+.table-cell  {
+    text-align: center;
+    font-size: 11px;
+    color: inherit;
+}

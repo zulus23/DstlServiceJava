@@ -21,6 +21,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "GTK_DSTL_PlanShipmentItem")
 public class PlanShipmentItem  extends Model {
+
+    public static final Finder<Long,PlanShipmentItem> find = new Finder<Long,PlanShipmentItem>(PlanShipmentItem.class);
+
     @Id
     @Column(name = "ID")
     private Long id;
@@ -505,4 +508,8 @@ public class PlanShipmentItem  extends Model {
     public int hashCode() {
         return getId().hashCode();
     }
+
+
+
+
 }

@@ -78,7 +78,7 @@ public class PlanDayService {
         journalShipment1.setNumberDispatcher("5438");
         journalShipment1.setInPlanDay(false);
         journalShipment1.setDateCreateDispatcher(Timestamp.valueOf(LocalDateTime.of(2016,3,25,13,25,0,0)));
-        journalShipment1.setDateShipmentDispatcher(LocalDate.of(2016,3,26).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        journalShipment1.setDateShipmentDispatcher(LocalDate.of(2016,11,26).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         journalShipment1.setDateDeliveryDispatcher(LocalDate.of(2016,3,27).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         journalShipment1.setExistInStore(true);
         journalShipment1.setDateToStore(Timestamp.valueOf(LocalDateTime.of(2016,3,24,16,21)));
@@ -306,6 +306,49 @@ public class PlanDayService {
 
         return _newPlanShipmentItem;
     }
+
+    public PlanShipmentItem updatePlanShipment(JsonNode value,Integer id){
+        PlanShipmentItem _updatePlanShipmentItem  = PlanShipmentItem.find.where().eq("id",id).findUnique();
+
+        Optional.ofNullable(value.findValue("deviationShipment")).ifPresent(e -> {
+        DeviationShipment deviationShipment =   Optional.ofNullable(find(DeviationShipment.class).where().eq("id", e
+                .findValue("id").asInt())
+                .findUnique()).orElse(null);
+        _updatePlanShipmentItem.setDeviationShipment(deviationShipment);
+        });
+
+        Optional.ofNullable(value.findValue("costTrip")).ifPresent(e -> {
+            _updatePlanShipmentItem.setCostTrip(e.asDouble());
+        });
+        Optional.ofNullable(value.findValue("note")).ifPresent(e -> {
+            _updatePlanShipmentItem.setNote(e.asText());
+        });
+
+        Optional.ofNullable(value.findValue("numberGate")).ifPresent(e -> {
+            _updatePlanShipmentItem.setNumberGate(e.asInt());
+        });
+
+        Optional.ofNullable(value.findValue("dateDeliveryFact")).ifPresent(e -> {
+            _updatePlanShipmentItem.setDateDeliveryFact(dateFromStringInFormat_dd_MM_yyyy(e.asText()));
+            }
+        );
+
+
+
+        Ebean.save(_updatePlanShipmentItem);
+
+
+        if(Objects.isNull(_updatePlanShipmentItem.getDeviationShipment())){
+
+            _updatePlanShipmentItem.setDeviationShipment(new DeviationShipment(-1,""));
+        }
+        if(Objects.isNull(_updatePlanShipmentItem.getDeviationDelivery())){
+            _updatePlanShipmentItem.setDeviationDelivery(new DeviationDelivery(-1,""));
+        }
+
+        return  _updatePlanShipmentItem;
+    }
+
 
     @NotNull
     private Date dateFromStringInFormat_dd_MM_yyyy(String dateValue) {

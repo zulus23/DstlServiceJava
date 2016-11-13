@@ -42,8 +42,8 @@ public class JournalShipmentController extends Controller {
     }
 
     public  Result updatePlanDayItem(Integer id) {
-        System.out.println(request().body().asJson());
-        return play.mvc.Results.TODO;
+        //System.out.println(request().body().asJson());
+        return ok(Json.toJson(planDayService.updatePlanShipment(request().body().asJson(),id)));
     }
 
 

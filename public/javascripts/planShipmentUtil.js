@@ -4,7 +4,7 @@
 var planShipmentUtil = (
     function() {
 
-        var datePlan,ID;
+        var datePlan,ID, selectShipItem;
 
         function enterpriseDropDownEditor(container, options) {
             console.log(options);
@@ -173,9 +173,10 @@ var planShipmentUtil = (
 
 
         var setDatePlan  = function(value){
-            console.log("setDatePlan");
-            datePlan = value;
+             datePlan = value;
         }
+
+
         function getPlanDay(){
             return moment(datePlan).format("DD-MM-YYYY") ;
         }
@@ -543,11 +544,14 @@ var planShipmentUtil = (
                 ]
             }).data("kendoGrid");
         }
-
+        var getDay = function(dateShipmentDispatcher){
+            return moment(datePlan) > moment(dateShipmentDispatcher);
+        }
 
         function onChange(e) {
             var model = this.dataItem(this.select());
             ID = model.uid; //gets the value of the field "ID"
+
             if(e.values.dateDeliveryFact !== e.model.dateDeliveryFact){
                 e.model.set('dateDeliveryFact',moment(values.dateDeliveryFact).format("DD-MM-YYYY"));
             }
@@ -556,9 +560,17 @@ var planShipmentUtil = (
         var  selectPlanDetailID = function(){
             return ID;
         }
-
+        function getColor(dateShipmentDispatcher)
+        {
+            return {"class" : "table-cell-red"};
+        }
         var planGrid =  function(){
+
+
+
             var  self = this;
+
+
             return $("#planDayGrid").kendoGrid({
                 // toolbar: ["edit"],
                 dataSource: planShipmentUtil.dataSourcePlanDay(),
@@ -593,7 +605,7 @@ var planShipmentUtil = (
                         //filterable: false,
                         groupable: false
                     },
-                    {
+                  /*  {
                         field: "",
                         title: "Дата плана",
                         width: "60px",
@@ -601,7 +613,7 @@ var planShipmentUtil = (
                         attributes: gridUtils.columnFormat,
                         //filterable: false,
                         groupable: false
-                    },
+                    },*/
                     {
                         field: "planLoad",
                         title: "В плане погрузки",
@@ -616,7 +628,8 @@ var planShipmentUtil = (
                         title: "Дата отгрузки в ПЭ",
                         width: "100px",
                         headerAttributes: gridUtils.headerFormat,
-                        attributes: gridUtils.columnFormat,
+                       // attributes: {class:"#=moment.duration(moment(dateShipmentDispatcher).diff(moment('01-01-2016'))).asDays() > 0 ? 'table-cell-red':'table-cell'#  "},
+                        attributes: {class:"#=planShipmentUtil.getDay(dateShipmentDispatcher) ? 'table-cell-red':'table-cell'#  "},
                         filterable: false,
                         groupable: false,
                         format:"{0:dd-MM-yyyy}"
@@ -1026,7 +1039,8 @@ var planShipmentUtil = (
             addToPlan:addToPlan,
             updateJournalShipment:UpdateJournalShipment,
             selectPlanDetailID:selectPlanDetailID,
-            setDatePlan:setDatePlan
+            setDatePlan:setDatePlan,
+            getDay:getDay
         }
     }
 )();
