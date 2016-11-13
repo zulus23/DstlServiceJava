@@ -55,7 +55,8 @@ public class PlanShipmentItem  extends Model {
     @Column(name = "DateToStore")
     @JsonFormat(
             shape = JsonFormat.Shape.STRING,
-            pattern = "dd-MM-yyyy hh:mm")
+            pattern = "dd-MM-yyyy hh:mm",
+            timezone="Europe/Moscow")
     private Timestamp dateToStore;
     @Column(name = "PlaceShipment")
     private String placeShipment;
@@ -66,7 +67,8 @@ public class PlanShipmentItem  extends Model {
     @Column(name = "DateCreateDispatcher")
     @JsonFormat(
             shape = JsonFormat.Shape.STRING,
-            pattern = "dd-MM-yyyy hh:mm")
+            pattern = "dd-MM-yyyy hh:mm",
+            timezone="Europe/Moscow")
     private Timestamp dateCreateDispatcher;
     @Column(name = "Co_Num")
     private String numberOrder;

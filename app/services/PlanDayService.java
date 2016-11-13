@@ -64,7 +64,7 @@ public class PlanDayService {
         journalShipment.setPlaceDelivery("Россия Москва");
         journalShipment.setSizeOrder(2000);
         journalShipment.setSizePallet("800X1200");
-        journalShipment.setPackingMethod("Поддон");
+        journalShipment.setPackingMethod("Россыпь");
         journalShipment.setCountPlace(22);
         journalShipment.setCapacityOrder(7000);
         journalShipment.setTypeTransport("82");
@@ -92,7 +92,7 @@ public class PlanDayService {
         journalShipment1.setPlaceDelivery("Россия Тула");
         journalShipment1.setSizeOrder(1000);
         journalShipment1.setSizePallet("800X1200");
-        journalShipment1.setPackingMethod("Поддон");
+        journalShipment1.setPackingMethod("Пакет");
         journalShipment1.setCountPlace(20);
         journalShipment1.setCapacityOrder(5000);
         journalShipment1.setTypeTransport("Компл.");
@@ -148,6 +148,7 @@ public class PlanDayService {
 
     public PlanShipmentItem savePlanShipmentItem(JsonNode value,String nameServiceDstl){
         Enterprise _serviceDstl = DbUtils.enterpriseFromUser(nameServiceDstl);
+        Enterprise  _enterprise = dstlService.getEnterprise(value.findValue("senderEnterprise").findValue("name").asText());
         Date _datePlan =  dateFromStringInFormat_dd_MM_yyyy(value.findValue("datePlan").asText());
         PlanShipment planShipment =
                   Optional.ofNullable(find(PlanShipment.class)
@@ -157,8 +158,6 @@ public class PlanDayService {
 
         PlanShipmentItem _newPlanShipmentItem = new PlanShipmentItem();
         Optional.ofNullable(value.findValue("senderEnterprise")).ifPresent(e -> {
-
-            Enterprise _enterprise = dstlService.getEnterprise(e.findValue("name").asText());
             _newPlanShipmentItem.setSenderEnterprise(_enterprise);
         });
 
@@ -245,6 +244,12 @@ public class PlanDayService {
         Optional.ofNullable(value.findValue("sizePallet")).ifPresent(e -> {
             _newPlanShipmentItem.setSizePallet(e.asText());
         });
+        Optional.ofNullable(value.findValue("packingMethod")).ifPresent( e -> {
+            _newPlanShipmentItem.setPackingMethod(e.asText());
+            _newPlanShipmentItem.setTimeToLoad(dstlService.timeForLoadingByTypePacking(e.asText(),_enterprise));
+           }
+        );
+
         Optional.ofNullable(value.findValue("countPlace")).ifPresent(e -> {
             _newPlanShipmentItem.setCountPlace(e.asInt());
         });
@@ -254,9 +259,9 @@ public class PlanDayService {
         Optional.ofNullable(value.findValue("typeTransport")).ifPresent(e -> {
             _newPlanShipmentItem.setTypeTransport(e.asText());
         });
-        Optional.ofNullable(value.findValue("timeToLoad")).ifPresent(e -> {
-            _newPlanShipmentItem.setTimeToLoad(e.asInt());
-        });
+        /*Optional.ofNullable(value.findValue("timeToLoad")).ifPresent(e -> {
+
+        });*/
 
         // ???????
         _newPlanShipmentItem.setTransportCompanyPlan(null);

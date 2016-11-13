@@ -223,6 +223,7 @@ var planShipmentUtil = (
                             dataType: 'json',
                             beforeSend: function(){
                                options.data.dateDeliveryFact = moment(options.data.dateDeliveryFact).format("DD-MM-YYYY");
+
                             },
                             data:  kendo.stringify(options),
                             success: function(data) {
@@ -252,7 +253,7 @@ var planShipmentUtil = (
                 },
                 //batch: true,
                 aggregate:[
-                    {field:"timeToLoad",aggregate:"count"}
+                    {field:"timeToLoad",aggregate:"sum"}
                 ],
 
 
@@ -272,11 +273,11 @@ var planShipmentUtil = (
                             dateDeliveryFact: {type:"date"},
                             deviationDelivery: {defaultValue:{id:-1,description:''}, nullable: true},
                             existInStore: {editable: false,type: "boolean"},
-                            dateToStore: {editable: false},
-                            placeLoading: {type: "string"},
+                            dateToStore: {editable: false,type:"string"},
+                            placeShipment: {type: "string"},
                             statusDispatcher: {editable: false,type: "string"},
                             numberDispatcher: {editable: false,type: "string"},
-                            dateCreateDispatcher: {editable: false},
+                            dateCreateDispatcher: {editable: false,type:"string"},
                             numberOrder: {editable: false,type: "string"},
                             numberItem: {editable: false,type: "string"},
                             nameOrder: {editable: false,type: "string"},
@@ -678,10 +679,10 @@ var planShipmentUtil = (
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
                         groupable: false,
-                       // template:'#=  moment(dateToStore).format("DD-MM-YYYY HH:mm")#'
+                        //template:'#=  moment(dateToStore).format("DD-MM-YYYY HH:mm")#'
                     },
                     {
-                        field: "placeLoading",
+                        field: "placeShipment",
                         title: "Площадка отгрузки",
                         width: "95px",
                         headerAttributes: gridUtils.headerFormat,
@@ -825,7 +826,7 @@ var planShipmentUtil = (
                         aggregates: ["count"],
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        footerTemplate: "#=count# "
+                        footerTemplate: "#=sum# "
 
                     },
                     {
@@ -947,7 +948,7 @@ var planShipmentUtil = (
                 deviationDelivery:{id:-1,description:''},
                 existInStore: item.existInStore,
                 dateToStore: item.dateToStore,
-                placeLoading: item.placeLoading,
+                placeShipment: item.placeLoading,
                 statusDispatcher: item.statusDispatcher,
                 numberOrder: item.numberOrder,
                 numberItem: item.numberItem,
