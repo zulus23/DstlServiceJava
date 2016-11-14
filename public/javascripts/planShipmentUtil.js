@@ -7,7 +7,7 @@ var planShipmentUtil = (
         var datePlan,ID, selectShipItem;
 
         function enterpriseDropDownEditor(container, options) {
-            console.log(options);
+
             $('<input required name="' + options.field + '"/>')
                 .appendTo(container)
                 .kendoDropDownList({
@@ -76,7 +76,7 @@ var planShipmentUtil = (
                 });
         }
         function deviationDeliveryDropDownEditor(container, options) {
-            console.log(options);
+
             $('<input required name="' + options.field + '"/>')
                 .appendTo(container)
                 .kendoDropDownList({
@@ -181,6 +181,24 @@ var planShipmentUtil = (
             return moment(datePlan).format("DD-MM-YYYY") ;
         }
 
+        function ErrorShow(request) {
+            var notificationElement = $("#notification").kendoNotification({
+                // hide automatically after 7 seconds
+                autoHideAfter: 7000,
+                // prevent accidental hiding for 1 second
+                allowHideAfter: 1000,
+                // show a hide button
+                button: true,
+                // prevent hiding by clicking on the notification content
+
+
+                hideOnClick: false
+            });
+
+            var notificationWidget = notificationElement.data("kendoNotification");
+            notificationWidget.show("Ошибка сохранения данных. " + request.responseText,"error");
+        }
+
         var dataSourcePlanDay =  function() {
             return new kendo.data.DataSource({
                 //serverAggregates: true,
@@ -197,7 +215,7 @@ var planShipmentUtil = (
                                 datePlan: getPlanDay()
                             },
                             success: function (data) {
-                                console.log(data);
+
                                 options.success(data);
                             }
                         });
@@ -212,6 +230,14 @@ var planShipmentUtil = (
                             data : kendo.stringify(options),
                             success: function(data) {
                                 options.success(data);
+                            },
+                            error: function (request, status, error) {
+                                console.log(request);
+                                //alert("Ошибка сохранения данных. "+request.responseText);
+                                ErrorShow(request);
+
+                                planGrid().dataSource.fetch();
+
                             }
                         });
                     },
@@ -233,7 +259,7 @@ var planShipmentUtil = (
                         });
                     },
                     destroy: function(options) {
-                        console.log(options);
+
                         $.ajax({
                             type: "DELETE",
                             url: "/api/plandayshipment/"+options.data.id,
@@ -545,6 +571,7 @@ var planShipmentUtil = (
             }).data("kendoGrid");
         }
         var getDay = function(dateShipmentDispatcher){
+            moment.locale('ru');
             return moment(datePlan) > moment(dateShipmentDispatcher);
         }
 
@@ -560,10 +587,10 @@ var planShipmentUtil = (
         var  selectPlanDetailID = function(){
             return ID;
         }
-        function getColor(dateShipmentDispatcher)
+       /* function getColor(dateShipmentDispatcher)
         {
             return {"class" : "table-cell-red"};
-        }
+        }*/
         var planGrid =  function(){
 
 
@@ -632,7 +659,8 @@ var planShipmentUtil = (
                         attributes: {class:"#=planShipmentUtil.getDay(dateShipmentDispatcher) ? 'table-cell-red':'table-cell'#  "},
                         filterable: false,
                         groupable: false,
-                        format:"{0:dd-MM-yyyy}"
+                        format:"{0:dd-MM-yyyy}",
+                        //template:'#=  moment(dateShipmentDispatcher).format("DD-MM-YYYY")#'
 
 
                     },
@@ -948,7 +976,7 @@ var planShipmentUtil = (
         }
 
         var addToPlan = function (item) {
-            console.log(item.dateToStore);
+
             return {
                 senderEnterprise: item.senderEnterprise,
                 typeShipment: item.typeShipment,

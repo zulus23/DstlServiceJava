@@ -130,6 +130,7 @@ references GTK_DSTL_Deviation (ID);
 ALTER TABLE GTK_DSTL_PlanShipmentItem ADD CONSTRAINT FK_GTK_DSTL_PlanShipmentItemDeviationDelivery foreign key (IdDeviationDelivery)
 references GTK_DSTL_Deviation (ID);
 
+ALTER TABLE GTK_DSTL_PlanShipmentItem ADD CONSTRAINT UQ_GTK_DSTL_PlanShipmentItemByPlan UNIQUE (idPlan,idEnterprise,NumberOrderDispatcher,Co_Num,Co_Line,Item)
 
 
 

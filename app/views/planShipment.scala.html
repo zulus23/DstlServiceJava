@@ -32,9 +32,11 @@
 
         </div>
     </div>
-
+    <span id="notification"></span>
     <div id="planShipmentSplitter">
+
         <div id="planShipmentByDay" >
+
             <div id="planDayGrid" > </div> @* @planshipment.plandays() *@
         </div>
         <div id="journalShipment" >
@@ -51,7 +53,7 @@
     <script>
             $(document).ready(function () {
                 /* ----------------------------------------------------------------------------*/
-
+               moment.locale('ru');
                 var datePlan,  wnd,
                         detailsTemplate;
 

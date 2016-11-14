@@ -7,6 +7,7 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import scala.Option;
 import services.PlanDayService;
+import utils.PlanShipmentItemException;
 
 import javax.inject.Inject;
 
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.sun.corba.se.impl.util.Utility.printStackTrace;
 import static java.util.Optional.ofNullable;
 import static play.mvc.Results.ok;
 
@@ -58,8 +60,14 @@ public class JournalShipmentController extends Controller {
         return ok(Json.toJson(planDayService.journalShipmentList()));
     }
     public Result create() {
-        System.out.println(request().body().asJson());
-        return ok(Json.toJson(  planDayService.savePlanShipmentItem(request().body().asJson(),"ЗАО ГОТЭК-СЕВЕРО-ЗАПАД")));
+        //System.out.println(request().body().asJson());
+        PlanShipmentItem planShipmentItem = null;
+        try {
+            planShipmentItem = planDayService.savePlanShipmentItem(request().body().asJson(), "ЗАО ГОТЭК-СЕВЕРО-ЗАПАД");
+        } catch (PlanShipmentItemException e ){
+            return internalServerError("Данная запись уже есть в плане");
+        }
+        return ok(Json.toJson( planShipmentItem));
     }
     public Result planDayIndex(Option<String> dateValue){
         LocalDate localDate = LocalDate.now();

@@ -2,8 +2,10 @@ package services;
 
 import auth.DstlProfile;
 import com.avaje.ebean.Ebean;
+import com.avaje.ebean.PersistenceIOException;
 import com.avaje.ebean.config.JsonConfig;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import model.DeviationDelivery;
 import model.DeviationShipment;
 import model.Enterprise;
@@ -14,9 +16,11 @@ import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import utils.DbUtils;
+import utils.PlanShipmentItemException;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.persistence.PersistenceException;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -146,7 +150,7 @@ public class PlanDayService {
        return planShipment;
     }
 
-    public PlanShipmentItem savePlanShipmentItem(JsonNode value,String nameServiceDstl){
+    public PlanShipmentItem savePlanShipmentItem(JsonNode value,String nameServiceDstl) throws PlanShipmentItemException{
         Enterprise _serviceDstl = DbUtils.enterpriseFromUser(nameServiceDstl);
         Enterprise  _enterprise = dstlService.getEnterprise(value.findValue("senderEnterprise").findValue("name").asText());
         Date _datePlan =  dateFromStringInFormat_dd_MM_yyyy(value.findValue("datePlan").asText());
@@ -294,7 +298,19 @@ public class PlanDayService {
             _newPlanShipmentItem.setNote(e.asText());
         });
 
-        Ebean.save(_newPlanShipmentItem);
+         try {
+             Ebean.save(_newPlanShipmentItem);
+         } catch (Exception e){
+            //if(((SQLServerException) ((PersistenceException) e.)).vendorCode == 2627)
+            //if( ((SQLServerException) ((PersistenceException) e.getCause())).getErrorCode() == 2627)
+             if ( ((SQLServerException)((PersistenceException) e).getCause()).getErrorCode() == 2627 ){
+                 throw new PlanShipmentItemException("Такая запись уже существует");
+             };
+
+
+         }
+
+
         if(Objects.isNull(_newPlanShipmentItem.getDeviationShipment())){
 
             _newPlanShipmentItem.setDeviationShipment(new DeviationShipment(-1,""));
