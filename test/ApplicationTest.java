@@ -9,10 +9,7 @@ import com.avaje.ebean.EbeanServerFactory;
 import com.avaje.ebean.SqlRow;
 import com.avaje.ebean.config.ServerConfig;
 import com.fasterxml.jackson.databind.JsonNode;
-import model.DeviationDelivery;
-import model.DeviationShipment;
-import model.Enterprise;
-import model.WorkTime;
+import model.*;
 import model.plan.PlanShipment;
 import model.plan.PlanShipmentItem;
 import org.avaje.datasource.DataSourceConfig;
@@ -175,6 +172,26 @@ public class ApplicationTest {
         assertNotEquals(-1,deviationDelivery.getId());
 
     }
+    @Test
+    public void getListTrasportCompony(){
+        getObjectLocal();
+        TransportCompany transportCompany =  TransportCompany.find.byId("A7ED6ABB-F607-438D-84BE-56BDDA07A192");
+
+        assertEquals("П000032",transportCompany.getCode());
+
+    }
+    @Test
+    public void getPlayItem(){
+        getObjectLocal();
+        PlanShipmentItem planShipmentItem =  PlanShipmentItem.find.byId(93L);
+
+        assertEquals("П000032",planShipmentItem.getTransportCompanyPlan().getCode());
+
+    }
+
+
+
+
     @Test
     public void createDeviationShipment(){
         getObjectLocal();

@@ -106,9 +106,12 @@ public class PlanShipmentItem  extends Model {
     private String typeTransport;
     @Column(name = "TimeForLoading")
     private Integer timeToLoad;
-    @Column(name = "DeliveryCompanyPlan")
+    @ManyToOne
+    @JoinColumn(name = "DeliveryCompanyPlan")
     private TransportCompany transportCompanyPlan;
-    @Column(name = "DeliveryCompanyFact")
+
+    @ManyToOne
+    @JoinColumn(name = "DeliveryCompanyFact")
     private TransportCompany transportCompanyFact;
     @Column(name = "Driver")
     private DriverTransportCompany driverTransportCompany;

@@ -9,6 +9,7 @@ import com.microsoft.sqlserver.jdbc.SQLServerException;
 import model.DeviationDelivery;
 import model.DeviationShipment;
 import model.Enterprise;
+import model.TransportCompany;
 import model.plan.JournalShipment;
 import model.plan.PlanShipment;
 import model.plan.PlanShipmentItem;
@@ -103,8 +104,34 @@ public class PlanDayService {
         journalShipment1.setManagerBackOffice("Иванов А.А.");
         journalShipment1.setNote("");
         _journalShipments.add(journalShipment1);
-
-
+        JournalShipment journalShipmentP = new JournalShipment();
+        journalShipmentP.setId(1L);
+        journalShipmentP.setSenderEnterprise( dstlService.getEnterprise("ПРИНТ"));
+        journalShipmentP.setTypeShipment("Доставка");
+        journalShipmentP.setNumberDispatcher("5439");
+        journalShipmentP.setInPlanDay(false);
+        journalShipmentP.setDateCreateDispatcher(Timestamp.valueOf(LocalDateTime.of(2016,3,21,14,25,0,0)));
+        journalShipmentP.setDateShipmentDispatcher(LocalDate.of(2016,3,23).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        journalShipmentP.setDateDeliveryDispatcher(LocalDate.of(2016,3,24).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        journalShipmentP.setExistInStore(true);
+        journalShipmentP.setDateToStore(Timestamp.valueOf(LocalDateTime.of(2016,3,20,17,20)));
+        journalShipmentP.setPlaceLoading("ПЖ");
+        journalShipmentP.setStatusDispatcher("заказано");
+        journalShipmentP.setNumberOrder("2715");
+        journalShipmentP.setNumberItem("45");
+        journalShipmentP.setNameOrder("Кофе - №3");
+        journalShipmentP.setNameCustomer("Марс ООО");
+        journalShipmentP.setCodeCustomer("П0000001");
+        journalShipmentP.setPlaceDelivery("Россия Москва");
+        journalShipmentP.setSizeOrder(2000);
+        journalShipmentP.setSizePallet("800X1200");
+        journalShipmentP.setPackingMethod("Россыпь");
+        journalShipmentP.setCountPlace(22);
+        journalShipmentP.setCapacityOrder(7000);
+        journalShipmentP.setTypeTransport("82");
+        journalShipmentP.setManagerBackOffice("Тимофеев А.А.");
+        journalShipmentP.setNote("");
+        _journalShipments.add(journalShipmentP);
 
         return _journalShipments;
     }
@@ -345,9 +372,16 @@ public class PlanDayService {
         });
 
         Optional.ofNullable(value.findValue("dateDeliveryFact")).ifPresent(e -> {
+            if (!e.asText().equals("null")){
             _updatePlanShipmentItem.setDateDeliveryFact(dateFromStringInFormat_dd_MM_yyyy(e.asText()));
+              }
             }
         );
+
+        Optional.ofNullable(value.findValue("transportCompanyPlan")).ifPresent(e -> {
+            _updatePlanShipmentItem.setTransportCompanyPlan(TransportCompany.find.byId(e.asText()));
+        });
+
 
 
 

@@ -33,6 +33,40 @@ var planShipmentUtil = (
                 });
         }
 
+        function transportCompanyDropDownEditor(container, options) {
+            var enterpriseName = options.model.senderEnterprise.name;
+
+            $('<input  name="' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    autoBind: false,
+                    dataTextField: "name",
+                    dataValueField: "rowPointer",
+                    dataSource: {
+                        transport: {
+                            read: function(options){
+                                $.ajax({
+                                    type:"GET",
+                                    url:'/api/transportcompany/'+enterpriseName,
+                                   /* beforeSend: function(){
+                                        console.log(enterpriseName);
+
+                                    },*/
+                                    contentType: "application/json; charset=utf-8",
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        options.success(data);
+                                    }
+                                });
+
+                            }
+                        }
+                    }
+                });
+        }
+
+
+
 
         function deviationShipmentDropDownEditor(container, options) {
 
@@ -317,7 +351,7 @@ var planShipmentUtil = (
                             capacityOrder: {editable: false,type: "number"},
                             typeTransport: {editable: false,type: "string"},
                             timeToLoad: {editable: false,type:"number"},
-                            transportCompanyPlan: {},
+                            transportCompanyPlan: {editable:true,defaultValue:{rowPointer:"",name:""}},
                             transportCompanyFact: {},
                             numberGate: {type:"number"},
                             deliveryDistance: {type:"number"},
@@ -574,6 +608,12 @@ var planShipmentUtil = (
             moment.locale('ru');
             return moment(datePlan) > moment(dateShipmentDispatcher);
         }
+        var isTransportCompany = function(transportCompany) {
+            return transportCompany !== null
+        }
+
+
+
 
         function onChange(e) {
             var model = this.dataItem(this.select());
@@ -868,16 +908,17 @@ var planShipmentUtil = (
 
                     },
                     {
-                        field: "",
+                        field: "transportCompanyPlan",
                         title: "Наименование ТЭК план",
                         width: "80px",
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
+                        editor:transportCompanyDropDownEditor, template: "#=planShipmentUtil.isTransportCompany(transportCompanyPlan) ? transportCompanyPlan.name : ''#"
 
                     },
                     {
-                        field: "",
+                        field: "transportCompanyFact",
                         title: "Наименование ТЭК факт",
                         width: "80px",
                         filterable: false,
@@ -999,6 +1040,7 @@ var planShipmentUtil = (
                 countPlace: item.countPlace,
                 capacityOrder: item.capacityOrder,
                 typeTransport: item.typeTransport,
+                transportCompanyPlan: {},
                 costTrip: 0,
                 managerBackOffice: item.managerBackOffice,
                 note: item.note,
@@ -1065,7 +1107,8 @@ var planShipmentUtil = (
             updateJournalShipment:UpdateJournalShipment,
             selectPlanDetailID:selectPlanDetailID,
             setDatePlan:setDatePlan,
-            getDay:getDay
+            getDay:getDay,
+            isTransportCompany:isTransportCompany
         }
     }
 )();

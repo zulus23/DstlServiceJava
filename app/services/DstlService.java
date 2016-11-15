@@ -21,19 +21,21 @@ public class DstlService {
 
     public Integer timeForLoadingByTypePacking(String typePacking,Enterprise enterprise){
         Integer timeLoad = 0;
-         NormaTimeLoading normaTimeLoading =  Ebean.find(NormaTimeLoading.class).where().eq("enterprise",enterprise).findUnique();
+         Optional<NormaTimeLoading> normaTimeLoading =  Optional.ofNullable(Ebean.find(NormaTimeLoading.class).where().eq("enterprise",enterprise).findUnique());
 
-
-        if (typePacking.equals(TypePacking.PACKING.getNameTypePacking())){
-          timeLoad = normaTimeLoading.getPackageTime();
-        }
-        if (typePacking.equals(TypePacking.COMMISSION.getNameTypePacking())){
-            timeLoad = normaTimeLoading.getCommissionTime();
-        }
-        if (typePacking.equals(TypePacking.PLACER.getNameTypePacking())){
-            timeLoad = normaTimeLoading.getPlacerTime();
-        }
-
+        timeLoad =  normaTimeLoading.map(e -> {
+            int _timeLoad = 0;
+            if (typePacking.equals(TypePacking.PACKING.getNameTypePacking())) {
+                _timeLoad =  e.getPackageTime();
+            }
+            if (typePacking.equals(TypePacking.COMMISSION.getNameTypePacking())) {
+                _timeLoad =  e.getCommissionTime();
+            }
+            if (typePacking.equals(TypePacking.PLACER.getNameTypePacking())) {
+                _timeLoad =  e.getPlacerTime();
+            }
+            return _timeLoad;
+        }).orElse(0);
         return    timeLoad;
     }
 
