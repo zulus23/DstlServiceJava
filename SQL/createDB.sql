@@ -152,7 +152,7 @@ GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_Deviation TO report
 CREATE VIEW GTK_DSTL_TransportCompany
   AS
   SELECT DISTINCT 'ПРИНТ' AS EnterpriseName,v.vend_num ,v.name,SL_Print.dbo.GTKFormatAddress(v.vend_num,0,'vendaddr') AS address,
-    vd.contact,vd.phone
+    vd.contact,vd.phone,v.RowPointer
   FROM SL_Print.dbo.GTK_CAR_Sprav s
     JOIN SL_Print.dbo.vendaddr v ON v.vend_num = s.Vend_Num
     JOIN SL_Print.dbo.vendor vd ON vd.vend_num = v.vend_num

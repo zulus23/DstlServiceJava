@@ -379,9 +379,11 @@ public class PlanDayService {
         );
 
         Optional.ofNullable(value.findValue("transportCompanyPlan")).ifPresent(e -> {
-            _updatePlanShipmentItem.setTransportCompanyPlan(TransportCompany.find.byId(e.asText()));
+            _updatePlanShipmentItem.setTransportCompanyPlan(TransportCompany.find.byId(e.findValue("rowPointer").asText()));
         });
-
+        Optional.ofNullable(value.findValue("transportCompanyFact")).ifPresent(e -> {
+            _updatePlanShipmentItem.setTransportCompanyFact(TransportCompany.find.byId(e.findValue("rowPointer").asText()));
+        });
 
 
 

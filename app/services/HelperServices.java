@@ -192,11 +192,12 @@ public class HelperServices {
 
     public List<TransportCompany> transportCompanyByEnterprise(String enterpriseName){
 
-        return   Ebean.createSqlQuery("select distinct EnterpriseName, vend_num, name from GTK_ALL_CAR where enterpriseName = :enterpriseName")
+        return TransportCompany.find.where().eq("enterpriseName",enterpriseName).findList();
+        /*return   Ebean.createSqlQuery("select distinct EnterpriseName, vend_num, name from GTK_ALL_CAR where enterpriseName = :enterpriseName")
                       .setParameter("enterpriseName",enterpriseName).findList()
                       .stream()
                       .map(this::mapSqlRowToTransportCompany)
-                      .collect(toList());
+                      .collect(toList());*/
     }
 
     private  TransportCompany mapSqlRowToTransportCompany(SqlRow sqlRow) {

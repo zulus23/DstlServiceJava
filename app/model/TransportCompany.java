@@ -23,7 +23,7 @@ public class TransportCompany extends Model {
     public static final Model.Finder<String,TransportCompany> find = new Model.Finder<String,TransportCompany>(TransportCompany.class);
     @Id
     @Column(name = "RowPointer")
-    private UUID rowPointer;
+    private String rowPointer;
     @Column(name = "vend_num")
     private String code;
     @Column(name = "name")
@@ -36,11 +36,11 @@ public class TransportCompany extends Model {
     private String phoneContactPerson;
 
 
-    public UUID getRowPointer() {
+    public String getRowPointer() {
         return rowPointer;
     }
 
-    public void setRowPointer(UUID rowPointer) {
+    public void setRowPointer(String rowPointer) {
         this.rowPointer = rowPointer;
     }
 

@@ -42,6 +42,12 @@ var planShipmentUtil = (
                     autoBind: false,
                     dataTextField: "name",
                     dataValueField: "rowPointer",
+                    /*dataBound: function(){
+                        console.log(this.dataItem());
+                        options.model[options.field] = this.dataItem().value;
+
+                    },*/
+
                     dataSource: {
                         transport: {
                             read: function(options){
@@ -352,7 +358,7 @@ var planShipmentUtil = (
                             typeTransport: {editable: false,type: "string"},
                             timeToLoad: {editable: false,type:"number"},
                             transportCompanyPlan: {editable:true,defaultValue:{rowPointer:"",name:""}},
-                            transportCompanyFact: {},
+                            transportCompanyFact: {editable:true,defaultValue:{rowPointer:"",name:""}},
                             numberGate: {type:"number"},
                             deliveryDistance: {type:"number"},
                             costTrip: {type:"number",editable: true, nullable: false},
@@ -924,6 +930,7 @@ var planShipmentUtil = (
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
+                        editor:transportCompanyDropDownEditor, template: "#=planShipmentUtil.isTransportCompany(transportCompanyFact) ? transportCompanyFact.name : ''#"
 
                     },
                     {
