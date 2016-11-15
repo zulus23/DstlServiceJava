@@ -190,6 +190,27 @@ public class HelperServices {
                 .collect(toList());
     }
 
+    public List<TransportCompany> transportCompanyByEnterprise(String enterpriseName){
+
+        return   Ebean.createSqlQuery("select distinct EnterpriseName, vend_num, name from GTK_ALL_CAR where enterpriseName = :enterpriseName")
+                      .setParameter("enterpriseName",enterpriseName).findList()
+                      .stream()
+                      .map(this::mapSqlRowToTransportCompany)
+                      .collect(toList());
+    }
+
+    private  TransportCompany mapSqlRowToTransportCompany(SqlRow sqlRow) {
+        TransportCompany transportCompany = new TransportCompany();
+
+        transportCompany.setCode(sqlRow.getString("vend_num"));
+        transportCompany.setName(sqlRow.getString("name"));
+        transportCompany.setAddress(sqlRow.getString("address"));
+        transportCompany.setContactPerson(sqlRow.getString("contact"));
+        transportCompany.setPhoneContactPerson(sqlRow.getString("phone"));
+
+        return transportCompany;
+    }
+
     private  TransportCompanyWithDriver mapSqlRowToTransportCompanyWithDriver(SqlRow sqlRow) {
          TransportCompanyWithDriver transportCompanyWithDriver = new TransportCompanyWithDriver();
          transportCompanyWithDriver.setId(sqlRow.getString("id"));

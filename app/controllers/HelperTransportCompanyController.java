@@ -20,7 +20,11 @@ public class HelperTransportCompanyController extends Controller {
     @Inject
     private HelperServices helperServices;
 
-  public Result show(){
+    public  Result selectTransportCompanyByEnterprise(String enterprise) {
+        return ok(Json.toJson(helperServices.transportCompanyByEnterprise(enterprise)));
+    }
+
+    public Result show(){
       return  ok(views.html.helper.helpTransportCompany.render("Транспортные компании",webJarAssets, authService.isLoggedIn(), authService.getUserInfo().orElse(null)));
   }
 

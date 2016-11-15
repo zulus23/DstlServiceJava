@@ -595,9 +595,6 @@ var planShipmentUtil = (
 
 
 
-            var  self = this;
-
-
             return $("#planDayGrid").kendoGrid({
                 // toolbar: ["edit"],
                 dataSource: planShipmentUtil.dataSourcePlanDay(),
@@ -615,13 +612,13 @@ var planShipmentUtil = (
                 },
                 columns: [
                     {
-                        field: "senderEnterprise",
+                        field: "senderEnterprise.name",
                         title: "Предприятие отправитель",
                         width: "100px",
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
                         groupable: false,
-                        editor: enterpriseDropDownEditor, template: "#=senderEnterprise.name#"
+                      //  editor: enterpriseDropDownEditor, template: "#=senderEnterprise.name#"
                     },
                     {
                         field: "typeShipment",
