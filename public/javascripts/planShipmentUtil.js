@@ -646,7 +646,7 @@ var planShipmentUtil = (
             return $("#planDayGrid").kendoGrid({
                 // toolbar: ["edit"],
                 dataSource: planShipmentUtil.dataSourcePlanDay(),
-
+                noRecords: true,
                 height: '100%',
                 groupable: true,
                 sortable: true,

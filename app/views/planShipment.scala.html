@@ -5,8 +5,8 @@
 @main(param) {
 
 
-<div class="k-content " style="height: 100%">
-    <div class="nav" style="height:50px; width: 100%;">
+<div  class="k-content" style="height: 100%">
+    <div class="nav " style="height:50px; width: 100%;">
         <div class="row">
             <div id="toolBarPlanDay" class="col-lg-5 col-md-10 col-sm-12">
                 <label id="labelPlanShipmentDay" for="planShipmentDay" class="pull-left">План на: </label>
@@ -33,17 +33,19 @@
         </div>
     </div>
     <span id="notification"></span>
-    <div id="planShipmentSplitter">
-
-        <div id="planShipmentByDay" >
+    <div  id="planShipmentSplitter">
+        <div >
+        @*<div id="planShipmentByDay" >*@
 
             <div id="planDayGrid" > </div> @* @planshipment.plandays() *@
         </div>
-        <div id="journalShipment" >
+        @*</div>*@
+        @*<div id="journalShipment" >*@
+         <div>
+            <div  id="journalGridView"></div>  @*  @planshipment.journalshipment() *@
+         </div>
 
-            <div id="journalGridView"></div>  @*  @planshipment.journalshipment() *@
-
-        </div>
+        @*</div>*@
     </div>
 
     </div>
@@ -70,14 +72,14 @@
 
 
 
-
-                $("#planShipmentSplitter").kendoSplitter({
+               $("#planShipmentSplitter").kendoSplitter({
                     orientation: "vertical",
                     panes: [
-                        {collapsible: false},
-                        {collapsible: false, size: "60%"},
-                        {collapsible: false, resizable: false, size: "40%"}
-                    ]
+                      /*  {collapsible: false},*/
+                        {collapsible: false, size: "40%"},
+                        {collapsible: false, resizable: true, size: "60%"}
+                    ],
+
                 });
 
                 // create DatePicker from input HTML element
@@ -102,7 +104,7 @@
 
                 });
                 $("#planShipmentDay").attr("readonly", true);
-
+/*
                 function showDetails(e) {
                    //  e.preventDefault();
 
@@ -110,22 +112,26 @@
                    // dataItem.set("FirstName", "James") //set the property of the dataItem
                     wnd.content(detailsTemplate(e));
                     wnd.center().open();
-                }
+                }*/
 
                 planShipmentUtil.journalShipmentView();
                 var plangrid =  planShipmentUtil.planGrid();
                 planShipmentUtil.createDragAndDrop();
 
-               /* $("#planDayGrid tbody").bind('dblclick', function (e) {
-                    console.log("-----------------------");
-                    showDetails(planShipmentUtil.selectPlanDetailID());
 
-                });*/
                $("#bSavePlan").bind( "click", function() {
 
                    $("#planDayGrid").data("kendoGrid").dataSource.sync();
                 })
+                var splitter = $("#planShipmentSplitter").data("kendoSplitter");
+                splitter.bind("resize", function(){
+                        var size =   $("#journalGridView").find(".k-grid-content").height();
+                        $("#journalGridView").find(".k-grid-content").height(size-50);
 
+
+                } );
+
+                splitter.resize(true);
             });
 
 
