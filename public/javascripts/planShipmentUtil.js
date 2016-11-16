@@ -646,7 +646,7 @@ var planShipmentUtil = (
             return $("#planDayGrid").kendoGrid({
                 // toolbar: ["edit"],
                 dataSource: planShipmentUtil.dataSourcePlanDay(),
-                noRecords: true,
+               // noRecords: true,
                 height: '100%',
                 groupable: true,
                 sortable: true,
@@ -658,6 +658,7 @@ var planShipmentUtil = (
                 dataBound: function (e) {
                     $("#gridView").find('.k-icon.k-i-collapse').trigger('click');
                 },
+
                 columns: [
                     {
                         field: "senderEnterprise.name",
@@ -918,7 +919,7 @@ var planShipmentUtil = (
                     {
                         field: "transportCompanyPlan",
                         title: "Наименование ТЭК план",
-                        width: "80px",
+                        width: "140px",
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
@@ -928,7 +929,7 @@ var planShipmentUtil = (
                     {
                         field: "transportCompanyFact",
                         title: "Наименование ТЭК факт",
-                        width: "80px",
+                        width: "140px",
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
@@ -1052,6 +1053,7 @@ var planShipmentUtil = (
                 transportCompanyPlan: {},
                 transportCompanyFact: {},
                 costTrip: 0,
+                numberGate: 1,
                 managerBackOffice: item.managerBackOffice,
                 note: item.note,
                 datePlan: getPlanDay()
