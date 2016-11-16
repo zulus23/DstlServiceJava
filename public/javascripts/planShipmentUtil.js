@@ -1080,7 +1080,7 @@ var planShipmentUtil = (
 
                        /*var item = $('<div class="k-grid k-widget" style="background-color: DarkOrange; color: black;"><table><tbody><tr>' + e.html() + '</tr></tbody></table></div>');
                         return item;*/
-                        var helper = $('<div class="k-grid k-widget drag-helper"/>');
+                        var helper = $('<div class="k-grid k-widget drag-helper" style="background-color: DarkOrange; color: black;"/>');
                         if (!item.hasClass(selectedClass)) {
                             item.addClass(selectedClass).siblings().removeClass(selectedClass);
                         }
