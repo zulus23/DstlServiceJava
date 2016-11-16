@@ -40,6 +40,7 @@ var planShipmentUtil = (
                 .appendTo(container)
                 .kendoDropDownList({
                     autoBind: false,
+                    filter: "contains",
                     dataTextField: "name",
                     dataValueField: "rowPointer",
                     /*dataBound: function(){
@@ -615,6 +616,7 @@ var planShipmentUtil = (
             return moment(datePlan) > moment(dateShipmentDispatcher);
         }
         var isTransportCompany = function(transportCompany) {
+            console.log(transportCompany);
             return transportCompany !== null
         }
 
@@ -1048,6 +1050,7 @@ var planShipmentUtil = (
                 capacityOrder: item.capacityOrder,
                 typeTransport: item.typeTransport,
                 transportCompanyPlan: {},
+                transportCompanyFact: {},
                 costTrip: 0,
                 managerBackOffice: item.managerBackOffice,
                 note: item.note,
