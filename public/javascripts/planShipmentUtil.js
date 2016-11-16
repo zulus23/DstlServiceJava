@@ -383,11 +383,23 @@ var planShipmentUtil = (
                 height: '100%',
                 groupable: true,
                 sortable: true,
+                selectable:"multiple, row",
                 filterable: true,
                 resizable: true,
                 pageable: {
                     pageSizes: true
                 },
+                 change: function(e) {
+                   var selectedRows = this.select();
+                     console.log(selectedRows);
+                   var selectedDataItems = [];
+                   for (var i = 0; i < selectedRows.length; i++) {
+                       var dataItem = this.dataItem(selectedRows[i]);
+                       console.log(dataItem);
+                       selectedDataItems.push(dataItem);
+                   }
+                },
+
                 /* dataBound: function (e) {
                  $("#gridView").find('.k-icon.k-i-collapse').trigger('click');
                  },*/
@@ -1060,14 +1072,22 @@ var planShipmentUtil = (
 
             }
         }
-
+        var selectedClass = 'k-state-selected';
         var createDragAndDrop = function(){
                 $("#journalGridView").kendoDraggable({
                     filter: "tr",
-                    hint: function (e) {
+                    hint: function (item) {
 
-                        var item = $('<div class="k-grid k-widget" style="background-color: DarkOrange; color: black;"><table><tbody><tr>' + e.html() + '</tr></tbody></table></div>');
-                        return item;
+                       /*var item = $('<div class="k-grid k-widget" style="background-color: DarkOrange; color: black;"><table><tbody><tr>' + e.html() + '</tr></tbody></table></div>');
+                        return item;*/
+                        var helper = $('<div class="k-grid k-widget drag-helper"/>');
+                        if (!item.hasClass(selectedClass)) {
+                            item.addClass(selectedClass).siblings().removeClass(selectedClass);
+                        }
+                        var elements = item.parent().children('.'+selectedClass).clone();
+                        item.data('multidrag', elements).siblings('.'+selectedClass).remove();
+                        return helper.append(elements);
+
                     },
                     group: "gridGroupJournal",
                 });
@@ -1084,12 +1104,21 @@ var planShipmentUtil = (
                 $("#planDayGrid").kendoDropTarget({
 
                     drop: function (e) {
-
+                       /*
                         var dataItem = $("#journalGridView").data("kendoGrid").dataSource.getByUid(e.draggable.currentTarget.data("uid"));
 
                         $("#planDayGrid").data("kendoGrid").dataSource.add(planShipmentUtil.addToPlan(dataItem));
                          planShipmentUtil.updateJournalShipment(dataItem);
-                        $("#planDayGrid").data("kendoGrid").dataSource.sync();
+                        $("#planDayGrid").data("kendoGrid").dataSource.sync();*/
+                        var mainDataSource = $("#journalGridView").data("kendoGrid").dataSource;
+                        var draggedRows = e.draggable.hint.find("tr");
+                        draggedRows.each(function() {
+                            var thisUid = $(this).attr("data-uid"),
+                            itemToMove = mainDataSource.getByUid(thisUid);
+                            mainDataSource.remove(itemToMove);
+                           // mainDataSource.insert(beginningRangePosition,itemToMove);
+                        });
+
                     },
                     group: "gridGroupJournal"
                 });
