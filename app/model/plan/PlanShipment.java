@@ -17,6 +17,9 @@ import java.util.List;
 @Entity
 @Table(name = "GTK_DSTL_PlanShipment")
 public class PlanShipment extends Model {
+    public static final Finder<Long,PlanShipment> find = new Finder<Long,PlanShipment>(PlanShipment.class);
+
+
     @Id
     private Long id;
     private String name;

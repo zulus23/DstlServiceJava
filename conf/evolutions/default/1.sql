@@ -43,7 +43,7 @@ create table gtk_dstl_planshipment (
 
 create table gtk_dstl_planshipmentitem (
   id                            numeric(19) identity(1,1) not null,
-  idplan                        numeric(19) not null,
+  idplan                        numeric(19),
   identerprise                  integer,
   typeshipment                  varchar(255),
   dateshipmentdispatcher        date,

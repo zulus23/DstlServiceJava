@@ -61,13 +61,14 @@ public class JournalShipmentController extends Controller {
     }
     public Result create() {
         //System.out.println(request().body().asJson());
-        PlanShipmentItem planShipmentItem = null;
+
         try {
-            planShipmentItem = planDayService.savePlanShipmentItem(request().body().asJson(), "ЗАО ГОТЭК-СЕВЕРО-ЗАПАД");
+            //planShipmentItem = planDayService.savePlanShipmentItem(request().body().asJson(), "ЗАО ГОТЭК-СЕВЕРО-ЗАПАД");
+            planDayService.savePlanShipmentItems(request().body().asJson(), "ЗАО ГОТЭК-СЕВЕРО-ЗАПАД");
         } catch (PlanShipmentItemException e ){
             return internalServerError("Данная запись уже есть в плане");
         }
-        return ok(Json.toJson( planShipmentItem));
+        return ok();
     }
     public Result planDayIndex(Option<String> dateValue){
         LocalDate localDate = LocalDate.now();

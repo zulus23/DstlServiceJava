@@ -29,7 +29,7 @@ public class PlanShipmentItem  extends Model {
     private Long id;
 
 
-    @ManyToOne(optional = false)
+    @ManyToOne()
     @JoinColumn(name = "IDPLAN")
     @com.fasterxml.jackson.annotation.JsonIgnore
     private PlanShipment planShipment;

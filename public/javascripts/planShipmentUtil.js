@@ -77,17 +77,13 @@ var planShipmentUtil = (
 
         function deviationShipmentDropDownEditor(container, options) {
 
-            $('<input required name="' + options.field + '"/>')
+            $('<input  name="' + options.field + '"/>')
                 .appendTo(container)
                 .kendoDropDownList({
                     autoBind: false,
                     dataTextField: "description",
                     dataValueField: "id",
-/*
-                    optionLabel: {
-                        description: " ",
-                        Id: "-1"
-                    },*/
+                    filter: "contains",
                     dataSource: {
                         transport: {
                             read: function(options){
@@ -118,13 +114,13 @@ var planShipmentUtil = (
         }
         function deviationDeliveryDropDownEditor(container, options) {
 
-            $('<input required name="' + options.field + '"/>')
+            $('<input  name="' + options.field + '"/>')
                 .appendTo(container)
                 .kendoDropDownList({
                     autoBind: false,
                     dataTextField: "description",
                     dataValueField: "id",
-
+                    filter: "contains",
                     dataSource: {
                         transport: {
                             read: function(options){
@@ -319,7 +315,7 @@ var planShipmentUtil = (
                         });
                     },
                 },
-                //batch: true,
+                batch: true,
                 aggregate:[
                     {field:"timeToLoad",aggregate:"sum"}
                 ],
@@ -332,14 +328,14 @@ var planShipmentUtil = (
                         fields: {
                             id: {type: "number", editable: false},
                             idPlan: {editable: false,type:"number"},
-                            senderEnterprise: { editable: false,defaultValue: { id: 0,name:''}} ,
+                            senderEnterprise: { editable: false/*,defaultValue: { id: 0,name:''}*/} ,
                             typeShipment: {editable: false,type: "string"},
                             planLoad: {editable: false,type: "boolean"},
                             dateShipmentDispatcher: {editable: false,type: "date",format:"{0:dd-MM-yyyy}"},
-                            deviationShipment: {defaultValue:{id:-1,description:''}, nullable: true},
+                            deviationShipment: {/*defaultValue:{id:-1,description:''},*/ nullable: true},
                             dateDeliveryDispatcher: {editable: false,type: "string"},
                             dateDeliveryFact: {type:"date"},
-                            deviationDelivery: {defaultValue:{id:-1,description:''}, nullable: true},
+                            deviationDelivery: {/*defaultValue:{id:-1,description:''},*/ nullable: true},
                             existInStore: {editable: false,type: "boolean"},
                             dateToStore: {editable: false,type:"string"},
                             placeShipment: {type: "string"},
@@ -628,8 +624,12 @@ var planShipmentUtil = (
             return moment(datePlan) > moment(dateShipmentDispatcher);
         }
         var isTransportCompany = function(transportCompany) {
-            console.log(transportCompany);
-            return transportCompany !== null
+
+            return transportCompany !== null;
+        }
+
+        var hasDeviation = function (deviation) {
+            return deviation !== null;
         }
 
 
@@ -679,6 +679,7 @@ var planShipmentUtil = (
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
                         groupable: false,
+                        editable:false,
                       //  editor: enterpriseDropDownEditor, template: "#=senderEnterprise.name#"
                     },
                     {
@@ -728,7 +729,7 @@ var planShipmentUtil = (
                         width: "120px",
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        editor: deviationShipmentDropDownEditor, template: "#= deviationShipment.description#"
+                        editor: deviationShipmentDropDownEditor, template: "#=planShipmentUtil.hasDeviation(deviationShipment) ? deviationShipment.description : ''#"
 
                     },
                     {
@@ -757,7 +758,7 @@ var planShipmentUtil = (
                         width: "120px",
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        editor: deviationDeliveryDropDownEditor, template: "#=deviationDelivery.description#"
+                        editor: deviationDeliveryDropDownEditor, template: "#=planShipmentUtil.hasDeviation(deviationDelivery) ? deviationDelivery.description : ''#"
 
                     },
                     {
@@ -1043,10 +1044,12 @@ var planShipmentUtil = (
                 numberDispatcher: item.numberDispatcher,
                 planLoad: false,
                 dateCreateDispatcher: item.dateCreateDispatcher,
-                deviationShipment:{id:-1,description:''},
+                //deviationShipment:{id:-1,description:''},
+                deviationShipment:{},
                 dateShipmentDispatcher: item.dateShipmentDispatcher,
                 dateDeliveryDispatcher: item.dateDeliveryDispatcher,
-                deviationDelivery:{id:-1,description:''},
+                //deviationDelivery:{id:-1,description:''},
+                deviationDelivery:{},
                 existInStore: item.existInStore,
                 dateToStore: item.dateToStore,
                 placeShipment: item.placeLoading,
@@ -1110,14 +1113,18 @@ var planShipmentUtil = (
                         $("#planDayGrid").data("kendoGrid").dataSource.add(planShipmentUtil.addToPlan(dataItem));
                          planShipmentUtil.updateJournalShipment(dataItem);
                         $("#planDayGrid").data("kendoGrid").dataSource.sync();*/
-                        var mainDataSource = $("#journalGridView").data("kendoGrid").dataSource;
+                        var sourceDataSource = $("#journalGridView").data("kendoGrid").dataSource;
+                        var destinationDataSource = $("#planDayGrid").data("kendoGrid").dataSource;
                         var draggedRows = e.draggable.hint.find("tr");
                         draggedRows.each(function() {
                             var thisUid = $(this).attr("data-uid"),
-                            itemToMove = mainDataSource.getByUid(thisUid);
-                            mainDataSource.remove(itemToMove);
+                                dataItem= sourceDataSource.getByUid(thisUid);
+                            destinationDataSource.add(planShipmentUtil.addToPlan(dataItem));
+                            sourceDataSource.remove(dataItem);
+
                            // mainDataSource.insert(beginningRangePosition,itemToMove);
                         });
+                        destinationDataSource.sync();
 
                     },
                     group: "gridGroupJournal"
@@ -1149,7 +1156,8 @@ var planShipmentUtil = (
             selectPlanDetailID:selectPlanDetailID,
             setDatePlan:setDatePlan,
             getDay:getDay,
-            isTransportCompany:isTransportCompany
+            isTransportCompany:isTransportCompany,
+            hasDeviation:hasDeviation
         }
     }
 )();
