@@ -208,7 +208,7 @@ public class ApplicationTest {
         getObjectLocal();
         PlanDayService planDayService = new PlanDayService();
         DstlService dstlService = new DstlService();
-        PlanShipment planShipment =  planDayService.createPlan(java.sql.Date.valueOf(LocalDate.now().plusDays(1)),"ЗАО ГОТЭК-ЦПУ");
+        PlanShipment planShipment =  planDayService.createPlan(java.sql.Date.valueOf(LocalDate.now().plusDays(1)), dstlService.getEnterprise("ЗАО ГОТЭК-ЦПУ"));
         assertNotNull(planShipment);
         PlanShipmentItem planShipmentItem = new PlanShipmentItem();
         planShipmentItem.setCodeCustomer("Test");

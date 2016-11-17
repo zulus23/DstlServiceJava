@@ -121,7 +121,9 @@
 
                $("#bSavePlan").bind( "click", function() {
 
-                   $("#planDayGrid").data("kendoGrid").dataSource.sync();
+                   //$("#planDayGrid").data("kendoGrid").dataSource.sync();
+                   $("#planDayGrid").data("kendoGrid").saveChanges();
+                   //$("#planDayGrid").data("kendoGrid").dataSource.sync();
                 })
                 var splitter = $("#planShipmentSplitter").data("kendoSplitter");
                 splitter.bind("resize", function(){

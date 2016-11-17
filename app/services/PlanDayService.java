@@ -551,55 +551,82 @@ public class PlanDayService {
         return _newPlanShipmentItem;
     }*/
 
-    public PlanShipmentItem updatePlanShipment(JsonNode value,Integer id){
-        PlanShipmentItem _updatePlanShipmentItem  = PlanShipmentItem.find.where().eq("id",id).findUnique();
+
+
+    public List<PlanShipmentItem>  updatesPlanShipment(JsonNode value){
+        List<PlanShipmentItem> planShipmentItems = new ArrayList<>();
+        Iterator<JsonNode> nodeIterator =  value.findValue("data").findValue("models").elements();
+        while(nodeIterator.hasNext()){
+            JsonNode valueUpdate = nodeIterator.next();
+            PlanShipmentItem _updatePlanShipmentItem  = PlanShipmentItem.find.where().eq("id",valueUpdate.findValue("id").asInt()).findUnique();
+            planShipmentItems.add(updatePlanShipment(valueUpdate,_updatePlanShipmentItem));
+        }
+        planShipmentItems.stream().forEach(e -> e.save());
+        return planShipmentItems;
+
+
+    }
+
+    public PlanShipmentItem updatePlanShipment(JsonNode value,PlanShipmentItem planShipmentItem){
 
         Optional.ofNullable(value.findValue("deviationShipment")).ifPresent(e -> {
         DeviationShipment deviationShipment =   Optional.ofNullable(find(DeviationShipment.class).where().eq("id", e
                 .findValue("id").asInt())
                 .findUnique()).orElse(null);
-        _updatePlanShipmentItem.setDeviationShipment(deviationShipment);
+        planShipmentItem.setDeviationShipment(deviationShipment);
+        });
+        Optional.ofNullable(value.findValue("deviationDelivery")).ifPresent(e -> {
+            DeviationDelivery deviationDelivery =   Optional.ofNullable(find(DeviationDelivery.class).where().eq("id", e
+                    .findValue("id").asInt())
+                    .findUnique()).orElse(null);
+            planShipmentItem.setDeviationDelivery(deviationDelivery);
         });
 
+
+
         Optional.ofNullable(value.findValue("costTrip")).ifPresent(e -> {
-            _updatePlanShipmentItem.setCostTrip(e.asDouble());
+            planShipmentItem.setCostTrip(e.asDouble());
         });
         Optional.ofNullable(value.findValue("note")).ifPresent(e -> {
-            _updatePlanShipmentItem.setNote(e.asText());
+            planShipmentItem.setNote(e.asText());
         });
 
         Optional.ofNullable(value.findValue("numberGate")).ifPresent(e -> {
-            _updatePlanShipmentItem.setNumberGate(e.asInt());
+            planShipmentItem.setNumberGate(e.asInt());
         });
 
         Optional.ofNullable(value.findValue("dateDeliveryFact")).ifPresent(e -> {
             if (!e.asText().equals("null")){
-            _updatePlanShipmentItem.setDateDeliveryFact(dateFromStringInFormat_dd_MM_yyyy(e.asText()));
+            planShipmentItem.setDateDeliveryFact(dateFromStringInFormat_dd_MM_yyyy(e.asText()));
               }
             }
         );
 
         Optional.ofNullable(value.findValue("transportCompanyPlan")).ifPresent(e -> {
-            _updatePlanShipmentItem.setTransportCompanyPlan(TransportCompany.find.byId(e.findValue("rowPointer").asText()));
+            if (!e.asText().equals("null")) {
+                planShipmentItem.setTransportCompanyPlan(TransportCompany.find.byId(e.findValue("rowPointer").asText()));
+            }
         });
         Optional.ofNullable(value.findValue("transportCompanyFact")).ifPresent(e -> {
-            _updatePlanShipmentItem.setTransportCompanyFact(TransportCompany.find.byId(e.findValue("rowPointer").asText()));
+            if (!e.asText().equals("null")) {
+                planShipmentItem.setTransportCompanyFact(TransportCompany.find.byId(e.findValue("rowPointer").asText()));
+            }
         });
 
 
 
-        Ebean.save(_updatePlanShipmentItem);
+        Ebean.save(planShipmentItem);
 
 
-        if(Objects.isNull(_updatePlanShipmentItem.getDeviationShipment())){
+        /*if(Objects.isNull(planShipmentItem.getDeviationShipment())){
 
-            _updatePlanShipmentItem.setDeviationShipment(new DeviationShipment(-1,""));
+            planShipmentItem.setDeviationShipment(new DeviationShipment(-1,""));
         }
-        if(Objects.isNull(_updatePlanShipmentItem.getDeviationDelivery())){
-            _updatePlanShipmentItem.setDeviationDelivery(new DeviationDelivery(-1,""));
-        }
+        if(Objects.isNull(planShipmentItem.getDeviationDelivery())){
+            planShipmentItem.setDeviationDelivery(new DeviationDelivery(-1,""));
+        }*/
 
-        return  _updatePlanShipmentItem;
+        return  planShipmentItem;
     }
 
 

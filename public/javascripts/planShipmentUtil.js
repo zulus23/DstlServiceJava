@@ -282,7 +282,7 @@ var planShipmentUtil = (
 
                         $.ajax({
                             type: "PATCH",
-                            url: "/api/plandayshipment/"+options.data.id,
+                            url: "/api/plandayshipment",
                             contentType: "application/json; charset=utf-8",
                             dataType: 'json',
                             beforeSend: function(){

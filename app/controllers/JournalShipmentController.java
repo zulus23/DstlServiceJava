@@ -43,9 +43,9 @@ public class JournalShipmentController extends Controller {
         return ok(Json.toJson(planDayService.deletePlandDayItem(id,authService.getUserInfo().orElse(null))));
     }
 
-    public  Result updatePlanDayItem(Integer id) {
+    public  Result updatePlanDayItem() {
         //System.out.println(request().body().asJson());
-        return ok(Json.toJson(planDayService.updatePlanShipment(request().body().asJson(),id)));
+        return ok(Json.toJson(planDayService.updatesPlanShipment(request().body().asJson())));
     }
 
 
@@ -68,7 +68,7 @@ public class JournalShipmentController extends Controller {
         } catch (PlanShipmentItemException e ){
             return internalServerError("Данная запись уже есть в плане");
         }
-        return ok();
+        return ok("Ok");
     }
     public Result planDayIndex(Option<String> dateValue){
         LocalDate localDate = LocalDate.now();
