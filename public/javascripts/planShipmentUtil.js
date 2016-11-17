@@ -268,11 +268,10 @@ var planShipmentUtil = (
                             success: function(data) {
                                 options.success(data);
                             },
-                            error: function (request, status, error) {
-                                console.log(request);
-                                //alert("Ошибка сохранения данных. "+request.responseText);
-                                ErrorShow(request);
+                            error: function (result) {
 
+                                ErrorShow(result);
+                                options.error(result);
                                 planGrid().dataSource.fetch();
 
                             }
@@ -298,17 +297,11 @@ var planShipmentUtil = (
                     destroy: function(options) {
 
                         $.ajax({
-                            type: "DELETE",
-                            url: "/api/plandayshipment/"+options.data.id,
+                            type: "POST",
+                            url: "/api/deleteplandayshipment",
                             contentType: "application/json; charset=utf-8",
                             dataType: 'json',
-                            /*data:  kendo.stringify({
-                                "id":options.data.id,
-                                "name":options.data.name,
-                                "startTime":moment(options.data.startTime).format("DD-MM-YYYY HH:mm"),
-                                "endTime":moment(options.data.endTime).format("DD-MM-YYYY HH:mm"),
-                                "workTime":options.data.workTime
-                            }),*/
+                            data:  kendo.stringify(options),
                             success: function(data) {
                                 options.success(data);
                             }
@@ -1134,7 +1127,6 @@ var planShipmentUtil = (
                     drop: function (e) {
                         //var deleteItem =
                         var dataItem = $("#planDayGrid").data("kendoGrid").dataSource.getByUid(e.draggable.currentTarget.data("uid"));
-                        console.log(dataItem);
                         $("#planDayGrid").data("kendoGrid").dataSource.remove(dataItem);
                         $("#planDayGrid").data("kendoGrid").dataSource.sync();
                     },

@@ -2,9 +2,6 @@ package services;
 
 import auth.DstlProfile;
 import com.avaje.ebean.Ebean;
-import com.avaje.ebean.PersistenceIOException;
-import com.avaje.ebean.TxIsolation;
-import com.avaje.ebean.config.JsonConfig;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import model.DeviationDelivery;
@@ -24,20 +21,14 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.PersistenceException;
 import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static com.avaje.ebean.Ebean.find;
-import static com.avaje.ebean.Expr.eq;
 import static java.util.Optional.ofNullable;
-import static play.mvc.Results.TODO;
-import static sun.misc.MessageUtils.where;
 
 /**
  * Created by Gukov on 01.11.2016.
@@ -179,7 +170,7 @@ public class PlanDayService {
        return planShipment;
     }
 
-    public void savePlanShipmentItems(JsonNode value,String nameServiceDstl) throws PlanShipmentItemException{
+    public List<PlanShipmentItem> savePlanShipmentItems(JsonNode value,String nameServiceDstl) throws PlanShipmentItemException{
         Enterprise _serviceDstl = DbUtils.enterpriseFromUser(nameServiceDstl);
         Enterprise  _enterprise = dstlService.getEnterprise(value.findValue("senderEnterprise").findValue("name").asText());
         Date _datePlan =  dateFromStringInFormat_dd_MM_yyyy(value.findValue("datePlan").asText());
@@ -211,7 +202,7 @@ public class PlanDayService {
             }
         }
 
-
+        return planShipment.getPlanShipmentItems();
 
 
     }
@@ -558,7 +549,7 @@ public class PlanDayService {
         Iterator<JsonNode> nodeIterator =  value.findValue("data").findValue("models").elements();
         while(nodeIterator.hasNext()){
             JsonNode valueUpdate = nodeIterator.next();
-            PlanShipmentItem _updatePlanShipmentItem  = PlanShipmentItem.find.where().eq("id",valueUpdate.findValue("id").asInt()).findUnique();
+            PlanShipmentItem _updatePlanShipmentItem  = PlanShipmentItem.find.where().eq("id",valueUpdate.get("id").asInt()).findUnique();
             planShipmentItems.add(updatePlanShipment(valueUpdate,_updatePlanShipmentItem));
         }
         planShipmentItems.stream().forEach(e -> e.save());
@@ -570,16 +561,20 @@ public class PlanDayService {
     public PlanShipmentItem updatePlanShipment(JsonNode value,PlanShipmentItem planShipmentItem){
 
         Optional.ofNullable(value.findValue("deviationShipment")).ifPresent(e -> {
-        DeviationShipment deviationShipment =   Optional.ofNullable(find(DeviationShipment.class).where().eq("id", e
-                .findValue("id").asInt())
-                .findUnique()).orElse(null);
-        planShipmentItem.setDeviationShipment(deviationShipment);
-        });
-        Optional.ofNullable(value.findValue("deviationDelivery")).ifPresent(e -> {
-            DeviationDelivery deviationDelivery =   Optional.ofNullable(find(DeviationDelivery.class).where().eq("id", e
+         if (!e.asText().equals("null")){
+              DeviationShipment deviationShipment =   Optional.ofNullable(find(DeviationShipment.class).where().eq("id", e
                     .findValue("id").asInt())
                     .findUnique()).orElse(null);
-            planShipmentItem.setDeviationDelivery(deviationDelivery);
+               planShipmentItem.setDeviationShipment(deviationShipment);
+         }
+        });
+        Optional.ofNullable(value.findValue("deviationDelivery")).ifPresent(e -> {
+            if (!e.asText().equals("null")){
+                DeviationDelivery deviationDelivery =   Optional.ofNullable(find(DeviationDelivery.class).where().eq("id", e
+                    .findValue("id").asInt())
+                    .findUnique()).orElse(null);
+               planShipmentItem.setDeviationDelivery(deviationDelivery);
+            }
         });
 
 
@@ -647,8 +642,14 @@ public class PlanDayService {
     }
 
 
-    public Integer deletePlandDayItem(Integer id, DstlProfile dstlProfile) {
+    public Integer deletePlandDayItem(JsonNode valueDelete, DstlProfile dstlProfile) {
+        Iterator<JsonNode> nodeIterator =  valueDelete.findValue("data").findValue("models").elements();
+        while(nodeIterator.hasNext()){
+            JsonNode _delete = nodeIterator.next();
+            PlanShipmentItem.find.where().eq("id",_delete.findValue("id").asInt()).delete();
+        }
+
         //PlanShipmentItem planShipmentItem =  Ebean.find(PlanShipmentItem.class,id);
-        return Ebean.delete(PlanShipmentItem.class,id);
+        return 1;
     }
 }

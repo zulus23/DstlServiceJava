@@ -18,7 +18,7 @@ GET         /api/journalship               controllers.JournalShipmentController
 GET         /api/plandayshipment                controllers.JournalShipmentController.planDayIndex(datePlan:Option[String])
 POST        /api/plandayshipment                controllers.JournalShipmentController.create()
 PATCH         /api/plandayshipment          controllers.JournalShipmentController.updatePlanDayItem()
-DELETE      /api/plandayshipment/:id            controllers.JournalShipmentController.deletePlanDayItem(id:Integer)
+POST      /api/deleteplandayshipment            controllers.JournalShipmentController.deletePlanDayItem()
 
 #Норма времени погрузки
 GET         /normtime                    controllers.HelperShipmentController.show()
