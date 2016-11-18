@@ -73,15 +73,21 @@ var planShipmentUtil = (
         }
 
         function driverTransportCompanyDropDownEditor(container, options) {
-            var transportConpanyFact = options.model.transportCompanyFact.rowPointer;
+            var transportConpanyFact;
+
+            if(options.model.transportCompanyFact) {
+                 transportConpanyFact = options.model.transportCompanyFact.rowPointer;
+            } else {
+                 transportConpanyFact = "";
+            }
 
             $('<input  name="' + options.field + '"/>')
                 .appendTo(container)
                 .kendoDropDownList({
                     autoBind: false,
                     filter: "contains",
-                    dataTextField: "name",
-                    dataValueField: "rowPointer",
+                    dataTextField: "fullName",
+                    dataValueField: "id",
                     /*dataBound: function(){
                      console.log(this.dataItem());
                      options.model[options.field] = this.dataItem().value;
@@ -107,7 +113,8 @@ var planShipmentUtil = (
 
                             }
                         }
-                    }
+                    },
+                    template: "<div><span>${fullName} </span><span> ${numberTruck}</span></div>"
                 });
         }
 
@@ -395,6 +402,9 @@ var planShipmentUtil = (
                             timeToLoad: {editable: false,type:"number"},
                             transportCompanyPlan: {editable:false,defaultValue:{rowPointer:"",name:""}},
                             transportCompanyFact: {editable:true,defaultValue:{rowPointer:"",name:""}},
+                            driverTransportCompany:{editable:true,defaultValue:{id:"",fullName:""}},
+                            numTruck:{editable:false,type:"string"},
+                            phoneDriver:{editable:false,type:"string"},
                             numberGate: {type:"number"},
                             deliveryDistance: {type:"number"},
                             costTrip: {type:"number",editable: true, nullable: false},
@@ -667,15 +677,18 @@ var planShipmentUtil = (
             moment.locale('ru');
             return moment(datePlan) > moment(dateShipmentDispatcher);
         }
-        var isTransportCompany = function(transportCompany) {
+     /*   var isTransportCompany = function(transportCompany) {
 
             return transportCompany !== null;
         }
 
         var hasDeviation = function (deviation) {
             return deviation !== null;
-        }
+        }*/
 
+        var isNotNull = function(value){
+            return value !== null;
+        }
 
 
 
@@ -714,7 +727,14 @@ var planShipmentUtil = (
                 dataBound: function (e) {
                     $("#gridView").find('.k-icon.k-i-collapse').trigger('click');
                 },
+                save: function(data) {
+                    console.log(data);
+                    if (data.values.driverTransportCompany) {
+                        data.model.set("numTruck", data.values.driverTransportCompany.numberTruck);
+                        data.model.set("phoneDriver", data.values.driverTransportCompany.phone);
+                    }
 
+                },
                 columns: [
                     {
                         field: "senderEnterprise.name",
@@ -775,7 +795,7 @@ var planShipmentUtil = (
                         width: "120px",
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        editor: deviationShipmentDropDownEditor, template: "#=planShipmentUtil.hasDeviation(deviationShipment) ? deviationShipment.description : ''#"
+                        editor: deviationShipmentDropDownEditor, template: "#=planShipmentUtil.isNotNull(deviationShipment) ? deviationShipment.description : ''#"
 
                     },
                     {
@@ -804,7 +824,7 @@ var planShipmentUtil = (
                         width: "120px",
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        editor: deviationDeliveryDropDownEditor, template: "#=planShipmentUtil.hasDeviation(deviationDelivery) ? deviationDelivery.description : ''#"
+                        editor: deviationDeliveryDropDownEditor, template: "#=planShipmentUtil.isNotNull(deviationDelivery) ? deviationDelivery.description : ''#"
 
                     },
                     {
@@ -986,7 +1006,7 @@ var planShipmentUtil = (
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        editor:transportCompanyDropDownEditor, template: "#=planShipmentUtil.isTransportCompany(transportCompanyPlan) ? transportCompanyPlan.name : ''#"
+                        editor:transportCompanyDropDownEditor, template: "#=planShipmentUtil.isNotNull(transportCompanyPlan) ? transportCompanyPlan.name : ''#"
 
                     },
                     {
@@ -996,11 +1016,11 @@ var planShipmentUtil = (
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        editor:transportCompanyDropDownEditor, template: "#=planShipmentUtil.isTransportCompany(transportCompanyFact) ? transportCompanyFact.name : ''#"
+                        editor:transportCompanyDropDownEditor, template: "#=planShipmentUtil.isNotNull(transportCompanyFact) ? transportCompanyFact.name : ''#"
 
                     },
                     {
-                        field: "",
+                        field: "numTruck",
                         title: "Гос. номер ТС",
                         width: "80px",
                         filterable: false,
@@ -1009,16 +1029,17 @@ var planShipmentUtil = (
 
                     },
                     {
-                        field: "",
+                        field: "driverTransportCompany",
                         title: "Водитель",
                         width: "80px",
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-
+                        editor:driverTransportCompanyDropDownEditor,
+                        template: "#=planShipmentUtil.isNotNull(driverTransportCompany) ? driverTransportCompany.fullName : ''#"
                     },
                     {
-                        field: "",
+                        field: "phoneDriver",
                         title: "Телефон водителя",
                         width: "80px",
                         filterable: false,
@@ -1206,8 +1227,9 @@ var planShipmentUtil = (
             selectPlanDetailID:selectPlanDetailID,
             setDatePlan:setDatePlan,
             getDay:getDay,
-            isTransportCompany:isTransportCompany,
-            hasDeviation:hasDeviation
+            /*isTransportCompany:isTransportCompany,
+            hasDeviation:hasDeviation,*/
+            isNotNull:isNotNull
         }
     }
 )();

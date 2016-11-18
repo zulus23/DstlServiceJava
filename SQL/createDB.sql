@@ -166,10 +166,14 @@ GRANT SELECT ON GTK_DSTL_TransportCompany  TO report
 CREATE VIEW GTK_ALL_CAR
 AS
   SELECT 'ПРИНТ' AS EnterpriseName,v.vend_num ,v.name,SL_Print.dbo.GTKFormatAddress(v.vend_num,0,'vendaddr') AS address,
-    vd.contact,vd.phone,s.Driver,s.Phone AS driverPhone
+    vd.contact,vd.phone,s.Driver,s.Phone AS driverPhone,s.CAR_Num AS NumberTruck,
+    v.RowPointer AS TransportCompanyRef,s.RowPointer AS DriverRef
   FROM SL_Print.dbo.GTK_CAR_Sprav s
     JOIN SL_Print.dbo.vendaddr v ON v.vend_num = s.Vend_Num
     JOIN SL_Print.dbo.vendor vd ON vd.vend_num = v.vend_num
+
+
+
 
 
 --                    -javaagent:C:\Users\Zhukov\.ivy2\cache\org.avaje.ebeanorm\avaje-ebeanorm-agent\jars\avaje-ebeanorm-agent-4.9.2.jar

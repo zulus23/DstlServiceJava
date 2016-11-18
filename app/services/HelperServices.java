@@ -190,6 +190,27 @@ public class HelperServices {
                 .collect(toList());
     }
 
+    public List<DriverTransportCompany> driverTransportCompany(String refCompany){
+
+        return  DriverTransportCompany.find.where().eq("transportCompany",refCompany).findList();
+
+
+        //String sqlsp = "exec dbo.gtk_rpt_logist_www :v_startdate, :v_enddate, :v_site,:v_type_rep";
+        /*List<DriverTransportCompany> result =   Ebean.createSqlQuery(sqlsp).setParameter("v_startdate",dateBegin)
+                .setParameter("v_enddate",dateEnd)
+                .setParameter("v_site",site)
+                .setParameter("v_type_rep",typeReport)
+                .findList().stream().map(this::mapSqlRowToReportPrecisionOrder).collect(toList());*/
+//
+//        return   Ebean.createSqlQuery("select * from GTK_ALL_CAR").findList()
+//                .stream()
+//                .map(this::mapSqlRowToTransportCompanyWithDriver)
+//                .collect(toList());
+
+
+    }
+
+
     public List<TransportCompany> transportCompanyByEnterprise(String enterpriseName){
 
         return TransportCompany.find.where().eq("enterpriseName",enterpriseName).findList();

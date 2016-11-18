@@ -47,6 +47,7 @@ PATCH         /api/worktime/:id            controllers.HelperWorkTimeController.
 #Транспортные компаниии
 GET         /api/transports               controllers.HelperTransportCompanyController.index()
 GET         /api/transportcompany/:enterprise               controllers.HelperTransportCompanyController.selectTransportCompanyByEnterprise(enterprise:String)
+GET         /api/drivertransportcompany/:refcompany    controllers.HelperTransportCompanyController.selectDriverByTransportCompany(refcompany:String)
 
 # An example controller showing how to use dependency injection
 

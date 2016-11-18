@@ -189,6 +189,22 @@ public class ApplicationTest {
 
     }
 
+    @Test
+     public void listDriverDontHaveSizeZero(){
+        getObjectLocal();
+        HelperServices helperServices = new HelperServices();
+        List<DriverTransportCompany> driverTransportCompanies =  helperServices.driverTransportCompany("FFA768E4-6122-4D78-87EE-1C68DA27B4DD");
+        assertNotNull(driverTransportCompanies);
+        String nameDriver =  driverTransportCompanies.stream().filter(e -> e.getNumberTruck().equals("В 558 СТ 46")).map(e -> e.getFullName()).findFirst().get();
+
+        assertEquals(nameDriver,"ОДИНОКОВ АЛЕКСЕЙ СЕРГЕЕВИЧ");
+
+
+
+
+    }
+
+
 
 
 
