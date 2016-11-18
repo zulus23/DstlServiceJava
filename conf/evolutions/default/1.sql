@@ -74,6 +74,7 @@ create table gtk_dstl_planshipmentitem (
   timeforloading                integer,
   deliverycompanyplan           varchar(255),
   deliverycompanyfact           varchar(255),
+  driver                        varchar(255),
   numbergate                    integer,
   distancedeliver               float(32),
   costdelivery                  float(32),
@@ -135,6 +136,9 @@ create index ix_gtk_dstl_planshipmentitem_deliverycompanyplan on gtk_dstl_plansh
 alter table gtk_dstl_planshipmentitem add constraint fk_gtk_dstl_planshipmentitem_deliverycompanyfact foreign key (deliverycompanyfact) references gtk_dstl_transportcompany (rowpointer);
 create index ix_gtk_dstl_planshipmentitem_deliverycompanyfact on gtk_dstl_planshipmentitem (deliverycompanyfact);
 
+alter table gtk_dstl_planshipmentitem add constraint fk_gtk_dstl_planshipmentitem_driver foreign key (driver) references gtk_all_car (driverref);
+create index ix_gtk_dstl_planshipmentitem_driver on gtk_dstl_planshipmentitem (driver);
+
 alter table gtk_dstl_planshipmentitem add constraint fk_gtk_dstl_planshipmentitem_createby foreign key (createby) references gtk_dstl_user (id);
 create index ix_gtk_dstl_planshipmentitem_createby on gtk_dstl_planshipmentitem (createby);
 
@@ -179,6 +183,9 @@ drop index if exists ix_gtk_dstl_planshipmentitem_deliverycompanyplan;
 
 IF OBJECT_ID('fk_gtk_dstl_planshipmentitem_deliverycompanyfact', 'F') IS NOT NULL alter table gtk_dstl_planshipmentitem drop constraint fk_gtk_dstl_planshipmentitem_deliverycompanyfact;
 drop index if exists ix_gtk_dstl_planshipmentitem_deliverycompanyfact;
+
+IF OBJECT_ID('fk_gtk_dstl_planshipmentitem_driver', 'F') IS NOT NULL alter table gtk_dstl_planshipmentitem drop constraint fk_gtk_dstl_planshipmentitem_driver;
+drop index if exists ix_gtk_dstl_planshipmentitem_driver;
 
 IF OBJECT_ID('fk_gtk_dstl_planshipmentitem_createby', 'F') IS NOT NULL alter table gtk_dstl_planshipmentitem drop constraint fk_gtk_dstl_planshipmentitem_createby;
 drop index if exists ix_gtk_dstl_planshipmentitem_createby;

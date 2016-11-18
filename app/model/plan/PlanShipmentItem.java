@@ -114,7 +114,8 @@ public class PlanShipmentItem  extends Model {
     @ManyToOne
     @JoinColumn(name = "DeliveryCompanyFact")
     private TransportCompany transportCompanyFact;
-    @Column(name = "Driver")
+    @ManyToOne
+    @JoinColumn(name = "Driver")
     private DriverTransportCompany driverTransportCompany;
     @Column(name = "NumberGate")
     private Integer numberGate;

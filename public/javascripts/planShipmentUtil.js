@@ -292,6 +292,7 @@ var planShipmentUtil = (
         var dataSourcePlanDay =  function() {
             return new kendo.data.DataSource({
                 //serverAggregates: true,
+               // autoSync: true,
                 transport: {
 
                     read: function (options) {
@@ -362,10 +363,24 @@ var planShipmentUtil = (
                     },
                 },
                 batch: true,
+
                 aggregate:[
                     {field:"timeToLoad",aggregate:"sum"}
                 ],
+                change: function(e) {
+                    console.log(e);
+                    if (e.action === "itemchange" && e.field === "driverTransportCompany"){
+                        var model = e.items[0];
+                        $("#planDayGrid").find("tr[data-uid='" + model.uid + "'] td:eq(30)").text(model.driverTransportCompany.phone);
+                        $("#planDayGrid").find("tr[data-uid='" + model.uid + "'] td:eq(28)").text(model.driverTransportCompany.numberTruck);
+                    }
+                    /*if (data.values.driverTransportCompany) {
+                        data.model.set("numTruck", data.values.driverTransportCompany.numberTruck);
+                        data.model.set("phoneDriver", data.values.driverTransportCompany.phone);
+                    }
+                    */
 
+                },
 
                 schema: {
                     model: {
@@ -403,7 +418,7 @@ var planShipmentUtil = (
                             transportCompanyPlan: {editable:false,defaultValue:{rowPointer:"",name:""}},
                             transportCompanyFact: {editable:true,defaultValue:{rowPointer:"",name:""}},
                             driverTransportCompany:{editable:true,defaultValue:{id:"",fullName:""}},
-                            numTruck:{editable:false,type:"string"},
+                            numberTruck:{editable:false,type:"string"},
                             phoneDriver:{editable:false,type:"string"},
                             numberGate: {type:"number"},
                             deliveryDistance: {type:"number"},
@@ -714,7 +729,8 @@ var planShipmentUtil = (
 
             return $("#planDayGrid").kendoGrid({
                 // toolbar: ["edit"],
-                dataSource: planShipmentUtil.dataSourcePlanDay(),
+                //dataSource: planShipmentUtil.dataSourcePlanDay(),
+                dataSource: dataSourcePlanDay(),
                // noRecords: true,
                 height: '100%',
                 groupable: true,
@@ -727,14 +743,7 @@ var planShipmentUtil = (
                 dataBound: function (e) {
                     $("#gridView").find('.k-icon.k-i-collapse').trigger('click');
                 },
-                save: function(data) {
-                    console.log(data);
-                    if (data.values.driverTransportCompany) {
-                        data.model.set("numTruck", data.values.driverTransportCompany.numberTruck);
-                        data.model.set("phoneDriver", data.values.driverTransportCompany.phone);
-                    }
 
-                },
                 columns: [
                     {
                         field: "senderEnterprise.name",
@@ -744,8 +753,8 @@ var planShipmentUtil = (
                         attributes: gridUtils.columnFormat,
                         groupable: false,
                         editable:false,
-                        locked: true,
-                        lockable: false,
+                      //  locked: true,
+                      //  lockable: false,
                       //  editor: enterpriseDropDownEditor, template: "#=senderEnterprise.name#"
                     },
                     {
@@ -917,8 +926,8 @@ var planShipmentUtil = (
                         title: "Грузополучатель",
                         width: "120px",
                         filterable: false,
-                        locked: true,
-                        lockable: false,
+                        //locked: true,
+                        //lockable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
 
@@ -991,8 +1000,8 @@ var planShipmentUtil = (
                         title: "Время на погрузку",
                         width: "80px",
                         filterable: false,
-                        locked: true,
-                        lockable: false,
+                      //  locked: true,
+                       // lockable: false,
                         aggregates: ["count"],
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
@@ -1020,13 +1029,13 @@ var planShipmentUtil = (
 
                     },
                     {
-                        field: "numTruck",
+                        //field: "driverTransportCompany",
                         title: "Гос. номер ТС",
                         width: "80px",
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-
+                        template: "#=planShipmentUtil.isNotNull(driverTransportCompany) ? driverTransportCompany.numberTruck : ''#"
                     },
                     {
                         field: "driverTransportCompany",
@@ -1039,13 +1048,13 @@ var planShipmentUtil = (
                         template: "#=planShipmentUtil.isNotNull(driverTransportCompany) ? driverTransportCompany.fullName : ''#"
                     },
                     {
-                        field: "phoneDriver",
+                       // field: "driverTransportCompany",
                         title: "Телефон водителя",
                         width: "80px",
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-
+                        template: "#=planShipmentUtil.isNotNull(driverTransportCompany) ? driverTransportCompany.phone : ''#"
                     },
                     {
                         field: "numberGate",
@@ -1111,6 +1120,7 @@ var planShipmentUtil = (
         var addToPlan = function (item) {
 
             return {
+
                 senderEnterprise: item.senderEnterprise,
                 typeShipment: item.typeShipment,
                 numberDispatcher: item.numberDispatcher,
@@ -1139,6 +1149,7 @@ var planShipmentUtil = (
                 typeTransport: item.typeTransport,
                 transportCompanyPlan: {},
                 transportCompanyFact: {},
+                driverTransportCompany:{},
                 costTrip: 0,
                 numberGate: 1,
                 managerBackOffice: item.managerBackOffice,
@@ -1188,7 +1199,9 @@ var planShipmentUtil = (
                         var sourceDataSource = $("#journalGridView").data("kendoGrid").dataSource;
                         var destinationDataSource = $("#planDayGrid").data("kendoGrid").dataSource;
                         var draggedRows = e.draggable.hint.find("tr");
+
                         draggedRows.each(function() {
+
                             var thisUid = $(this).attr("data-uid"),
                                 dataItem= sourceDataSource.getByUid(thisUid);
                             destinationDataSource.add(planShipmentUtil.addToPlan(dataItem));
@@ -1197,6 +1210,7 @@ var planShipmentUtil = (
                            // mainDataSource.insert(beginningRangePosition,itemToMove);
                         });
                         destinationDataSource.sync();
+                        //$("#planDayGrid").data("kendoGrid").refresh();
 
                     },
                     group: "gridGroupJournal"

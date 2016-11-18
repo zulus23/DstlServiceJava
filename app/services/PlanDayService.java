@@ -3,11 +3,9 @@ package services;
 import auth.DstlProfile;
 import com.avaje.ebean.Ebean;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.NullNode;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
-import model.DeviationDelivery;
-import model.DeviationShipment;
-import model.Enterprise;
-import model.TransportCompany;
+import model.*;
 import model.plan.JournalShipment;
 import model.plan.PlanShipment;
 import model.plan.PlanShipmentItem;
@@ -59,17 +57,17 @@ public class PlanDayService {
         journalShipment.setStatusDispatcher("заказано");
         journalShipment.setNumberOrder("2715");
         journalShipment.setNumberItem("45");
-        journalShipment.setNameOrder("Кофе - №3");
-        journalShipment.setNameCustomer("Марс ООО");
+        journalShipment.setNameOrder("Шоколад - №3");
+        journalShipment.setNameCustomer("Звезда ООО");
         journalShipment.setCodeCustomer("П0000001");
-        journalShipment.setPlaceDelivery("Россия Москва");
+        journalShipment.setPlaceDelivery("Россия Москва1");
         journalShipment.setSizeOrder(2000);
         journalShipment.setSizePallet("800X1200");
         journalShipment.setPackingMethod("Россыпь");
         journalShipment.setCountPlace(22);
         journalShipment.setCapacityOrder(7000);
         journalShipment.setTypeTransport("82");
-        journalShipment.setManagerBackOffice("Тимофеев А.А.");
+        journalShipment.setManagerBackOffice("Петров А.А.");
         journalShipment.setNote("");
      _journalShipments.add(journalShipment);
         JournalShipment journalShipment1 = new JournalShipment();
@@ -385,7 +383,7 @@ public class PlanDayService {
     public PlanShipmentItem updatePlanShipment(JsonNode value,PlanShipmentItem planShipmentItem){
 
         Optional.ofNullable(value.findValue("deviationShipment")).ifPresent(e -> {
-         if (!e.asText().equals("null")){
+         if (!e.equals(NullNode.getInstance())){
               DeviationShipment deviationShipment =   Optional.ofNullable(find(DeviationShipment.class).where().eq("id", e
                     .findValue("id").asInt())
                     .findUnique()).orElse(null);
@@ -393,7 +391,7 @@ public class PlanDayService {
          }
         });
         Optional.ofNullable(value.findValue("deviationDelivery")).ifPresent(e -> {
-            if (!e.asText().equals("null")){
+            if (!e.equals(NullNode.getInstance())){
                 DeviationDelivery deviationDelivery =   Optional.ofNullable(find(DeviationDelivery.class).where().eq("id", e
                     .findValue("id").asInt())
                     .findUnique()).orElse(null);
@@ -415,25 +413,31 @@ public class PlanDayService {
         });
 
         Optional.ofNullable(value.findValue("dateDeliveryFact")).ifPresent(e -> {
-            if (!e.asText().equals("null")){
+            if (!e.equals(NullNode.getInstance())){
             planShipmentItem.setDateDeliveryFact(dateFromStringInFormat_dd_MM_yyyy(e.asText()));
               }
             }
         );
 
         Optional.ofNullable(value.findValue("transportCompanyPlan")).ifPresent(e -> {
-            if (!e.asText().equals("null")) {
+            if (!e.equals(NullNode.getInstance())) {
                 planShipmentItem.setTransportCompanyPlan(TransportCompany.find.byId(e.findValue("rowPointer").asText()));
             }
         });
         Optional.ofNullable(value.findValue("transportCompanyFact")).ifPresent(e -> {
-            if (!e.asText().equals("null")) {
+            if (!e.equals(NullNode.getInstance())) {
                 planShipmentItem.setTransportCompanyFact(TransportCompany.find.byId(e.findValue("rowPointer").asText()));
             }
         });
 
-        Optional.ofNullable(value.findValue("timeLoad")).ifPresent( e-> {
-            if(e.asText().length()> 2){
+        Optional.ofNullable(value.get("driverTransportCompany")).ifPresent(e -> {
+            DriverTransportCompany driverTransportCompany = DriverTransportCompany.find.where().eq("id",e.get("id").asText()).findUnique();
+            planShipmentItem.setDriverTransportCompany(driverTransportCompany);
+        });
+
+
+        Optional.ofNullable(value.get("timeLoad")).ifPresent( e-> {
+            if(!e.equals(NullNode.getInstance())){
                 DateTime dateTime = DateTime.parse(e.asText()).plusHours(3);
                //DateTime dateTime =   DateTime.parse(e.asText(), DateTimeFormat.forPattern("dd-MM-yyyy HH:mm"));
                LocalTime localTime = LocalTime.of(dateTime.getHourOfDay(),dateTime.getMinuteOfHour());

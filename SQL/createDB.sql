@@ -108,7 +108,7 @@ CREATE TABLE  GTK_DSTL_PlanShipmentItem(
   TimeForLoading               INTEGER,
   DeliveryCompanyPlan          VARCHAR(50),
   DeliveryCompanyFact          VARCHAR(50),
-  Driver                       INTEGER,
+  Driver                       VARCHAR(50),
   NumberGate                   INTEGER,
   DistanceDeliver              INTEGER,
   CostDelivery                 DECIMAL(15,3),
