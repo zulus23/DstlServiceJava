@@ -72,6 +72,44 @@ var planShipmentUtil = (
                 });
         }
 
+        function driverTransportCompanyDropDownEditor(container, options) {
+            var transportConpanyFact = options.model.transportCompanyFact.rowPointer;
+
+            $('<input  name="' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    autoBind: false,
+                    filter: "contains",
+                    dataTextField: "name",
+                    dataValueField: "rowPointer",
+                    /*dataBound: function(){
+                     console.log(this.dataItem());
+                     options.model[options.field] = this.dataItem().value;
+
+                     },*/
+
+                    dataSource: {
+                        transport: {
+                            read: function(options){
+                                $.ajax({
+                                    type:"GET",
+                                    url:'/api/drivertransportcompany/'+transportConpanyFact,
+                                    /* beforeSend: function(){
+                                     console.log(enterpriseName);
+
+                                     },*/
+                                    contentType: "application/json; charset=utf-8",
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        options.success(data);
+                                    }
+                                });
+
+                            }
+                        }
+                    }
+                });
+        }
 
 
 
@@ -150,6 +188,8 @@ var planShipmentUtil = (
         function UpdateJournalShipment(item) {
             item.set('inPlanDay', true);
         }
+
+
 
         var dataSourceJournal =  function() {
            return new kendo.data.DataSource({
@@ -235,6 +275,12 @@ var planShipmentUtil = (
             var notificationWidget = notificationElement.data("kendoNotification");
             notificationWidget.show("Ошибка сохранения данных. " + request.responseText,"error");
         }
+        function timeEditor(container, options) {
+            $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" data-format="' + options.format + '"/>')
+                .appendTo(container)
+                .kendoTimePicker({culture: "ru-RU"});
+        }
+
 
         var dataSourcePlanDay =  function() {
             return new kendo.data.DataSource({
@@ -286,7 +332,7 @@ var planShipmentUtil = (
                             dataType: 'json',
                             beforeSend: function(){
                                options.data.dateDeliveryFact = moment(options.data.dateDeliveryFact).format("DD-MM-YYYY");
-
+                               //options.data.timeLoad = moment(options.data.timeLoad).format("DD-MM-YYYY HH:mm");
                             },
                             data:  kendo.stringify(options),
                             success: function(data) {
@@ -331,7 +377,7 @@ var planShipmentUtil = (
                             deviationDelivery: {/*defaultValue:{id:-1,description:''},*/ nullable: true},
                             existInStore: {editable: false,type: "boolean"},
                             dateToStore: {editable: false,type:"string"},
-                            placeShipment: {type: "string"},
+                            placeShipment: {editable: false,type: "string"},
                             statusDispatcher: {editable: false,type: "string"},
                             numberDispatcher: {editable: false,type: "string"},
                             dateCreateDispatcher: {editable: false,type:"string"},
@@ -347,15 +393,16 @@ var planShipmentUtil = (
                             capacityOrder: {editable: false,type: "number"},
                             typeTransport: {editable: false,type: "string"},
                             timeToLoad: {editable: false,type:"number"},
-                            transportCompanyPlan: {editable:true,defaultValue:{rowPointer:"",name:""}},
+                            transportCompanyPlan: {editable:false,defaultValue:{rowPointer:"",name:""}},
                             transportCompanyFact: {editable:true,defaultValue:{rowPointer:"",name:""}},
                             numberGate: {type:"number"},
                             deliveryDistance: {type:"number"},
                             costTrip: {type:"number",editable: true, nullable: false},
-                            timeLoad: {},
+                            timeLoad: {type:"date"},
                             managerBackOffice: {editable: false,type: "string"},
                             note: {type: "string"},
-                            dataPlan:{type:"string"}
+                            dataPlan:{type:"string"},
+
 
                         }
                     }
@@ -400,6 +447,8 @@ var planShipmentUtil = (
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
                         groupable: false,
+                       /* locked: true,
+                        lockable: false,*/
                         template: "#=senderEnterprise.name#"
                     },
                     {
@@ -532,6 +581,8 @@ var planShipmentUtil = (
                         title: "Грузополучатель",
                         width: "120px",
                         filterable: false,
+                       /* locked: true,
+                        lockable: false,*/
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat
                     },
@@ -673,6 +724,8 @@ var planShipmentUtil = (
                         attributes: gridUtils.columnFormat,
                         groupable: false,
                         editable:false,
+                        locked: true,
+                        lockable: false,
                       //  editor: enterpriseDropDownEditor, template: "#=senderEnterprise.name#"
                     },
                     {
@@ -844,6 +897,8 @@ var planShipmentUtil = (
                         title: "Грузополучатель",
                         width: "120px",
                         filterable: false,
+                        locked: true,
+                        lockable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
 
@@ -916,6 +971,8 @@ var planShipmentUtil = (
                         title: "Время на погрузку",
                         width: "80px",
                         filterable: false,
+                        locked: true,
+                        lockable: false,
                         aggregates: ["count"],
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
@@ -997,12 +1054,13 @@ var planShipmentUtil = (
 
                     },
                     {
-                        field: "",
+                        field: "timeLoad",
                         title: "Время погрузки ТС",
                         width: "80px",
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
+                        format:"{0:HH:mm}", editor: timeEditor
 
                     },
                     {

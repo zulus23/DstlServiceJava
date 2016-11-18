@@ -2,6 +2,7 @@ package model.plan;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import model.Enterprise;
+import model.TransportCompany;
 
 import java.sql.Timestamp;
 
@@ -33,6 +34,7 @@ public class JournalShipment {
     private String nameOrder;
     private String nameCustomer;
     private String codeCustomer;
+    private TransportCompany transportCompanyPlan;
     //private String consignee; //грузополучатель
     private String placeDelivery;
     private Integer sizeOrder;

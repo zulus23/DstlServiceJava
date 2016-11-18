@@ -12,6 +12,7 @@ import play.db.NamedDatabase;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
@@ -122,7 +123,8 @@ public class PlanShipmentItem  extends Model {
     @Column(name = "CostDelivery")
     private Double costTrip;
     @Column(name = "TimeLoading")
-    private Timestamp  timeLoad;
+    @Temporal(TemporalType.TIME)
+    private Time timeLoad;
     @Column(name = "BackManager")
     private String managerBackOffice;
     @Column(name = "Note")
@@ -440,11 +442,11 @@ public class PlanShipmentItem  extends Model {
         this.costTrip = costTrip;
     }
 
-    public Timestamp getTimeLoad() {
+    public Time getTimeLoad() {
         return timeLoad;
     }
 
-    public void setTimeLoad(Timestamp timeLoad) {
+    public void setTimeLoad(Time timeLoad) {
         this.timeLoad = timeLoad;
     }
 

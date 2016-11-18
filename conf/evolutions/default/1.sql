@@ -77,7 +77,7 @@ create table gtk_dstl_planshipmentitem (
   numbergate                    integer,
   distancedeliver               float(32),
   costdelivery                  float(32),
-  timeloading                   datetime2,
+  timeloading                   time,
   backmanager                   varchar(255),
   note                          varchar(255),
   createby                      integer,

@@ -21,9 +21,11 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.PersistenceException;
 import java.sql.Date;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -336,13 +338,11 @@ public class PlanDayService {
 
         Optional.ofNullable(value.findValue("timeLoad")).ifPresent( e -> {
             DateTime dateTime =   DateTime.parse(value.findValue("timeLoad").asText(), DateTimeFormat.forPattern("dd-MM-yyyy HH:mm"));
-            LocalDateTime localTime = LocalDateTime.of(dateTime.getYear(),
-                    dateTime.getMonthOfYear(),
-                    dateTime.getDayOfMonth(),
+            LocalTime localTime = LocalTime.of(
                     dateTime.getHourOfDay(),
                     dateTime.getMinuteOfHour());
 
-            _newPlanShipmentItem.setTimeLoad(Timestamp.valueOf(localTime));
+            _newPlanShipmentItem.setTimeLoad(Time.valueOf(localTime));
         });
         Optional.ofNullable(value.findValue("managerBackOffice")).ifPresent(e -> {
             _newPlanShipmentItem.setManagerBackOffice(e.asText());
@@ -365,182 +365,6 @@ public class PlanDayService {
         return _newPlanShipmentItem;
     }
 
-    /*public PlanShipmentItem savePlanShipmentItem(JsonNode value,String nameServiceDstl) throws PlanShipmentItemException{
-
-
-
-
-        Enterprise _serviceDstl = DbUtils.enterpriseFromUser(nameServiceDstl);
-        Enterprise  _enterprise = dstlService.getEnterprise(value.findValue("senderEnterprise").findValue("name").asText());
-        Date _datePlan =  dateFromStringInFormat_dd_MM_yyyy(value.findValue("datePlan").asText());
-        PlanShipment planShipment =  createPlan(_datePlan,_serviceDstl);
-                  *//*Optional.ofNullable(find(PlanShipment.class)
-                                           .where().eq("datePlan",_datePlan).eq("serviceDstl",_serviceDstl)
-                                           .findUnique())
-                          .orElse(createPlan(_datePlan,_serviceDstl.getName()));*//*
-
-        PlanShipmentItem _newPlanShipmentItem = new PlanShipmentItem();
-        Optional.ofNullable(value.findValue("senderEnterprise")).ifPresent(e -> {
-            _newPlanShipmentItem.setSenderEnterprise(_enterprise);
-        });
-
-        _newPlanShipmentItem.setPlanShipment(planShipment);
-        _newPlanShipmentItem.setTypeShipment(value.findValue("typeShipment").asText());
-        // Необходимо держать ссылку на план отрузки
-        _newPlanShipmentItem.setPlanLoad(value.findValue("planLoad").asBoolean(false));
-       _newPlanShipmentItem.setDateShipmentDispatcher(dateFromStringInFormat_dd_MM_yyyy(value.findValue("dateShipmentDispatcher").asText()));
-
-        DeviationShipment deviationShipment =   Optional.ofNullable(find(DeviationShipment.class).where().eq("id", value.findValue("deviationShipment")
-                                                                .findValue("id").asInt())
-                                                                .findUnique()).orElse(null);
-       _newPlanShipmentItem.setDeviationShipment(deviationShipment);
-       _newPlanShipmentItem.setDateDeliveryDispatcher(dateFromStringInFormat_dd_MM_yyyy(value.findValue("dateDeliveryDispatcher").asText()));
-
-        Optional.ofNullable(value.findValue("dateDeliveryFact")).ifPresent(e -> {
-                    _newPlanShipmentItem.setDateDeliveryFact(dateFromStringInFormat_dd_MM_yyyy(e.asText()));
-                }
-        );
-
-
-        DeviationDelivery deviationDelivery =   Optional.ofNullable(find(DeviationDelivery.class).where().eq("id", value.findValue("deviationDelivery")
-                                                                                                                              .findValue("id").asInt())
-                                      .findUnique()).orElse(null);
-       _newPlanShipmentItem.setDeviationDelivery(deviationDelivery);
-       _newPlanShipmentItem.setExistInStore(value.findValue("existInStore").asBoolean(false));
-        Optional.ofNullable(value.findValue("dateToStore")).ifPresent(e -> {
-            DateTime dateTime =   DateTime.parse(value.findValue("dateToStore").asText(), DateTimeFormat.forPattern("dd-MM-yyyy HH:mm"));
-            //DateTime dateTime =    new DateTime(value.findValue("dateToStore").asText());
-            LocalDateTime localTime = LocalDateTime.of(dateTime.getYear(),
-                                                       dateTime.getMonthOfYear(),
-                                                       dateTime.getDayOfMonth(),
-                                                       dateTime.getHourOfDay(),
-                                                       dateTime.getMinuteOfHour());
-           _newPlanShipmentItem.setDateToStore(Timestamp.valueOf(localTime));
-            //_newPlanShipmentItem.setDateToStore(localTime);
-
-        });
-        Optional.ofNullable(value.findValue("placeShipment")).ifPresent(e -> {
-            _newPlanShipmentItem.setPlaceShipment(e.asText());
-        });
-        Optional.ofNullable(value.findValue("statusDispatcher")).ifPresent( e -> {
-            _newPlanShipmentItem.setStatusDispatcher(e.asText());
-        });
-        Optional.ofNullable(value.findValue("numberDispatcher")).ifPresent( e ->{
-            _newPlanShipmentItem.setNumberDispatcher(e.asText());
-        } );
-
-        Optional.ofNullable(value.findValue("dateCreateDispatcher")).ifPresent(e -> {
-            DateTime dateTime =   DateTime.parse(value.findValue("dateCreateDispatcher").asText(), DateTimeFormat.forPattern("dd-MM-yyyy HH:mm"));
-            LocalDateTime localTime = LocalDateTime.of(dateTime.getYear(),
-                    dateTime.getMonthOfYear(),
-                    dateTime.getDayOfMonth(),
-                    dateTime.getHourOfDay(),
-                    dateTime.getMinuteOfHour());
-            _newPlanShipmentItem.setDateCreateDispatcher(Timestamp.valueOf(localTime));
-         });
-
-       _newPlanShipmentItem.setNumberOrder(value.findValue("numberOrder").asText());
-        Optional.ofNullable(value.findValue("lineOrder")).ifPresent(e -> {
-            _newPlanShipmentItem.setLineOrder(e.asInt());
-        });
-        Optional.ofNullable(value.findValue("numberItem")).ifPresent(e -> {
-            _newPlanShipmentItem.setNumberItem(e.asText());
-        });
-        Optional.ofNullable(value.findValue("nameOrder")).ifPresent(e -> {
-            _newPlanShipmentItem.setNameOrder(e.asText());
-        });
-        Optional.ofNullable(value.findValue("codeCustomer")).ifPresent(e ->{
-            _newPlanShipmentItem.setCodeCustomer(e.asText());
-        });
-        Optional.ofNullable(value.findValue("seqCustomer")).ifPresent(e->{
-            _newPlanShipmentItem.setSeqCustomer(e.asInt());
-        });
-        Optional.ofNullable(value.findValue("nameCustomer")).ifPresent(e -> {
-            _newPlanShipmentItem.setNameCustomer(e.asText());
-        });
-        Optional.ofNullable(value.findValue("placeDelivery")).ifPresent(e -> {
-            _newPlanShipmentItem.setPlaceDelivery(e.asText());
-        });
-        Optional.ofNullable(value.findValue("sizeOrder")).ifPresent(e -> {
-            _newPlanShipmentItem.setSizeOrder(e.asInt());
-        });
-        Optional.ofNullable(value.findValue("sizePallet")).ifPresent(e -> {
-            _newPlanShipmentItem.setSizePallet(e.asText());
-        });
-        Optional.ofNullable(value.findValue("packingMethod")).ifPresent( e -> {
-            _newPlanShipmentItem.setPackingMethod(e.asText());
-            _newPlanShipmentItem.setTimeToLoad(dstlService.timeForLoadingByTypePacking(e.asText(),_enterprise));
-           }
-        );
-
-        Optional.ofNullable(value.findValue("countPlace")).ifPresent(e -> {
-            _newPlanShipmentItem.setCountPlace(e.asInt());
-        });
-        Optional.ofNullable(value.findValue("capacityOrder")).ifPresent( e -> {
-            _newPlanShipmentItem.setCapacityOrder(e.asText());
-        });
-        Optional.ofNullable(value.findValue("typeTransport")).ifPresent(e -> {
-            _newPlanShipmentItem.setTypeTransport(e.asText());
-        });
-        *//*Optional.ofNullable(value.findValue("timeToLoad")).ifPresent(e -> {
-
-        });*//*
-
-        // ???????
-        _newPlanShipmentItem.setTransportCompanyPlan(null);
-        _newPlanShipmentItem.setTransportCompanyFact(null);
-        _newPlanShipmentItem.setDriverTransportCompany(null);
-        Optional.ofNullable(value.findValue("numberGate")).ifPresent(e -> {
-            _newPlanShipmentItem.setNumberGate(e.asInt());
-        });
-        Optional.ofNullable(value.findValue("distanceDelivery")).ifPresent(e -> {
-            _newPlanShipmentItem.setDistanceDelivery(e.asDouble());
-        });
-        Optional.ofNullable(value.findValue("costTrip")).ifPresent(e -> {
-            _newPlanShipmentItem.setCostTrip(e.asDouble());
-        });
-
-        Optional.ofNullable(value.findValue("timeLoad")).ifPresent( e -> {
-            DateTime dateTime =   DateTime.parse(value.findValue("timeLoad").asText(), DateTimeFormat.forPattern("dd-MM-yyyy HH:mm"));
-            LocalDateTime localTime = LocalDateTime.of(dateTime.getYear(),
-                    dateTime.getMonthOfYear(),
-                    dateTime.getDayOfMonth(),
-                    dateTime.getHourOfDay(),
-                    dateTime.getMinuteOfHour());
-
-           _newPlanShipmentItem.setTimeLoad(Timestamp.valueOf(localTime));
-        });
-        Optional.ofNullable(value.findValue("managerBackOffice")).ifPresent(e -> {
-            _newPlanShipmentItem.setManagerBackOffice(e.asText());
-        });
-        Optional.ofNullable(value.findValue("note")).ifPresent(e -> {
-            _newPlanShipmentItem.setNote(e.asText());
-        });
-
-         try {
-             Ebean.save(_newPlanShipmentItem);
-         } catch (Exception e){
-            //if(((SQLServerException) ((PersistenceException) e.)).vendorCode == 2627)
-            //if( ((SQLServerException) ((PersistenceException) e.getCause())).getErrorCode() == 2627)
-             if ( ((SQLServerException)((PersistenceException) e).getCause()).getErrorCode() == 2627 ){
-                 throw new PlanShipmentItemException("Такая запись уже существует");
-             };
-
-
-         }
-
-
-        if(Objects.isNull(_newPlanShipmentItem.getDeviationShipment())){
-
-            _newPlanShipmentItem.setDeviationShipment(new DeviationShipment(-1,""));
-        }
-        if(Objects.isNull(_newPlanShipmentItem.getDeviationDelivery())){
-            _newPlanShipmentItem.setDeviationDelivery(new DeviationDelivery(-1,""));
-        }
-
-
-        return _newPlanShipmentItem;
-    }*/
 
 
 
@@ -605,6 +429,15 @@ public class PlanDayService {
         Optional.ofNullable(value.findValue("transportCompanyFact")).ifPresent(e -> {
             if (!e.asText().equals("null")) {
                 planShipmentItem.setTransportCompanyFact(TransportCompany.find.byId(e.findValue("rowPointer").asText()));
+            }
+        });
+
+        Optional.ofNullable(value.findValue("timeLoad")).ifPresent( e-> {
+            if(e.asText().length()> 2){
+                DateTime dateTime = DateTime.parse(e.asText()).plusHours(3);
+               //DateTime dateTime =   DateTime.parse(e.asText(), DateTimeFormat.forPattern("dd-MM-yyyy HH:mm"));
+               LocalTime localTime = LocalTime.of(dateTime.getHourOfDay(),dateTime.getMinuteOfHour());
+               planShipmentItem.setTimeLoad(Time.valueOf(localTime));
             }
         });
 
