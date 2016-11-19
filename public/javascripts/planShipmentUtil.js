@@ -319,8 +319,11 @@ var planShipmentUtil = (
                             contentType: "application/json; charset=utf-8",
                             dataType: 'json',
                             data : kendo.stringify(options),
-                            success: function(data) {
-                                options.success(data);
+                            success: function(result) {
+                                console.group("create");
+                                console.log((result));
+                                console.groupEnd("create");
+                                options.success(result);
                             },
                             error: function (result) {
 
@@ -368,7 +371,7 @@ var planShipmentUtil = (
                     {field:"timeToLoad",aggregate:"sum"}
                 ],
                 change: function(e) {
-                    console.log(e);
+
                     if (e.action === "itemchange" && e.field === "driverTransportCompany"){
                         var model = e.items[0];
                         $("#planDayGrid").find("tr[data-uid='" + model.uid + "'] td:eq(30)").text(model.driverTransportCompany.phone);
@@ -745,6 +748,10 @@ var planShipmentUtil = (
                 },
 
                 columns: [
+                    { field: "id",
+                      title: "ID",
+                      width: "100px",
+                    },
                     {
                         field: "senderEnterprise.name",
                         title: "Предприятие отправитель",
@@ -1171,7 +1178,7 @@ var planShipmentUtil = (
                             item.addClass(selectedClass).siblings().removeClass(selectedClass);
                         }
                         var elements = item.parent().children('.'+selectedClass).clone();
-                        item.data('multidrag', elements).siblings('.'+selectedClass).remove();
+                       // item.data('multidrag', elements).siblings('.'+selectedClass).remove();
                         return helper.append(elements);
 
                     },

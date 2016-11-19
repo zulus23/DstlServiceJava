@@ -29,6 +29,7 @@ import java.util.*;
 
 import static com.avaje.ebean.Ebean.find;
 import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by Gukov on 01.11.2016.
@@ -131,22 +132,7 @@ public class PlanDayService {
     }
 
     public List<PlanShipmentItem> selectItemPlan(Date datePlan, String nameServiceDstl){
-        List<PlanShipmentItem> _items = ofNullable(Ebean.createQuery(PlanShipment.class).where().eq("datePlan",datePlan).findUnique())
-                .map(e -> e.getPlanShipmentItems()).orElse(null);
-        if (Objects.nonNull(_items)){
-            _items.stream().forEach(e -> {
-                if(Objects.isNull(e.getDeviationShipment())){
-
-                    e.setDeviationShipment(new DeviationShipment(-1,""));
-                }
-                if(Objects.isNull(e.getDeviationDelivery())){
-                    e.setDeviationDelivery(new DeviationDelivery(-1,""));
-                }
-            });
-        }
-
-
-        return _items;
+        return PlanShipment.find.where().eq("datePlan",datePlan).findUnique().getPlanShipmentItems();
     }
 
 
@@ -175,7 +161,7 @@ public class PlanDayService {
         Enterprise  _enterprise = dstlService.getEnterprise(value.findValue("senderEnterprise").findValue("name").asText());
         Date _datePlan =  dateFromStringInFormat_dd_MM_yyyy(value.findValue("datePlan").asText());
         PlanShipment planShipment =  createPlan(_datePlan,_serviceDstl);
-
+        Long maxIdInPLan =  planShipment.getPlanShipmentItems().stream().max((p,n) -> p.getId().compareTo( n.getId())).map(e -> e.getId()).orElse(0L);
 
         Iterator<JsonNode> nodeIterator =  value.findValue("data").findValue("models").elements();
         while(nodeIterator.hasNext()){
@@ -202,7 +188,7 @@ public class PlanDayService {
             }
         }
 
-        return planShipment.getPlanShipmentItems();
+        return planShipment.getPlanShipmentItems().stream(). filter(e -> e.getId() > maxIdInPLan).collect(toList());
 
 
     }
@@ -483,7 +469,7 @@ public class PlanDayService {
         Iterator<JsonNode> nodeIterator =  valueDelete.findValue("data").findValue("models").elements();
         while(nodeIterator.hasNext()){
             JsonNode _delete = nodeIterator.next();
-            PlanShipmentItem.find.where().eq("id",_delete.findValue("id").asInt()).delete();
+            PlanShipmentItem.find.where().eq("id",_delete.get("id").asInt()).delete();
         }
 
         //PlanShipmentItem planShipmentItem =  Ebean.find(PlanShipmentItem.class,id);
