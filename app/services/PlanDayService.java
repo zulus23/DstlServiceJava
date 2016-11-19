@@ -163,7 +163,8 @@ public class PlanDayService {
         PlanShipment planShipment =  createPlan(_datePlan,_serviceDstl);
         Long maxIdInPLan =  planShipment.getPlanShipmentItems().stream().max((p,n) -> p.getId().compareTo( n.getId())).map(e -> e.getId()).orElse(0L);
 
-        Iterator<JsonNode> nodeIterator =  value.findValue("data").findValue("models").elements();
+        Iterator<JsonNode> nodeIterator =  value.get("data").get("models").elements();
+      // Iterator<JsonNode> nodeIterator =  value.get("models").elements();
         while(nodeIterator.hasNext()){
             JsonNode valueInsert = nodeIterator.next();
             PlanShipmentItem planShipmentItem = savePlanShipmentItem(valueInsert,planShipment);
@@ -466,7 +467,8 @@ public class PlanDayService {
 
 
     public Integer deletePlandDayItem(JsonNode valueDelete, DstlProfile dstlProfile) {
-        Iterator<JsonNode> nodeIterator =  valueDelete.findValue("data").findValue("models").elements();
+        Iterator<JsonNode> nodeIterator =  valueDelete.get("data").get("models").elements();
+      //  Iterator<JsonNode> nodeIterator =  valueDelete.get("models").elements();
         while(nodeIterator.hasNext()){
             JsonNode _delete = nodeIterator.next();
             PlanShipmentItem.find.where().eq("id",_delete.get("id").asInt()).delete();

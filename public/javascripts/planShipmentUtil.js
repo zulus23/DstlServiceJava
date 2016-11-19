@@ -195,7 +195,10 @@ var planShipmentUtil = (
         function UpdateJournalShipment(item) {
             item.set('inPlanDay', true);
         }
-
+        function kendoGridRefresh() {
+            var grid = $('#planDayGrid').data('kendoGrid');
+            grid.dataSource.read();
+        }
 
 
         var dataSourceJournal =  function() {
@@ -296,7 +299,6 @@ var planShipmentUtil = (
                 transport: {
 
                     read: function (options) {
-
                         $.ajax({
                             type: "GET",
                             url: "api/plandayshipment",
@@ -311,19 +313,17 @@ var planShipmentUtil = (
                             }
                         });
                     },
-                    create: function(options){
+                    create: function(options) {
 
                         $.ajax({
                             type: "POST",
                             url: "api/plandayshipment",
                             contentType: "application/json; charset=utf-8",
                             dataType: 'json',
-                            data : kendo.stringify(options),
-                            success: function(result) {
-                                console.group("create");
-                                console.log((result));
-                                console.groupEnd("create");
+                            data: kendo.stringify(options),
+                            success: function (result) {
                                 options.success(result);
+                                // planGrid().dataSource.read();
                             },
                             error: function (result) {
 
@@ -332,6 +332,8 @@ var planShipmentUtil = (
                                 planGrid().dataSource.fetch();
 
                             }
+                        }).done(function () {
+                            kendoGridRefresh();
                         });
                     },
                     update: function(options){
@@ -352,8 +354,7 @@ var planShipmentUtil = (
                         });
                     },
                     destroy: function(options) {
-
-                        $.ajax({
+                         $.ajax({
                             type: "POST",
                             url: "/api/deleteplandayshipment",
                             contentType: "application/json; charset=utf-8",
@@ -364,7 +365,9 @@ var planShipmentUtil = (
                             }
                         });
                     },
+
                 },
+
                 batch: true,
 
                 aggregate:[
@@ -748,10 +751,7 @@ var planShipmentUtil = (
                 },
 
                 columns: [
-                    { field: "id",
-                      title: "ID",
-                      width: "100px",
-                    },
+
                     {
                         field: "senderEnterprise.name",
                         title: "Предприятие отправитель",
@@ -760,8 +760,8 @@ var planShipmentUtil = (
                         attributes: gridUtils.columnFormat,
                         groupable: false,
                         editable:false,
-                      //  locked: true,
-                      //  lockable: false,
+                        locked: true,
+                        lockable: false,
                       //  editor: enterpriseDropDownEditor, template: "#=senderEnterprise.name#"
                     },
                     {
@@ -933,8 +933,8 @@ var planShipmentUtil = (
                         title: "Грузополучатель",
                         width: "120px",
                         filterable: false,
-                        //locked: true,
-                        //lockable: false,
+                        locked: true,
+                        lockable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
 
@@ -1007,8 +1007,8 @@ var planShipmentUtil = (
                         title: "Время на погрузку",
                         width: "80px",
                         filterable: false,
-                      //  locked: true,
-                       // lockable: false,
+                        locked: true,
+                        lockable: false,
                         aggregates: ["count"],
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
@@ -1217,6 +1217,8 @@ var planShipmentUtil = (
                            // mainDataSource.insert(beginningRangePosition,itemToMove);
                         });
                         destinationDataSource.sync();
+                      //  destinationDataSource.read();
+                      //  $("#planDayGrid").data("kendoGrid").refresh();
                         //$("#planDayGrid").data("kendoGrid").refresh();
 
                     },
