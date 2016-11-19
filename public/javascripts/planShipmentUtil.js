@@ -426,7 +426,13 @@ var planShipmentUtil = (
                             driverTransportCompany:{editable:true,defaultValue:{id:"",fullName:""}},
                             numberTruck:{editable:false,type:"string"},
                             phoneDriver:{editable:false,type:"string"},
-                            numberGate: {type:"number"},
+                            numberGate: {type:"number",
+                                         validation: { // validation rules
+                                              required: true, // the field is required
+                                              min: 1,
+                                              max:4
+                                         }
+                            },
                             deliveryDistance: {type:"number"},
                             costTrip: {type:"number",editable: true, nullable: false},
                             timeLoad: {type:"date"},
@@ -819,7 +825,7 @@ var planShipmentUtil = (
                         title: "Дата доставки в ПЭ",
                         width: "80px",
                         headerAttributes: gridUtils.headerFormat,
-                        attributes: gridUtils.columnFormatChangeDeliveryDate,
+                        attributes: gridUtils.columnFormat,
                         filterable: false,
                         groupable: false,
 
@@ -829,7 +835,7 @@ var planShipmentUtil = (
                         title: "Дата доставки факт",
                         width: "80px",
                         headerAttributes: gridUtils.headerFormat,
-                        attributes: gridUtils.columnFormatChangeDeliveryDate,
+                        attributes: gridUtils.columnFormat,
                         filterable: false,
                         groupable: false,
                         format:"{0:dd-MM-yyyy}"

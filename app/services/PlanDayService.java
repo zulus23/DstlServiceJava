@@ -418,8 +418,10 @@ public class PlanDayService {
         });
 
         Optional.ofNullable(value.get("driverTransportCompany")).ifPresent(e -> {
-            DriverTransportCompany driverTransportCompany = DriverTransportCompany.find.where().eq("id",e.get("id").asText()).findUnique();
-            planShipmentItem.setDriverTransportCompany(driverTransportCompany);
+            if(!e.equals(NullNode.getInstance())){
+                DriverTransportCompany driverTransportCompany = DriverTransportCompany.find.where().eq("id",e.get("id").asText()).findUnique();
+                planShipmentItem.setDriverTransportCompany(driverTransportCompany);
+            }
         });
 
 

@@ -125,6 +125,14 @@
                    $("#planDayGrid").data("kendoGrid").saveChanges();
                    //$("#planDayGrid").data("kendoGrid").dataSource.sync();
                 })
+                $("#bExportPlan").bind( "click", function() {
+                    $("#planDayGrid").data("kendoGrid").saveAsExcel();
+
+                });
+                $("#bExportJournalPlan").bind( "click", function() {
+                    $("#journalGridView").data("kendoGrid").saveAsExcel();
+
+                });
                 var splitter = $("#planShipmentSplitter").data("kendoSplitter");
                 splitter.bind("resize", function(){
                         var size =   $("#journalGridView").find(".k-grid-content").height();
