@@ -40,6 +40,7 @@ public class JournalShipment {
     private Integer sizeOrder;
     private String sizePallet;
     private String packingMethod;
+
     private Integer countPlace;
     private Integer capacityOrder;
     private String typeTransport;
@@ -261,6 +262,14 @@ public class JournalShipment {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public TransportCompany getTransportCompanyPlan() {
+        return transportCompanyPlan;
+    }
+
+    public void setTransportCompanyPlan(TransportCompany transportCompanyPlan) {
+        this.transportCompanyPlan = transportCompanyPlan;
     }
 
     @Override

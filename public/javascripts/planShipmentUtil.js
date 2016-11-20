@@ -249,7 +249,8 @@ var planShipmentUtil = (
                             capacityOrder: {type: "number"},
                             typeTransport: {type: "string"},
                             managerBackOffice: {type: "string"},
-                            note: {type: "string"}
+                            note: {type: "string"},
+                            transportCompanyPlan:{}
 
                         }
                     }
@@ -308,9 +309,16 @@ var planShipmentUtil = (
                                 datePlan: getPlanDay()
                             },
                             success: function (data) {
-
-                                options.success(data);
+                                console.log(data);
+                                if(data === "No Data"){
+                                    options.success([]);
+                                }else
+                                {
+                                   options.success(data);
+                                }
                             }
+                        }).done(function(e){
+
                         });
                     },
                     create: function(options) {
@@ -322,6 +330,7 @@ var planShipmentUtil = (
                             dataType: 'json',
                             data: kendo.stringify(options),
                             success: function (result) {
+
                                 options.success(result);
                                 // planGrid().dataSource.read();
                             },
@@ -624,6 +633,16 @@ var planShipmentUtil = (
                         attributes: gridUtils.columnFormat
                     },
                     {
+                        field: "",
+                        title: "Наименование ТЭК план",
+                        width: "100px",
+                        filterable: false,
+                        headerAttributes: gridUtils.headerFormat,
+                        attributes: gridUtils.columnFormat,
+                        template: "#=planShipmentUtil.isNotNull(transportCompanyPlan) ? transportCompanyPlan.name : ''#"
+                    },
+
+                    {
                         field: "placeDelivery",
                         title: "Пункт доставки",
                         width: "100px",
@@ -750,6 +769,7 @@ var planShipmentUtil = (
                 filterable: true,
                 resizable: true,
                // selectable:"true",
+                columnMenu: true,
                 editable: true,
                 change:onChange,
                 dataBound: function (e) {
@@ -1160,8 +1180,8 @@ var planShipmentUtil = (
                 countPlace: item.countPlace,
                 capacityOrder: item.capacityOrder,
                 typeTransport: item.typeTransport,
-                transportCompanyPlan: {},
-                transportCompanyFact: {},
+                transportCompanyPlan: item.transportCompanyPlan,
+                transportCompanyFact: item.transportCompanyPlan,
                 driverTransportCompany:{},
                 costTrip: 0,
                 numberGate: 1,

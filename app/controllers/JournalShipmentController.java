@@ -79,7 +79,7 @@ public class JournalShipmentController extends Controller {
         if (Objects.nonNull(result)){
             return ok(Json.toJson(result));
         }
-        return  ok();
+        return  ok(Json.toJson("No Data"));
     }
 
 }

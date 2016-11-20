@@ -70,6 +70,10 @@ public class PlanDayService {
         journalShipment.setTypeTransport("82");
         journalShipment.setManagerBackOffice("Петров А.А.");
         journalShipment.setNote("");
+       /* TransportCompany transportCompany =  TransportCompany.find.byId("A7ED6ABB-F607-438D-84BE-56BDDA07A192");
+        journalShipment.setTransportCompanyPlan(transportCompany);*/
+
+
      _journalShipments.add(journalShipment);
         JournalShipment journalShipment1 = new JournalShipment();
         journalShipment1.setId(2L);
@@ -126,13 +130,16 @@ public class PlanDayService {
         journalShipmentP.setTypeTransport("82");
         journalShipmentP.setManagerBackOffice("Тимофеев А.А.");
         journalShipmentP.setNote("");
+        TransportCompany transportCompanyP =  TransportCompany.find.byId("A7ED6ABB-F607-438D-84BE-56BDDA07A192");
+        journalShipmentP.setTransportCompanyPlan(transportCompanyP);
+
         _journalShipments.add(journalShipmentP);
 
         return _journalShipments;
     }
 
     public List<PlanShipmentItem> selectItemPlan(Date datePlan, String nameServiceDstl){
-        return PlanShipment.find.where().eq("datePlan",datePlan).findUnique().getPlanShipmentItems();
+        return Optional.ofNullable(PlanShipment.find.where().eq("datePlan",datePlan).findUnique()).map(e ->e.getPlanShipmentItems()).orElse(null);
     }
 
 
@@ -172,12 +179,11 @@ public class PlanDayService {
 
         }
         try {
+       //TODO Need uses transaction
       //     Ebean.beginTransaction();
             Ebean.save(planShipment);
       //      Ebean.commitTransaction();
         } catch (Exception e){
-            //if(((SQLServerException) ((PersistenceException) e.)).vendorCode == 2627)
-            //if( ((SQLServerException) ((PersistenceException) e.getCause())).getErrorCode() == 2627)
             if ( ((SQLServerException)((PersistenceException) e).getCause()).getErrorCode() == 2627 ){
                 throw new PlanShipmentItemException("Такая запись уже существует");
             };
@@ -308,8 +314,17 @@ public class PlanDayService {
         });*/
 
         // ???????
-        _newPlanShipmentItem.setTransportCompanyPlan(null);
-        _newPlanShipmentItem.setTransportCompanyFact(null);
+        Optional.ofNullable(value.findValue("transportCompanyPlan")).ifPresent(e -> {
+            //TODO При создании в плане фактическая компания доставки = плановой
+            if(!e.equals(NullNode.getInstance())){
+                TransportCompany transportCompany =  TransportCompany.find.byId(e.get("rowPointer").asText());
+                _newPlanShipmentItem.setTransportCompanyPlan(transportCompany);
+                _newPlanShipmentItem.setTransportCompanyFact(transportCompany);
+            }
+
+        });
+
+
         _newPlanShipmentItem.setDriverTransportCompany(null);
         Optional.ofNullable(value.findValue("numberGate")).ifPresent(e -> {
             _newPlanShipmentItem.setNumberGate(e.asInt());
@@ -337,15 +352,6 @@ public class PlanDayService {
         });
 
 
-
-      /*  if(Objects.isNull(_newPlanShipmentItem.getDeviationShipment())){
-
-            _newPlanShipmentItem.setDeviationShipment(new DeviationShipment(-1,""));
-        }
-        if(Objects.isNull(_newPlanShipmentItem.getDeviationDelivery())){
-            _newPlanShipmentItem.setDeviationDelivery(new DeviationDelivery(-1,""));
-        }
-*/
 
         return _newPlanShipmentItem;
     }

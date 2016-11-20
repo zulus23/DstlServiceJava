@@ -59,19 +59,6 @@
                 var datePlan,  wnd,
                         detailsTemplate;
 
-            /*    wnd = $("#details")
-                        .kendoWindow({
-                            title: "Customer Details",
-                            modal: true,
-                            visible: false,
-                            resizable: false,
-                            width: 300
-                        }).data("kendoWindow");
-
-                detailsTemplate = kendo.template($("#popup_editor").html());*/
-
-
-
                $("#planShipmentSplitter").kendoSplitter({
                     orientation: "vertical",
                     panes: [
@@ -88,10 +75,6 @@
                  $("#planShipmentDay").kendoDatePicker({
                     format: kendo.culture().calendar.patterns.d,
                      value: moment().format("DD.MM.YYYY")
-                    /* change: function() {
-                     var value = this.value();
-                     console.log(value); //value is the selected date in the datepicker
-                     }*/
 
                 });
                 datePlan = $("#planShipmentDay").data("kendoDatePicker");
@@ -100,19 +83,12 @@
                     var value = this.value();
                     console.log(value); //value is the selected date in the datepicker
                     planShipmentUtil.setDatePlan(value);
-                    planShipmentUtil.planGrid().refresh();
+                    //planShipmentUtil.planGrid().read();
+                    $('#planDayGrid').data('kendoGrid').dataSource.read();
+
 
                 });
                 $("#planShipmentDay").attr("readonly", true);
-/*
-                function showDetails(e) {
-                   //  e.preventDefault();
-
-                   // var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
-                   // dataItem.set("FirstName", "James") //set the property of the dataItem
-                    wnd.content(detailsTemplate(e));
-                    wnd.center().open();
-                }*/
 
                 planShipmentUtil.journalShipmentView();
                 var plangrid =  planShipmentUtil.planGrid();
@@ -120,10 +96,7 @@
 
 
                $("#bSavePlan").bind( "click", function() {
-
-                   //$("#planDayGrid").data("kendoGrid").dataSource.sync();
-                   $("#planDayGrid").data("kendoGrid").saveChanges();
-                   //$("#planDayGrid").data("kendoGrid").dataSource.sync();
+                  $("#planDayGrid").data("kendoGrid").saveChanges();
                 })
                 $("#bExportPlan").bind( "click", function() {
                     $("#planDayGrid").data("kendoGrid").saveAsExcel();
