@@ -40,7 +40,7 @@ public class PlanDayService {
     @Inject
     private DstlService dstlService;
 
-    public List<JournalShipment> journalShipmentList(){
+    public List<JournalShipment> journalShipmentList(String nameServiceDstl){
 
         List<JournalShipment> _journalShipments = new ArrayList<>();
         JournalShipment journalShipment = new JournalShipment();
@@ -104,7 +104,7 @@ public class PlanDayService {
         journalShipment1.setNote("");
         _journalShipments.add(journalShipment1);
         JournalShipment journalShipmentP = new JournalShipment();
-        journalShipmentP.setId(1L);
+        journalShipmentP.setId(3L);
         journalShipmentP.setSenderEnterprise( dstlService.getEnterprise("ПРИНТ"));
         journalShipmentP.setTypeShipment("Доставка");
         journalShipmentP.setNumberDispatcher("5439");
@@ -132,14 +132,50 @@ public class PlanDayService {
         journalShipmentP.setNote("");
         TransportCompany transportCompanyP =  TransportCompany.find.byId("A7ED6ABB-F607-438D-84BE-56BDDA07A192");
         journalShipmentP.setTransportCompanyPlan(transportCompanyP);
-
         _journalShipments.add(journalShipmentP);
 
-        return _journalShipments;
+
+        JournalShipment journalShipmentSp = new JournalShipment();
+        journalShipmentSp.setId(4L);
+        journalShipmentSp.setSenderEnterprise( dstlService.getEnterprise("СЕВЕР"));
+        journalShipmentSp.setTypeShipment("Доставка");
+        journalShipmentSp.setNumberDispatcher("54392");
+        journalShipmentSp.setInPlanDay(false);
+        journalShipmentSp.setDateCreateDispatcher(Timestamp.valueOf(LocalDateTime.of(2016,3,21,14,25,0,0)));
+        journalShipmentSp.setDateShipmentDispatcher(LocalDate.of(2016,3,23).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        journalShipmentSp.setDateDeliveryDispatcher(LocalDate.of(2016,3,24).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        journalShipmentSp.setExistInStore(true);
+        journalShipmentSp.setDateToStore(Timestamp.valueOf(LocalDateTime.of(2016,3,20,17,20)));
+        journalShipmentSp.setPlaceLoading("ПЖ");
+        journalShipmentSp.setStatusDispatcher("заказано");
+        journalShipmentSp.setNumberOrder("27152");
+        journalShipmentSp.setNumberItem("452");
+        journalShipmentSp.setNameOrder("Кофе - №22222");
+        journalShipmentSp.setNameCustomer("Марс ООО 222222222222");
+        journalShipmentSp.setCodeCustomer("П0000001");
+        journalShipmentSp.setPlaceDelivery("Россия Москва");
+        journalShipmentSp.setSizeOrder(2000);
+        journalShipmentSp.setSizePallet("800X1200");
+        journalShipmentSp.setPackingMethod("Россыпь");
+        journalShipmentSp.setCountPlace(22);
+        journalShipmentSp.setCapacityOrder(7000);
+        journalShipmentSp.setTypeTransport("82");
+        journalShipmentSp.setManagerBackOffice("Тимофеев А.А.");
+        journalShipmentSp.setNote("");
+        //TransportCompany transportCompanySp =  TransportCompany.find.byId("A7ED6ABB-F607-438D-84BE-56BDDA07A192");
+        journalShipmentSp.setTransportCompanyPlan(null);
+
+
+
+        _journalShipments.add(journalShipmentSp);
+
+        return _journalShipments.stream().filter(e -> e.getSenderEnterprise().getBelongToService() == dstlService.getEnterprise(nameServiceDstl).getId()).collect(toList());
     }
 
     public List<PlanShipmentItem> selectItemPlan(Date datePlan, String nameServiceDstl){
-        return Optional.ofNullable(PlanShipment.find.where().eq("datePlan",datePlan).findUnique()).map(e ->e.getPlanShipmentItems()).orElse(null);
+        return Optional.ofNullable(PlanShipment.find.where()
+                                                    .eq("datePlan",datePlan)
+                                                    .eq("serviceDstl",dstlService.getEnterprise(nameServiceDstl)).findUnique()).map(e ->e.getPlanShipmentItems()).orElse(null);
     }
 
 

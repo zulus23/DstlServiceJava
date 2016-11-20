@@ -2,6 +2,7 @@ package controllers;
 
 import auth.AuthService;
 import model.plan.PlanShipmentItem;
+import org.pac4j.play.java.Secure;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -51,20 +52,20 @@ public class JournalShipmentController extends Controller {
 
 
 
-   // @Secure(clients = "ServiceDstlFormClient")
+    @Secure(clients = "ServiceDstlFormClient")
     public Result show() {
         return ok(views.html.planShipment.render("",webJarAssets, authService.isLoggedIn(), authService.getUserInfo().orElse(null)));
     }
 
     public Result index(){
-        return ok(Json.toJson(planDayService.journalShipmentList()));
+        return ok(Json.toJson(planDayService.journalShipmentList(authService.nameServiceDstl())));
     }
     public Result create() {
         //System.out.println(request().body().asJson());
 
         try {
             //planShipmentItem = planDayService.savePlanShipmentItem(request().body().asJson(), "ЗАО ГОТЭК-СЕВЕРО-ЗАПАД");
-            return ok(Json.toJson(planDayService.savePlanShipmentItems(request().body().asJson(), "ЗАО ГОТЭК-СЕВЕРО-ЗАПАД")));
+            return ok(Json.toJson(planDayService.savePlanShipmentItems(request().body().asJson(), authService.nameServiceDstl())));
         } catch (PlanShipmentItemException e ){
             return internalServerError("Данная запись уже есть в плане");
         }
