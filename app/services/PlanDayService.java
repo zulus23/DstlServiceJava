@@ -21,10 +21,10 @@ import javax.persistence.PersistenceException;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 
 import static com.avaje.ebean.Ebean.find;
@@ -485,4 +485,13 @@ public class PlanDayService {
         //PlanShipmentItem planShipmentItem =  Ebean.find(PlanShipmentItem.class,id);
         return 1;
     }
+
+
+    public long countMinuteInWorkDay(String serviceDstlName){
+        Enterprise serviceDstl = dstlService.getEnterprise(serviceDstlName);
+        Long allworkTime =   Optional.ofNullable(WorkTime.find.where().eq("serviceDstl",serviceDstl).eq("workTime",true).findList())
+                .map(e -> e.stream().mapToLong(t -> Duration.between(t.getStartTime().toLocalTime(),t.getEndTime().toLocalTime()).toMinutes()).sum()).orElse(0L);
+        return  allworkTime;
+    }
+
 }

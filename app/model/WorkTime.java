@@ -13,6 +13,8 @@ import java.sql.Time;
 @Entity
 @Table(name = "GTK_DSTL_WorkTime")
 public class WorkTime  extends Model{
+
+    public static final  Finder<Integer,WorkTime> find = new Finder<Integer, WorkTime>(WorkTime.class);
     @Id
     @Column(name = "ID")
     private Integer id;
