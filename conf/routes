@@ -42,7 +42,10 @@ GET         /api/worktimes               controllers.HelperWorkTimeController.in
 GET         /api/worktime/:id            controllers.HelperWorkTimeController.read(id:Integer)
 POST        /api/worktime                controllers.HelperWorkTimeController.create()
 DELETE      /api/worktime/:id            controllers.HelperWorkTimeController.delete(id:Integer)
-PATCH         /api/worktime/:id            controllers.HelperWorkTimeController.update(id:Integer)
+PATCH         /api/worktime/:id          controllers.HelperWorkTimeController.update(id:Integer)
+GET         /api/minuteworkday           controllers.HelperWorkTimeController.minuteWorkDay
+
+
 
 #Транспортные компаниии
 GET         /api/transports               controllers.HelperTransportCompanyController.index()

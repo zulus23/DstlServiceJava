@@ -523,11 +523,6 @@ public class PlanDayService {
     }
 
 
-    public long countMinuteInWorkDay(String serviceDstlName){
-        Enterprise serviceDstl = dstlService.getEnterprise(serviceDstlName);
-        Long allworkTime =   Optional.ofNullable(WorkTime.find.where().eq("serviceDstl",serviceDstl).eq("workTime",true).findList())
-                .map(e -> e.stream().mapToLong(t -> Duration.between(t.getStartTime().toLocalTime(),t.getEndTime().toLocalTime()).toMinutes()).sum()).orElse(0L);
-        return  allworkTime;
-    }
+
 
 }

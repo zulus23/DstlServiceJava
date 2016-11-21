@@ -13,6 +13,7 @@ import org.joda.time.format.DateTimeFormat;
 
 import utils.DbUtils;
 
+import javax.inject.Inject;
 import java.sql.Time;
 import java.time.LocalTime;
 import java.util.Arrays;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.avaje.ebean.Ebean.find;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -27,6 +29,8 @@ import static java.util.stream.Collectors.toList;
  */
 @Singleton
 public class HelperServices {
+    @Inject
+    private DstlService dstlService;
 
     private static java.time.LocalDateTime timeUpdateDeviation = java.time.LocalDateTime.now();
 
@@ -277,4 +281,16 @@ public class HelperServices {
         _deviationDeliveriList.add(nullDeviationDelivery);
         return  _deviationDeliveriList.stream().sorted((o1, o2) ->  o1.getId() - o2.getId() ).collect(toList());
     }
+
+
+    public long countMinuteInWorkDay(String serviceDstlName){
+        Enterprise serviceDstl = dstlService.getEnterprise(serviceDstlName);
+        Long allworkTime =   ofNullable(WorkTime.find.where().eq("serviceDstl",serviceDstl).eq("workTime",true).findList())
+                .map(e -> e.stream().mapToLong(t -> java.time.Duration.between(t.getStartTime().toLocalTime(),t.getEndTime().toLocalTime()).toMinutes()).sum()).orElse(0L);
+         long weekTime =  Optional.ofNullable(WorkTime.find.where().eq("serviceDstl",serviceDstl).ne("workTime",true).findList())
+                .map(e -> e.stream().mapToLong(t -> java.time.Duration.between(t.getStartTime().toLocalTime(),t.getEndTime().toLocalTime()).toMinutes()).sum()).orElse(0L);
+
+        return  allworkTime - weekTime;
+    }
+
 }

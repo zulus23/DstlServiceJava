@@ -4,11 +4,19 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import play.Application;
+
+import play.mvc.Http;
+import play.mvc.Result;
 import play.test.Helpers;
 
 import services.DstlService;
+import services.HelperServices;
 import services.PlanDayService;
 import static org.junit.Assert.*;
+import static play.mvc.Http.Status.NOT_FOUND;
+import static play.mvc.Http.Status.NO_CONTENT;
+import static play.test.Helpers.route;
+
 /**
  * Created by Zhukov on 20.11.2016.
  */
@@ -29,11 +37,24 @@ public class PlanShipmentTest   {
 
     @Test
     public void workTimeNotNull(){
-        PlanDayService planDayService = fakeApp.injector().instanceOf(PlanDayService.class);
+        HelperServices planDayService = fakeApp.injector().instanceOf(HelperServices.class);
         long  aLong =  planDayService.countMinuteInWorkDay("ЗАО ГОТЭК-ЦПУ");
         assertEquals(570,aLong);
        // assertEquals(569,aLong);
     }
+
+    @Test
+    public void RequestToWorkTimeCount(){
+        Http.RequestBuilder requestBuilder = new Http.RequestBuilder()
+                                                     .method("GET")
+                                                     .uri("/api/minuteworkday");
+        Result result =  route(requestBuilder);
+
+        assertNotEquals(NOT_FOUND,result.status());
+        result =  route(requestBuilder);
+
+    }
+
 
     @After
     public void teardown() {

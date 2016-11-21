@@ -3,6 +3,7 @@ package controllers;
 import auth.AuthService;
 import model.plan.PlanShipmentItem;
 import org.pac4j.play.java.Secure;
+import play.cache.CacheApi;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -21,6 +22,7 @@ import java.util.Optional;
 
 import static com.sun.corba.se.impl.util.Utility.printStackTrace;
 import static java.util.Optional.ofNullable;
+import static play.cache.Cache.getOrElse;
 import static play.mvc.Results.ok;
 
 /**
@@ -29,6 +31,9 @@ import static play.mvc.Results.ok;
 public class JournalShipmentController extends Controller {
 
 
+
+    @Inject
+    private CacheApi cache;
 
     @Inject
     WebJarAssets webJarAssets;
@@ -82,5 +87,8 @@ public class JournalShipmentController extends Controller {
         }
         return  ok(Json.toJson("No Data"));
     }
+
+
+
 
 }

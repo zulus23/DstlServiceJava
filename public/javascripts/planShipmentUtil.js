@@ -4,7 +4,7 @@
 var planShipmentUtil = (
     function() {
 
-        var datePlan,ID, selectShipItem;
+        var datePlan,ID, selectShipItem, countWorkTimeInMinute;
 
         function enterpriseDropDownEditor(container, options) {
 
@@ -309,13 +309,14 @@ var planShipmentUtil = (
                                 datePlan: getPlanDay()
                             },
                             success: function (data) {
-                                console.log(data);
+
                                 if(data === "No Data"){
                                     options.success([]);
                                 }else
                                 {
                                    options.success(data);
                                 }
+                                countAllWorkTime();
                             }
                         }).done(function(e){
 
@@ -1035,10 +1036,16 @@ var planShipmentUtil = (
                         filterable: false,
                         locked: true,
                         lockable: false,
-                        aggregates: ["count"],
+                        aggregates: ["sum"],
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        footerTemplate: "#=sum# "
+                        footerTemplate: "<div class = '#=planShipmentUtil.isNoMoreWorkTimeLoad(sum)? 'table-footer-cell-red' :'table-footer-cell-blue'#'>#=sum# <div> ",
+                        footerAttributes: {
+                            //class: "# =planShipmentUtil.isNoMoreWorkTimeLoad(value)? 'table-footer-cell-red' : '' # ",
+                            class: "table-footer-cell",
+                            //style: "# =planShipmentUtil.isNoMoreWorkTimeLoad(value) ? 'color: red;text-align: right; font-size: 14px ':'color:blue;text-align: right; font-size: 14px'#; "
+                          //  style: 'color:# =planShipmentUtil.isNoMoreWorkTimeLoad(value)? blue:red #;text-align: right; font-size: 14px'
+                        }
 
                     },
                     {
@@ -1265,6 +1272,31 @@ var planShipmentUtil = (
 
             }
 
+        var countAllWorkTime  = function () {
+              $.ajax({
+                type: "GET",
+                    url: "/api/minuteworkday",
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                data: {
+                datePlan: getPlanDay()
+            },
+                success: function (data) {
+                    console.log(data);
+                    countWorkTimeInMinute = data;
+                }
+            });
+
+        }
+
+        var isNoMoreWorkTimeLoad = function(minuteLoadInPlan){
+            if (countWorkTimeInMinute < minuteLoadInPlan  ){
+                return true;
+            } else{
+                return false;
+            }
+        }
+
         return {
             dataSourceJournal:dataSourceJournal,
             dataSourcePlanDay:dataSourcePlanDay,
@@ -1278,7 +1310,8 @@ var planShipmentUtil = (
             getDay:getDay,
             /*isTransportCompany:isTransportCompany,
             hasDeviation:hasDeviation,*/
-            isNotNull:isNotNull
+            isNotNull:isNotNull,
+            isNoMoreWorkTimeLoad:isNoMoreWorkTimeLoad
         }
     }
 )();

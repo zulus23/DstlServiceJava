@@ -7,11 +7,13 @@ import model.Enterprise;
 import model.NormaTimeLoading;
 import model.TypePacking;
 
+import javax.inject.Singleton;
 import java.util.Optional;
 
 /**
  * Created by Zhukov on 02.11.2016.
  */
+@Singleton
 public class DstlService {
 
     public Enterprise getEnterprise(String companyName){

@@ -1,17 +1,29 @@
 package controllers;
 
 import auth.AuthService;
+import model.Enterprise;
+import model.WorkTime;
+import play.cache.CacheApi;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import services.HelperServices;
 
 import javax.inject.Inject;
+import java.time.Duration;
+import java.util.Optional;
+
+import static com.sun.corba.se.impl.util.RepositoryId.cache;
 
 /**
  * Created by Gukov on 26.10.2016.
  */
 public class HelperWorkTimeController extends Controller {
+
+    @Inject
+    private CacheApi cache;
+
+
     @Inject
     WebJarAssets webJarAssets;
 
@@ -48,5 +60,12 @@ public class HelperWorkTimeController extends Controller {
     public Result read(Integer id){
         return TODO;
     }
+
+    public Result  minuteWorkDay(){
+        String dstlService =  authService.nameServiceDstl();
+        long count =   cache.getOrElse(authService.nameServiceDstl(),() -> helperServices.countMinuteInWorkDay(dstlService), 60*25) ;
+        return ok(Json.toJson(count));
+    }
+
 
 }

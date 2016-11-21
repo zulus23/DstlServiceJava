@@ -44,6 +44,10 @@ public class PlanShipment extends Model {
     @JoinColumn(name = "UpdateBy")
     private UserDstl userUpdate;
 
+    @Transient
+    private Long minuteWorkTime;
+
+
     public Long getId() {
         return id;
     }
@@ -98,6 +102,14 @@ public class PlanShipment extends Model {
 
     public void setUpdatePlan(Timestamp  updatePlan) {
         this.updatePlan = updatePlan;
+    }
+
+    public Long getMinuteWorkTime() {
+        return minuteWorkTime;
+    }
+
+    public void setMinuteWorkTime(Long minuteWorkTime) {
+        this.minuteWorkTime = minuteWorkTime;
     }
 
     @Override
