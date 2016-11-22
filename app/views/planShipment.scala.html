@@ -17,7 +17,7 @@
                 <label id="labelPlanShipmentDay" for="planShipmentDay" class="pull-left">План на: </label>
                 <section id="planShipmentDay1" >
                    <input id="planShipmentDay"  type="date">
-                    @if(!userInfo.getUsername.equals("user1")) {
+                    @if(userInfo.getRoles().contains("USER_DISPATCHER")) {
                         <button id="bSavePlan" class="k-button k-state-default red-tooltip red-tooltip"
                         data-toggle="tooltip" data-placement="bottom"
                         title="Сохранить план"><i class="fa fa-lg fa-floppy-o" aria-hidden="true"></i></button>
@@ -98,14 +98,15 @@
                 });
                 $("#planShipmentDay").attr("readonly", true);
 
-                @if(userInfo.getUsername.equals("user1")){
-                    planShipmentUtil.journalShipmentView();
-                    var plangrid = planShipmentUtil.planGrid();
-                    //planShipmentUtil.createDragAndDrop();
-                }else {
+                @if(userInfo.getRoles().contains("USER_DISPATCHER")){
                     planShipmentUtil.journalShipmentView();
                     var plangrid = planShipmentUtil.planGrid();
                     planShipmentUtil.createDragAndDrop();
+
+                }else {
+                    planShipmentUtil.journalShipmentView();
+                    var plangrid = planShipmentUtil.planGrid();
+                    //planShipmentUtil.createDragAndDrop();
                 }
 
 

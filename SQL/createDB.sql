@@ -14,6 +14,7 @@ CREATE TABLE GTK_DSTL_User (
   Name                          varchar(30),
   Password                      varchar(30),
   IdService                     integer,
+  CanCreatePlan                 bit
 
 );
 ALTER TABLE GTK_DSTL_User ADD CONSTRAINT FK_GTK_DSTL_User_IdService foreign key (IdService)

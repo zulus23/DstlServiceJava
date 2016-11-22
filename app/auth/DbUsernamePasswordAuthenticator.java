@@ -17,6 +17,7 @@ import play.libs.Json;
 
 import javax.inject.Inject;
 import java.sql.*;
+import java.util.Optional;
 
 /**
  * Created by Zhukov on 24.10.2016.
@@ -54,15 +55,28 @@ public class DbUsernamePasswordAuthenticator implements Authenticator<UsernamePa
         }*/
 
 
-        if(!userExistInDb(username,password,service)){
+         final DstlProfile dstlProfile = Optional.ofNullable(getUserFromDb(username,password,service)).map(e ->{
+            DstlProfile profile = new DstlProfile();
+            profile.setId(username);
+            profile.addAttribute(Pac4jConstants.USERNAME, username);
+            profile.addAttribute(AuthConstants.SERVICE_DSTL,service);
+            if(e.canCreatePlan) {
+                profile.addRole("USER_DISPATCHER");
+            }else {
+                profile.addRole("USER");
+            }
+            return  profile;
+        }).orElseThrow(()  ->   new CredentialsException("Ошибка. Пользователь : '" + username+ "' с таким паролем отсутствует"));
+
+         /*if(!userExistInDb(username,password,service)){
             throwsException("Ошибка. Пользователь : '" + username + "' с таким паролем отсутствует");
-        }
-        final DstlProfile profile = new DstlProfile();
+        }*/
+        /*final DstlProfile profile = new DstlProfile();
         profile.setId(username);
         profile.addAttribute(Pac4jConstants.USERNAME, username);
-        profile.addAttribute(AuthConstants.SERVICE_DSTL,service);
+        profile.addAttribute(AuthConstants.SERVICE_DSTL,service);*/
 
-        credentials.setUserProfile(profile);
+        credentials.setUserProfile(dstlProfile);
     }
 
     protected void throwsException(final String message) {
@@ -105,7 +119,7 @@ public class DbUsernamePasswordAuthenticator implements Authenticator<UsernamePa
         try(Connection conn =  DriverManager.getConnection(_configuration.getString("url"),
                 _configuration.getString("username"),
                 _configuration.getString("password"));
-            PreparedStatement preparedStatement = conn.prepareStatement("select u.name ,u.password,e.name  from gtk_dstl.dbo.gtk_dstl_user u " +
+            PreparedStatement preparedStatement = conn.prepareStatement("select u.name ,u.password,e.name, u.cancreateplan   from gtk_dstl.dbo.gtk_dstl_user u " +
                     " join gtk_dstl_enterprise e on u.idService = e.id where u.Name = ? AND  u.Password = ? AND e.name = ?");) {
 
             /*preparedStatement.executeQuery("select u.name ,u.password,e.name  from gtk_dstl.dbo.gtk_dstl_user u " +
@@ -117,7 +131,7 @@ public class DbUsernamePasswordAuthenticator implements Authenticator<UsernamePa
             ResultSet  result = preparedStatement.executeQuery();
 
             while ( result.next() ){
-                _innerUser = new InnerUser(result.getString(1),true);
+                _innerUser = new InnerUser(result.getString(1),result.getBoolean("cancreateplan"));
 
 
             }
@@ -132,19 +146,13 @@ public class DbUsernamePasswordAuthenticator implements Authenticator<UsernamePa
 
     private class  InnerUser {
         private String name;
-        private Boolean dispatcher;
+        private Boolean canCreatePlan;
 
-        public InnerUser(String name, Boolean dispatcher) {
+        public InnerUser(String name, Boolean canCreatePlan) {
             this.name = name;
-            this.dispatcher = dispatcher;
+            this.canCreatePlan = canCreatePlan;
         }
 
-        public String getName() {
-            return name;
-        }
 
-        public Boolean getDispatcher() {
-            return dispatcher;
-        }
     }
 }
