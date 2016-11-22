@@ -52,6 +52,8 @@ public class DbUsernamePasswordAuthenticator implements Authenticator<UsernamePa
         /*if (CommonHelper.areNotEquals(username, password)) {
             throwsException("Username : '" + username + "' does not match password");
         }*/
+
+
         if(!userExistInDb(username,password,service)){
             throwsException("Ошибка. Пользователь : '" + username + "' с таким паролем отсутствует");
         }
@@ -59,12 +61,15 @@ public class DbUsernamePasswordAuthenticator implements Authenticator<UsernamePa
         profile.setId(username);
         profile.addAttribute(Pac4jConstants.USERNAME, username);
         profile.addAttribute(AuthConstants.SERVICE_DSTL,service);
+
         credentials.setUserProfile(profile);
     }
 
     protected void throwsException(final String message) {
         throw new CredentialsException(message);
     }
+
+
     private boolean userExistInDb(String user,String password,String serviceName){
         Configuration _configuration= configuration.getConfig("login");
 
@@ -81,6 +86,7 @@ public class DbUsernamePasswordAuthenticator implements Authenticator<UsernamePa
             preparedStatement.setString(2,password);
             preparedStatement.setString(3,serviceName);
             ResultSet  result = preparedStatement.executeQuery();
+
             while ( result.next() ){
                return true;
             }
@@ -91,5 +97,54 @@ public class DbUsernamePasswordAuthenticator implements Authenticator<UsernamePa
             e.printStackTrace();
         }
         return  false;
+    }
+
+    private InnerUser getUserFromDb(String user,String password,String serviceName){
+        Configuration _configuration= configuration.getConfig("login");
+        InnerUser _innerUser = null;
+        try(Connection conn =  DriverManager.getConnection(_configuration.getString("url"),
+                _configuration.getString("username"),
+                _configuration.getString("password"));
+            PreparedStatement preparedStatement = conn.prepareStatement("select u.name ,u.password,e.name  from gtk_dstl.dbo.gtk_dstl_user u " +
+                    " join gtk_dstl_enterprise e on u.idService = e.id where u.Name = ? AND  u.Password = ? AND e.name = ?");) {
+
+            /*preparedStatement.executeQuery("select u.name ,u.password,e.name  from gtk_dstl.dbo.gtk_dstl_user u " +
+                            " join gtk_dstl_enterprise e on u.idService = e.id where u.Name = ? AND  u.Password = ? AND e.name = ?");*/
+
+            preparedStatement.setString(1,user);
+            preparedStatement.setString(2,password);
+            preparedStatement.setString(3,serviceName);
+            ResultSet  result = preparedStatement.executeQuery();
+
+            while ( result.next() ){
+                _innerUser = new InnerUser(result.getString(1),true);
+
+
+            }
+
+            //return  resultSet.getRow()!= 0  ;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return _innerUser;
+    }
+
+    private class  InnerUser {
+        private String name;
+        private Boolean dispatcher;
+
+        public InnerUser(String name, Boolean dispatcher) {
+            this.name = name;
+            this.dispatcher = dispatcher;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public Boolean getDispatcher() {
+            return dispatcher;
+        }
     }
 }
