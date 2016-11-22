@@ -10,8 +10,8 @@ var  gridUtils = (function(){
 
 
     var headerFormat = {"class": "table-header-cell",
-        style: " overflow: visible; white-space: normal; text-align: center; vertical-align:top; font-size: 10px"};
-    var columnFormat  = { "class": "table-cell",         style: "text-align: center; font-size: 11px" };
+        style: " overflow: visible; white-space: normal; text-align: center; vertical-align:top; font-size: 8px"};
+    var columnFormat  = { "class": "table-cell",         style: "text-align: center; font-size: 9px" };
 
 
 

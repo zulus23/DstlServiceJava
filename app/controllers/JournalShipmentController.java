@@ -12,18 +12,11 @@ import services.PlanDayService;
 import utils.PlanShipmentItemException;
 
 import javax.inject.Inject;
-
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-
-import static com.sun.corba.se.impl.util.Utility.printStackTrace;
-import static java.util.Optional.ofNullable;
-
-import static play.mvc.Results.ok;
 
 /**
  * Created by Zhukov on 22.10.2016.

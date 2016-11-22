@@ -104,12 +104,12 @@ div.col-lg-5, div.col-lg-7 {
 }*/
 .table-cell-red  {
 text-align: center;
-font-size: 11px;
+font-size: 9px;
 color: red;
 }
 .table-cell  {
     text-align: center;
-    font-size: 11px;
+    font-size: 9px;
     color: inherit;
 }
 .k-splitter .k-scrollable {
@@ -125,3 +125,19 @@ color: red;
     font-size: 14px;
     color: black;
 }
+/* Kendo Grid*/
+#planDayGrid .k-virtual-scrollable-wrap tr td{
+    height: 15px
+}
+.k-grid tbody tr{
+    height: 15px;
+}
+
+.k-grid td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0.08em 0.08em
+}
+
+

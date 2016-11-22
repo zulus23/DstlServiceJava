@@ -322,65 +322,9 @@ var planShipmentUtil = (
                         }).done(function(e){
 
                         });
-                    },
-                    create: function(options) {
-
-                        $.ajax({
-                            type: "POST",
-                            url: "api/plandayshipment",
-                            contentType: "application/json; charset=utf-8",
-                            dataType: 'json',
-                            data: kendo.stringify(options),
-                            success: function (result) {
-
-                                options.success(result);
-                                // planGrid().dataSource.read();
-                            },
-                            error: function (result) {
-
-                                ErrorShow(result);
-                                options.error(result);
-                                planGrid().dataSource.fetch();
-
-                            }
-                        }).done(function () {
-                            kendoGridRefresh();
-                        });
-                    },
-                    update: function(options){
-
-                        $.ajax({
-                            type: "PATCH",
-                            url: "/api/plandayshipment",
-                            contentType: "application/json; charset=utf-8",
-                            dataType: 'json',
-                            beforeSend: function(){
-                               options.data.dateDeliveryFact = moment(options.data.dateDeliveryFact).format("DD-MM-YYYY");
-                               //options.data.timeLoad = moment(options.data.timeLoad).format("DD-MM-YYYY HH:mm");
-                            },
-                            data:  kendo.stringify(options),
-                            success: function(data) {
-                                options.success(data);
-                            }
-                        });
-                    },
-                    destroy: function(options) {
-                         $.ajax({
-                            type: "POST",
-                            url: "/api/deleteplandayshipment",
-                            contentType: "application/json; charset=utf-8",
-                            dataType: 'json',
-                            data:  kendo.stringify(options),
-                            success: function(data) {
-                                options.success(data);
-                            }
-                        });
-                    },
+                    }
 
                 },
-
-                batch: true,
-
                 aggregate:[
                     {field:"timeToLoad",aggregate:"sum"}
                 ],
@@ -410,10 +354,10 @@ var planShipmentUtil = (
                             typeShipment: {editable: false,type: "string"},
                             planLoad: {editable: false,type: "boolean"},
                             dateShipmentDispatcher: {editable: false,type: "date",format:"{0:dd-MM-yyyy}"},
-                            deviationShipment: {/*defaultValue:{id:-1,description:''},*/ nullable: true},
+                            deviationShipment: {editable: false,/*defaultValue:{id:-1,description:''},*/ nullable: true},
                             dateDeliveryDispatcher: {editable: false,type: "string"},
-                            dateDeliveryFact: {type:"date"},
-                            deviationDelivery: {/*defaultValue:{id:-1,description:''},*/ nullable: true},
+                            dateDeliveryFact: {editable: false,type:"date"},
+                            deviationDelivery: {editable: false,/*defaultValue:{id:-1,description:''},*/ nullable: true},
                             existInStore: {editable: false,type: "boolean"},
                             dateToStore: {editable: false,type:"string"},
                             placeShipment: {editable: false,type: "string"},
@@ -433,23 +377,17 @@ var planShipmentUtil = (
                             typeTransport: {editable: false,type: "string"},
                             timeToLoad: {editable: false,type:"number"},
                             transportCompanyPlan: {editable:false,defaultValue:{rowPointer:"",name:""}},
-                            transportCompanyFact: {editable:true,defaultValue:{rowPointer:"",name:""}},
-                            driverTransportCompany:{editable:true,defaultValue:{id:"",fullName:""}},
+                            transportCompanyFact: {editable:false,defaultValue:{rowPointer:"",name:""}},
+                            driverTransportCompany:{editable:false,defaultValue:{id:"",fullName:""}},
                             numberTruck:{editable:false,type:"string"},
                             phoneDriver:{editable:false,type:"string"},
-                            numberGate: {type:"number",
-                                         validation: { // validation rules
-                                              required: true, // the field is required
-                                              min: 1,
-                                              max:4
-                                         }
-                            },
-                            deliveryDistance: {type:"number"},
-                            costTrip: {type:"number",editable: true, nullable: false},
-                            timeLoad: {type:"date"},
+                            numberGate: {editable: false,type:"number"},
+                            deliveryDistance: {editable: false,type:"number"},
+                            costTrip: {editable: false,type:"number",nullable: false},
+                            timeLoad: {editable: false,type:"date"},
                             managerBackOffice: {editable: false,type: "string"},
-                            note: {type: "string"},
-                            dataPlan:{type:"string"},
+                            note: {editable: false,type: "string"},
+                            dataPlan:{editable: false,type:"string"},
 
 
                         }
@@ -472,16 +410,6 @@ var planShipmentUtil = (
                 resizable: true,
                 pageable: {
                     pageSizes: true
-                },
-                 change: function(e) {
-                   var selectedRows = this.select();
-                     console.log(selectedRows);
-                   var selectedDataItems = [];
-                   for (var i = 0; i < selectedRows.length; i++) {
-                       var dataItem = this.dataItem(selectedRows[i]);
-                       console.log(dataItem);
-                       selectedDataItems.push(dataItem);
-                   }
                 },
 
                 /* dataBound: function (e) {
@@ -725,14 +653,6 @@ var planShipmentUtil = (
             moment.locale('ru');
             return moment(datePlan) > moment(dateShipmentDispatcher);
         }
-     /*   var isTransportCompany = function(transportCompany) {
-
-            return transportCompany !== null;
-        }
-
-        var hasDeviation = function (deviation) {
-            return deviation !== null;
-        }*/
 
         var isNotNull = function(value){
             return value !== null;
@@ -752,27 +672,19 @@ var planShipmentUtil = (
         var  selectPlanDetailID = function(){
             return ID;
         }
-       /* function getColor(dateShipmentDispatcher)
-        {
-            return {"class" : "table-cell-red"};
-        }*/
+
         var planGrid =  function(){
 
 
 
             return $("#planDayGrid").kendoGrid({
-                // toolbar: ["edit"],
-                //dataSource: planShipmentUtil.dataSourcePlanDay(),
                 dataSource: dataSourcePlanDay(),
-               // noRecords: true,
                 height: '100%',
                 groupable: true,
                 sortable: true,
                 filterable: true,
                 resizable: true,
-               // selectable:"true",
                 columnMenu: true,
-                editable: true,
                 change:onChange,
                 dataBound: function (e) {
                     $("#gridView").find('.k-icon.k-i-collapse').trigger('click');
@@ -801,15 +713,7 @@ var planShipmentUtil = (
                         //filterable: false,
                         groupable: false
                     },
-                  /*  {
-                        field: "",
-                        title: "Дата плана",
-                        width: "60px",
-                        headerAttributes: gridUtils.headerFormat,
-                        attributes: gridUtils.columnFormat,
-                        //filterable: false,
-                        groupable: false
-                    },*/
+
                     {
                         field: "planLoad",
                         title: "В плане погрузки",
@@ -839,7 +743,7 @@ var planShipmentUtil = (
                         width: "120px",
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        editor: deviationShipmentDropDownEditor, template: "#=planShipmentUtil.isNotNull(deviationShipment) ? deviationShipment.description : ''#"
+                        template: "#=planShipmentUtil.isNotNull(deviationShipment) ? deviationShipment.description : ''#"
 
                     },
                     {
@@ -868,7 +772,7 @@ var planShipmentUtil = (
                         width: "120px",
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        editor: deviationDeliveryDropDownEditor, template: "#=planShipmentUtil.isNotNull(deviationDelivery) ? deviationDelivery.description : ''#"
+                        template: "#=planShipmentUtil.isNotNull(deviationDelivery) ? deviationDelivery.description : ''#"
 
                     },
                     {
@@ -1056,7 +960,7 @@ var planShipmentUtil = (
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        editor:transportCompanyDropDownEditor, template: "#=planShipmentUtil.isNotNull(transportCompanyPlan) ? transportCompanyPlan.name : ''#"
+                        template: "#=planShipmentUtil.isNotNull(transportCompanyPlan) ? transportCompanyPlan.name : ''#"
 
                     },
                     {
@@ -1066,7 +970,7 @@ var planShipmentUtil = (
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        editor:transportCompanyDropDownEditor, template: "#=planShipmentUtil.isNotNull(transportCompanyFact) ? transportCompanyFact.name : ''#"
+                        template: "#=planShipmentUtil.isNotNull(transportCompanyFact) ? transportCompanyFact.name : ''#"
 
                     },
                     {
@@ -1085,7 +989,7 @@ var planShipmentUtil = (
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        editor:driverTransportCompanyDropDownEditor,
+
                         template: "#=planShipmentUtil.isNotNull(driverTransportCompany) ? driverTransportCompany.fullName : ''#"
                     },
                     {
@@ -1158,120 +1062,7 @@ var planShipmentUtil = (
             }).data("kendoGrid");
         }
 
-        var addToPlan = function (item) {
-
-            return {
-
-                senderEnterprise: item.senderEnterprise,
-                typeShipment: item.typeShipment,
-                numberDispatcher: item.numberDispatcher,
-                planLoad: false,
-                dateCreateDispatcher: item.dateCreateDispatcher,
-                //deviationShipment:{id:-1,description:''},
-                deviationShipment:{},
-                dateShipmentDispatcher: item.dateShipmentDispatcher,
-                dateDeliveryDispatcher: item.dateDeliveryDispatcher,
-                //deviationDelivery:{id:-1,description:''},
-                deviationDelivery:{},
-                existInStore: item.existInStore,
-                dateToStore: item.dateToStore,
-                placeShipment: item.placeLoading,
-                statusDispatcher: item.statusDispatcher,
-                numberOrder: item.numberOrder,
-                numberItem: item.numberItem,
-                nameOrder: item.nameOrder,
-                nameCustomer: item.nameCustomer,
-                placeDelivery: item.placeDelivery,
-                sizeOrder: item.sizeOrder,
-                sizePallet: item.sizePallet,
-                packingMethod: item.packingMethod,
-                countPlace: item.countPlace,
-                capacityOrder: item.capacityOrder,
-                typeTransport: item.typeTransport,
-                transportCompanyPlan: item.transportCompanyPlan,
-                transportCompanyFact: item.transportCompanyPlan,
-                driverTransportCompany:{},
-                costTrip: 0,
-                numberGate: 1,
-                managerBackOffice: item.managerBackOffice,
-                note: item.note,
-                datePlan: getPlanDay()
-
-            }
-        }
         var selectedClass = 'k-state-selected';
-        var createDragAndDrop = function(){
-                $("#journalGridView").kendoDraggable({
-                    filter: "tr",
-                    hint: function (item) {
-
-                       /*var item = $('<div class="k-grid k-widget" style="background-color: DarkOrange; color: black;"><table><tbody><tr>' + e.html() + '</tr></tbody></table></div>');
-                        return item;*/
-                        var helper = $('<div class="k-grid k-widget drag-helper" style="background-color: DarkOrange; color: black;"/>');
-                        if (!item.hasClass(selectedClass)) {
-                            item.addClass(selectedClass).siblings().removeClass(selectedClass);
-                        }
-                        var elements = item.parent().children('.'+selectedClass).clone();
-                       // item.data('multidrag', elements).siblings('.'+selectedClass).remove();
-                        return helper.append(elements);
-
-                    },
-                    group: "gridGroupJournal",
-                });
-
-
-                $("#planDayGrid").kendoDraggable({
-                    filter: "tr",
-                    hint: function (e) {
-                        var item = $('<div class="k-grid k-widget" style="background-color: MediumVioletRed; color: black;"><table><tbody><tr>' + e.html() + '</tr></tbody></table></div>');
-                        return item;
-                    },
-                    group: "gridGroupPlan"
-                });
-                $("#planDayGrid").kendoDropTarget({
-
-                    drop: function (e) {
-                       /*
-                        var dataItem = $("#journalGridView").data("kendoGrid").dataSource.getByUid(e.draggable.currentTarget.data("uid"));
-
-                        $("#planDayGrid").data("kendoGrid").dataSource.add(planShipmentUtil.addToPlan(dataItem));
-                         planShipmentUtil.updateJournalShipment(dataItem);
-                        $("#planDayGrid").data("kendoGrid").dataSource.sync();*/
-                        var sourceDataSource = $("#journalGridView").data("kendoGrid").dataSource;
-                        var destinationDataSource = $("#planDayGrid").data("kendoGrid").dataSource;
-                        var draggedRows = e.draggable.hint.find("tr");
-
-                        draggedRows.each(function() {
-
-                            var thisUid = $(this).attr("data-uid"),
-                                dataItem= sourceDataSource.getByUid(thisUid);
-                            destinationDataSource.add(planShipmentUtil.addToPlan(dataItem));
-                            sourceDataSource.remove(dataItem);
-
-                           // mainDataSource.insert(beginningRangePosition,itemToMove);
-                        });
-                        destinationDataSource.sync();
-                      //  destinationDataSource.read();
-                      //  $("#planDayGrid").data("kendoGrid").refresh();
-                        //$("#planDayGrid").data("kendoGrid").refresh();
-
-                    },
-                    group: "gridGroupJournal"
-                });
-
-                $("#journalGridView").kendoDropTarget({
-                    drop: function (e) {
-                        //var deleteItem =
-                        var dataItem = $("#planDayGrid").data("kendoGrid").dataSource.getByUid(e.draggable.currentTarget.data("uid"));
-                        $("#planDayGrid").data("kendoGrid").dataSource.remove(dataItem);
-                        $("#planDayGrid").data("kendoGrid").dataSource.sync();
-                    },
-                    group: "gridGroupPlan"
-                });
-
-
-
-            }
 
         var countAllWorkTime  = function () {
               $.ajax({
@@ -1328,16 +1119,12 @@ var planShipmentUtil = (
         return {
             dataSourceJournal:dataSourceJournal,
             dataSourcePlanDay:dataSourcePlanDay,
-            createDragAndDrop:createDragAndDrop,
             journalShipmentView:journalShipmentView,
             planGrid:planGrid,
-            addToPlan:addToPlan,
             updateJournalShipment:UpdateJournalShipment,
             selectPlanDetailID:selectPlanDetailID,
             setDatePlan:setDatePlan,
             getDay:getDay,
-            /*isTransportCompany:isTransportCompany,
-            hasDeviation:hasDeviation,*/
             isNotNull:isNotNull,
             isNoMoreWorkTimeLoad:isNoMoreWorkTimeLoad
         }

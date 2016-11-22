@@ -6,9 +6,12 @@
 GET         /                            controllers.ApplicationController.index
 
 GET         /planshipment                controllers.JournalShipmentController.show()
+GET         /planload                    controllers.PlanLoadController.show()
 GET         /transports                  controllers.HelperTransportCompanyController.show()
 GET         /deviation                   controllers.HelperDeviationController.show()
 GET         /worktime                    controllers.HelperWorkTimeController.show()
+
+
 
 
 
