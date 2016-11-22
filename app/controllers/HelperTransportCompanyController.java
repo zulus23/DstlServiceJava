@@ -12,6 +12,8 @@ import services.HelperServices;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 public class HelperTransportCompanyController extends Controller {
     @Inject
@@ -24,11 +26,12 @@ public class HelperTransportCompanyController extends Controller {
     @Inject
     private HelperServices helperServices;
 
-    public Result selectDriverByTransportCompany(String refcompany) {
+    public CompletionStage<Result> selectDriverByTransportCompany(String refcompany) {
 
-        List<DriverTransportCompany> driverTransportCompanies =helperServices.driverTransportCompany(refcompany);
+        return CompletableFuture.supplyAsync(()->helperServices.driverTransportCompany(refcompany))
+                         .thenApply(l -> ok(Json.toJson(l)));
 
-        return ok(Json.toJson(driverTransportCompanies));
+        //return ok(Json.toJson(driverTransportCompanies));
     }
 
     public  Result selectTransportCompanyByEnterprise(String enterprise) {
@@ -39,8 +42,11 @@ public class HelperTransportCompanyController extends Controller {
       return  ok(views.html.helper.helpTransportCompany.render("Транспортные компании",webJarAssets, authService.isLoggedIn(), authService.getUserInfo().orElse(null)));
   }
 
-    public Result index(){
+    public CompletionStage<Result> index(){
+       return CompletableFuture.supplyAsync(() -> helperServices.driverTransportCompanyList())
+                        .thenApply(l-> ok(Json.toJson(l)));
 
-        return ok(Json.toJson(helperServices.driverTransportCompanyList()));
+
+
     }
 }

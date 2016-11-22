@@ -22,7 +22,7 @@ import java.util.Optional;
 
 import static com.sun.corba.se.impl.util.Utility.printStackTrace;
 import static java.util.Optional.ofNullable;
-import static play.cache.Cache.getOrElse;
+
 import static play.mvc.Results.ok;
 
 /**
