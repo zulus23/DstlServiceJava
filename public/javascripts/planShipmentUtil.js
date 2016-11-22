@@ -4,7 +4,34 @@
 var planShipmentUtil = (
     function() {
 
-        var datePlan,ID, selectShipItem, countWorkTimeInMinute;
+
+        var datePlan,ID, selectShipItem, countWorkTimeInMinute,notificationElement;
+
+        function showNotification(message){
+            if(!!!notificationElement){
+            notificationElement = $("#notification");
+            notificationElement.kendoNotification({
+                // hide automatically after 7 seconds
+                autoHideAfter: 7000,
+                // prevent accidental hiding for 1 second
+                allowHideAfter: 1000,
+                // show a hide button
+                button: true,
+                // prevent hiding by clicking on the notification content
+                position: {
+                    top: 20,
+                    right: 20
+                },
+                stacking: "down",
+                hideOnClick: false
+            });
+            }
+
+            var notificationWidget = notificationElement.data("kendoNotification");
+            notificationWidget.show(message,"warning");
+
+
+        }
 
         function enterpriseDropDownEditor(container, options) {
 
@@ -314,6 +341,7 @@ var planShipmentUtil = (
                                     options.success([]);
                                 }else
                                 {
+
                                    options.success(data);
                                 }
 
@@ -334,6 +362,8 @@ var planShipmentUtil = (
                             success: function (result) {
 
                                 options.success(result);
+                                showNotification(kendo.format("Создано {0} записей ",result.length));
+
                                 // planGrid().dataSource.read();
                             },
                             error: function (result) {
@@ -396,6 +426,13 @@ var planShipmentUtil = (
                         data.model.set("phoneDriver", data.values.driverTransportCompany.phone);
                     }
                     */
+
+                    if (e.action === "remove") {
+                        var allTimeToLoad = this.aggregates().timeToLoad.sum;
+                        if (isNoMoreWorkTimeLoad(allTimeToLoad)) {
+                            showNotification("Превышено общее рабочее время на " + (countWorkTimeInMinute - this.aggregates().timeToLoad.sum) + " мин.");
+                        }
+                    }
 
                 },
 
@@ -1291,40 +1328,19 @@ var planShipmentUtil = (
 
         }
 
-        function showNotification(message){
-            var notificationElement = $("#notification").kendoNotification({
-                // hide automatically after 7 seconds
-                autoHideAfter: 7000,
-                // prevent accidental hiding for 1 second
-                allowHideAfter: 1000,
-                // show a hide button
-                button: true,
-                // prevent hiding by clicking on the notification content
 
-
-                hideOnClick: false
-            });
-            var notificationWidget = notificationElement.data("kendoNotification");
-            notificationWidget.show(message,"warning");
-
-
-        }
 
 
         var isNoMoreWorkTimeLoad = function(minuteLoadInPlan){
 
             if (countWorkTimeInMinute < minuteLoadInPlan  ){
-                showNotification("Превышено общее рабочее время на " + (countWorkTimeInMinute - minuteLoadInPlan)+" мин.");
-
                 //$("#planDayGrid .k-grid-footer-locked .table-footer-cell-blue").text(340)
-
-
                 return true;
             } else{
                 return false;
             }
         }
-
+        countAllWorkTime();
         return {
             dataSourceJournal:dataSourceJournal,
             dataSourcePlanDay:dataSourcePlanDay,

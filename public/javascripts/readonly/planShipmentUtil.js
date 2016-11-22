@@ -6,6 +6,24 @@ var planShipmentUtil = (
 
         var datePlan,ID, selectShipItem, countWorkTimeInMinute;
 
+        var countAllWorkTime  = function () {
+            $.ajax({
+                type: "GET",
+                url: "/api/minuteworkday",
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                data: {
+                    datePlan: getPlanDay()
+                },
+                success: function (data) {
+
+                    countWorkTimeInMinute = data;
+
+                }
+            });
+
+        }
+
         function enterpriseDropDownEditor(container, options) {
 
             $('<input required name="' + options.field + '"/>')
@@ -269,28 +287,8 @@ var planShipmentUtil = (
             return moment(datePlan).format("DD-MM-YYYY") ;
         }
 
-        function ErrorShow(request) {
-            var notificationElement = $("#notification").kendoNotification({
-                // hide automatically after 7 seconds
-                autoHideAfter: 7000,
-                // prevent accidental hiding for 1 second
-                allowHideAfter: 1000,
-                // show a hide button
-                button: true,
-                // prevent hiding by clicking on the notification content
 
 
-                hideOnClick: false
-            });
-
-            var notificationWidget = notificationElement.data("kendoNotification");
-            notificationWidget.show("Ошибка сохранения данных. " + request.responseText,"error");
-        }
-        function timeEditor(container, options) {
-            $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" data-format="' + options.format + '"/>')
-                .appendTo(container)
-                .kendoTimePicker({culture: "ru-RU"});
-        }
 
 
         var dataSourcePlanDay =  function() {
@@ -1035,7 +1033,7 @@ var planShipmentUtil = (
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        format:"{0:HH:mm}", editor: timeEditor
+                        format:"{0:HH:mm}",
 
                     },
                     {
@@ -1064,58 +1062,18 @@ var planShipmentUtil = (
 
         var selectedClass = 'k-state-selected';
 
-        var countAllWorkTime  = function () {
-              $.ajax({
-                type: "GET",
-                    url: "/api/minuteworkday",
-                contentType: "application/json; charset=utf-8",
-                dataType: 'json',
-                data: {
-                datePlan: getPlanDay()
-            },
-                success: function (data) {
 
-                    countWorkTimeInMinute = data;
-
-                }
-            });
-
-        }
-
-        function showNotification(message){
-            var notificationElement = $("#notification").kendoNotification({
-                // hide automatically after 7 seconds
-                autoHideAfter: 7000,
-                // prevent accidental hiding for 1 second
-                allowHideAfter: 1000,
-                // show a hide button
-                button: true,
-                // prevent hiding by clicking on the notification content
-
-
-                hideOnClick: false
-            });
-            var notificationWidget = notificationElement.data("kendoNotification");
-            notificationWidget.show(message,"warning");
-
-
-        }
 
 
         var isNoMoreWorkTimeLoad = function(minuteLoadInPlan){
 
             if (countWorkTimeInMinute < minuteLoadInPlan  ){
-                showNotification("Превышено общее рабочее время на " + (countWorkTimeInMinute - minuteLoadInPlan)+" мин.");
-
-                //$("#planDayGrid .k-grid-footer-locked .table-footer-cell-blue").text(340)
-
-
                 return true;
             } else{
                 return false;
             }
         }
-
+        countAllWorkTime();
         return {
             dataSourceJournal:dataSourceJournal,
             dataSourcePlanDay:dataSourcePlanDay,
