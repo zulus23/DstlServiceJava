@@ -1,11 +1,14 @@
 @import auth.DstlProfile
 @(param: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: DstlProfile)
 @main(param){
+    <script src="@routes.Assets.versioned("javascripts/kendo.timezones.min.js")" type="text/javascript"></script>
+
+
     <div  id="planLoadSplitter">
         <div >
             <div id="graphViewSplitter" >
                <div id="planLoadGrid">
-
+                  <div id="treelist"></div>
                </div>
                <div id="graphLoad"></div>
 
@@ -52,6 +55,7 @@
               kendo.culture("ru-RU");
 
               var scheduler = $("#graphLoad").kendoScheduler({
+                  date: new Date("2013/6/6"), // The current date of the scheduler
                   dataSource: [ // The kendo.data.SchedulerDataSource configuration
                       // First scheduler event
                       {
@@ -68,8 +72,6 @@
                           title: "Job Interview"
                       }
                   ],
-                  //date: new Date("2013/6/13"),
-                  startTime: new Date("2013/6/6 07:00 AM"),
                   eventHeight: 10,
                   majorTick: 30,
                   views: [
@@ -82,7 +84,30 @@
                           majorTick: 1440
                       }*/
                   ],
-                  timezone: "Etc/UTC",}).data("");
+                  timezone: "Europe/Moscow",
+                  edit: function(e) {
+                      var buttonsContainer = e.container.find(".k-edit-buttons");
+                      var cancelButton = buttonsContainer.find(".k-scheduler-cancel");
+                      cancelButton.text("Delete");
+                  }
+              }).data("");
+
+              $("#treelist").kendoTreeList({
+
+                  height: 540,
+                  filterable: true,
+                  sortable: true,
+                  columns: [
+                      { field: "FirstName", title: "First Name", width: 280,
+                          template: $("#photo-template").html() },
+                      { field: "LastName", title: "Last Name", width: 160 },
+                      { field: "Position" },
+                      { field: "Phone", width: 200 },
+                      { field: "Extension", width: 140 },
+                      { field: "Address" }
+                  ]
+              });
+
 
           });
   </script>
