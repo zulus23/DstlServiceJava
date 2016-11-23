@@ -51,12 +51,39 @@
               // create DatePicker from input HTML element
               kendo.culture("ru-RU");
 
-              var gantt = $("#graphLoad").kendoGantt({
+              var scheduler = $("#graphLoad").kendoScheduler({
+                  dataSource: [ // The kendo.data.SchedulerDataSource configuration
+                      // First scheduler event
+                      {
+                          id: 1, // Unique identifier. Needed for editing.
+                          start: new Date("2013/6/6 08:00 AM"), // Start of the event
+                          end: new Date("2013/6/6 09:00 AM"), // End of the event
+                          title: "Breakfast" // Title of the event
+                      },
+                      // Second scheduler event
+                      {
+                          id: 2,
+                          start: new Date("2013/6/6 10:15 AM"),
+                          end: new Date("2013/6/6 12:30 PM"),
+                          title: "Job Interview"
+                      }
+                  ],
+                  //date: new Date("2013/6/13"),
+                  startTime: new Date("2013/6/6 07:00 AM"),
+                  eventHeight: 10,
+                  majorTick: 30,
                   views: [
-                      { type: "day" , selected: true }
-                  ]
-              }).data("");
-              gantt.refresh();
+                      "timeline",
+                      /*"timelineWeek",
+                      "timelineWorkWeek",
+                      {
+                          type: "timelineMonth",
+                          startTime: new Date("2013/6/13 00:00 AM"),
+                          majorTick: 1440
+                      }*/
+                  ],
+                  timezone: "Etc/UTC",}).data("");
+
           });
   </script>
 
