@@ -1,5 +1,63 @@
 @import auth.DstlProfile
 @(param: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: DstlProfile)
 @main(param){
+    <div  id="planLoadSplitter">
+        <div >
+            <div id="graphViewSplitter" >
+               <div id="planLoadGrid">
+
+               </div>
+               <div id="graphLoad"></div>
+
+            </div>
+        </div>
+
+        <div>
+            <div  id="factLoadGridView"></div>
+
+        </div>
+
+
+
+
+    </div>
+
+  <script>
+          $(document).ready(function () {
+              /* ----------------------------------------------------------------------------*/
+              moment.locale('ru');
+              var datePlan, wnd,
+                      detailsTemplate;
+
+              $("#planLoadSplitter").kendoSplitter({
+                  orientation: "vertical",
+                  panes: [
+                      /*  {collapsible: false},*/
+                      {collapsible: false, size: "80%"},
+                      {collapsible: true, resizable: true, size: "20%"}
+                  ],
+
+              });
+              $("#graphViewSplitter").kendoSplitter({
+                  panes: [
+                      /*  {collapsible: false},*/
+                      {collapsible: true, size: "20%"},
+                      {collapsible: true, resizable: true, size: "80%"}
+                  ],
+
+              });
+
+
+              // create DatePicker from input HTML element
+              kendo.culture("ru-RU");
+
+              var gantt = $("#graphLoad").kendoGantt({
+                  views: [
+                      { type: "day" , selected: true }
+                  ]
+              }).data("");
+              gantt.refresh();
+          });
+  </script>
 
 }

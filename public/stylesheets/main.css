@@ -27,7 +27,7 @@ body{
 }
 
 
-#planShipmentSplitter
+#planShipmentSplitter,#planLoadSplitter,#graphViewSplitter
 {
     height:100%;
     border-width: 0;
@@ -48,6 +48,13 @@ body{
     background-color: transparent;
     width: 250px;
 }
+
+#graphLoad{
+    height:100%;
+    border-width: 0;
+}
+
+
 /* Bootstrap*/
 /*.form-control {
     height: 20px;

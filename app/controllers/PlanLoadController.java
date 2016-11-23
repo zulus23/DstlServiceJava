@@ -19,6 +19,7 @@ public class PlanLoadController extends Controller {
 
 
     public  Result show() {
-        return play.mvc.Results.TODO;
+
+        return ok(views.html.planload.planLoad.render("Планирование погрузки",webJarAssets, authService.isLoggedIn(), authService.getUserInfo().orElse(null)));
     }
 }
