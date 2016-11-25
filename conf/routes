@@ -18,10 +18,16 @@ GET         /worktime                    controllers.HelperWorkTimeController.sh
 #Журнал отгрузок
 GET         /api/journalship               controllers.JournalShipmentController.index
 
-GET         /api/plandayshipment                controllers.JournalShipmentController.planDayIndex(datePlan:Option[String])
+GET         /api/plandayshipment            controllers.JournalShipmentController.planDayIndex(datePlan:Option[String])
 POST        /api/plandayshipment                controllers.JournalShipmentController.create()
 PATCH         /api/plandayshipment          controllers.JournalShipmentController.updatePlanDayItem()
 POST      /api/deleteplandayshipment            controllers.JournalShipmentController.deletePlanDayItem()
+
+#План загрузки
+GET       /api/planshipmentfailure         controllers.PlanLoadController.showPlanShipmentFailure
+
+
+
 
 #Норма времени погрузки
 GET         /normtime                    controllers.HelperShipmentController.show()

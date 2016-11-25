@@ -17,7 +17,7 @@
 
 
             @if(userInfo.getRoles().contains("USER_CAN_CHANGE")){
-                     workTime.gridWorkTimeView();
+                    var grid =  workTime.gridWorkTimeView();
 
                         $("#gridWorkTimeView").on("click", ".k-grid-myDelete", function (e) {
                             e.preventDefault();
