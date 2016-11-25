@@ -3,6 +3,7 @@ package controllers;
 import auth.AuthService;
 import model.Enterprise;
 import model.WorkTime;
+import org.pac4j.play.java.Secure;
 import play.cache.CacheApi;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -34,10 +35,11 @@ public class HelperWorkTimeController extends Controller {
     @Inject
     private HelperServices helperServices;
 
-
+    @Secure(clients = "ServiceDstlFormClient")
     public Result show(){
         return ok(views.html.helper.helperWorkTime.render("Рабочие время",webJarAssets, authService.isLoggedIn(), authService.getUserInfo().orElse(null)));
     }
+
 
 
     public Result index(){

@@ -3,6 +3,7 @@
 @(param: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: DstlProfile)
 @main(param) {
       <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/helper.css")">
+      <script src="@routes.Assets.versioned("javascripts/workTime.js")" type="application/javascript"></script>
        <div class="k-content wide">
            <section class="well">
                <h2>Справочник рабочего времени</h2>
@@ -13,198 +14,39 @@
 
     <script>
 
-            var dataSourceDB = new kendo.data.DataSource({
-                serverAggregates: true,
-                transport: {
-                    read: function(options) {
-                        $.ajax({
-                            type: "GET",
-                            url: "api/worktimes",
-                            contentType: "application/json; charset=utf-8",
-                            dataType: 'json',
-                            @*data:{dateBegin: '@select.getDateBegin',dateEnd:'@select.getDateEnd', site:'@select.getEnterprise'},*@
-                            success: function(data) {
-                                options.success(data);
-                            }
+
+
+            @if(userInfo.getRoles().contains("USER_CAN_CHANGE")){
+                     workTime.gridWorkTimeView();
+
+                        $("#gridWorkTimeView").on("click", ".k-grid-myDelete", function (e) {
+                            e.preventDefault();
+
+                            var command = $(this);
+                            var cell = command.closest("td");
+
+                            command.remove();
+                            cell.append('<a class="k-button k-button-icontext k-grid-myConfirm" href="#"><span class="k-icon k-update"></span>Подтвердить</a>');
+                            cell.append('<a class="k-button k-button-icontext k-grid-myCancel" href="#"><span class="k-icon k-cancel"></span>Отмена</a>');
                         });
-                    },
-                    update: function(options){
-                        console.log(options);
-                        $.ajax({
-                            type: "PATCH",
-                            url: "api/worktime/"+options.data.id,
-                            contentType: "application/json; charset=utf-8",
-                            dataType: 'json',
-                            data:  kendo.stringify({
-                                "id":options.data.id,
-                                "name":options.data.name,
-                                "startTime":moment(options.data.startTime).format("DD-MM-YYYY HH:mm"),
-                                "endTime":moment(options.data.endTime).format("DD-MM-YYYY HH:mm"),
-                                "workTime":options.data.workTime
-                            }),
-                            success: function(data) {
-                                options.success(data);
-                            }
+
+                        $("#gridWorkTimeView").on("click", ".k-grid-myConfirm", function (e) {
+                            e.preventDefault();
+                            grid.removeRow($(this).closest("tr"))
                         });
-                    },
-                    destroy: function(options) {
-                        $.ajax({
-                            type: "DELETE",
-                            url: "api/worktime/"+options.data.id,
-                            contentType: "application/json; charset=utf-8",
-                            dataType: 'json',
-                            data:  kendo.stringify({
-                            "id":options.data.id,
-                            "name":options.data.name,
-                            "startTime":moment(options.data.startTime).format("DD-MM-YYYY HH:mm"),
-                            "endTime":moment(options.data.endTime).format("DD-MM-YYYY HH:mm"),
-                            "workTime":options.data.workTime
-                        }),
-                            success: function(data) {
-                                options.success(data);
-                            }
-                        });
-                    },
-                    create: function(options){
-                        console.log(options);
-                        $.ajax({
-                            type: "POST",
-                            url: "api/worktime",
-                            contentType: "application/json; charset=utf-8",
-                            dataType: 'json',
-                            data : kendo.stringify({
-                                   "id":options.data.id,
-                                   "name":options.data.name,
-                                   "startTime":moment(options.data.startTime).format("DD-MM-YYYY HH:mm"),
-                                   "endTime":moment(options.data.endTime).format("DD-MM-YYYY HH:mm"),
-                                   "workTime":options.data.workTime
-                                   }),
-                            success: function(data) {
-                                options.success(data);
-                            }
-                        });
-                    }
-                   /* parameterMap: function (options, operation) {
-                        console.log(" ------------------------- ");
-                        if(operation !== 'read' && options){
-                            console.log(options.data);
-                            console.log(kendo.stringify(options.data));
-                            return endo.stringify(options.data);
-                        }
-                    }*/
-                },
 
-                //batch: true,
-                schema: {
-                    model: {
-                        id:"id",
-
-                        fields: {
-                            id:{type:"number",editable:false},
-                            name: { type:"string" },
-                            startTime: { type: "date" },
-                            endTime:{type:"date"},
-                            workTime:{type:"boolean"}
-                        }
-                    }
-                },
-
-                change: function(e) {
-                    var data = this.data();
-                    console.log(data.length); // displays "77"
-                }
-
-
-            });
-
-
-
-            /* ========================================== Grid ======================================= */
-
-           var grid =  $("#gridWorkTimeView").kendoGrid({
-               toolbar: ["create"],
-               dataSource: dataSourceDB,
-               editable: {
-                   mode: "inline",
-                   confirmation: false
-               },
-             //  height: '300px',
-               sortable: true,
-
-
-               dataBound: function() {
-                   $(".k-grid-myDelete span").addClass("k-icon k-delete");
-               },
-               cancel: function() {
-                   setTimeout(function(){
-                       $(".k-grid-myDelete span").addClass("k-icon k-delete");
-                   });
-               },
-               columns: [
-                   {
-                       field: "name",
-                       title: "Наименование",
-                       width: "250px",
-
-
-                   },
-                   {
-                       field: "startTime",
-                       title: "Начало",
-                       width: "60px",
-                       format:"{0:HH:mm}", editor: timeEditor
-
-
-                   },
-                   {
-                       field: "endTime",
-                       title: "Окончание",
-                       width: "60px",
-                       format:"{0:HH:mm}", editor: timeEditor
-
-                   },
-                   {
-                       field: "workTime",
-                       title: "Рабочие время",
-                       width: "180px",
-                       template: '<input type="checkbox" #= workTime ? "checked=checked" : "" # disabled="disabled" ></input>'
-
-
-                   },
-                   { command: ["edit", {
-                       name: "myDelete",
-                       text: "Удалить"
-                   }], title: "&nbsp;", width: "150px" }
-               ]
-           }).data("kendoGrid");
-
-
-            $("#gridWorkTimeView").on("click", ".k-grid-myDelete", function(e) {
-                e.preventDefault();
-
-                var command = $(this);
-                var cell = command.closest("td");
-
-                command.remove();
-                cell.append('<a class="k-button k-button-icontext k-grid-myConfirm" href="#"><span class="k-icon k-update"></span>Подтвердить</a>');
-                cell.append('<a class="k-button k-button-icontext k-grid-myCancel" href="#"><span class="k-icon k-cancel"></span>Отмена</a>');
-            });
-
-            $("#gridWorkTimeView").on("click", ".k-grid-myConfirm", function(e){
-                e.preventDefault();
-                grid.removeRow($(this).closest("tr"))
-            });
-
-            $("#gridWorkTimeView").on("click", ".k-grid-myCancel", function(e){
-                e.preventDefault();
-                grid.refresh();
-            })
-            function timeEditor(container, options) {
-                $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" data-format="' + options.format + '"/>')
-                        .appendTo(container)
-                        .kendoTimePicker({culture: "ru-RU"});
+                        $("#gridWorkTimeView").on("click", ".k-grid-myCancel", function (e) {
+                            e.preventDefault();
+                            grid.refresh();
+                        })
+                    /*    function timeEditor(container, options) {
+                            $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" data-format="' + options.format + '"/>')
+                                    .appendTo(container)
+                                    .kendoTimePicker({culture: "ru-RU"});
+                        }*/
+            } else {
+               workTime.gridWorkTimeViewReadOnly();
             }
-
 
    </script>
 

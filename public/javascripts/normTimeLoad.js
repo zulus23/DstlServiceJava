@@ -113,17 +113,7 @@ var normTimeLoad = (function() {
             editable: {
                 mode: "inline",
                 confirmation: false
-            }/*function(){
-             if(@isLoggedIn){
-             return {
-             mode: "inline",
-             confirmation: false
-             }
-             } else {
-             return false;
-             }
-             }()*/,
-            //  height: '300px',
+            },
             sortable: true,
 
 
@@ -140,6 +130,8 @@ var normTimeLoad = (function() {
                     field: "enterprise",
                     title: "Предприятие",
                     width: "70px",
+                    headerAttributes: gridUtils.headerFormat,
+                    attributes: gridUtils.columnFormat,
                     editor: helper.enterpriseDropDownEditor, template: "#=enterprise.name#"
 
                 },
@@ -147,28 +139,33 @@ var normTimeLoad = (function() {
                     field: "packageTime",
                     title: "Пакет",
                     width: "60px",
-
+                    headerAttributes: gridUtils.headerFormat,
+                    attributes: gridUtils.columnFormat,
 
                 },
                 {
                     field: "commissionTime",
                     title: "Комиссионная отгрузка",
                     width: "60px",
-
+                    headerAttributes: gridUtils.headerFormat,
+                    attributes: gridUtils.columnFormat,
 
                 },
                 {
                     field: "placerTime",
                     title: "Россыпь",
                     width: "180px",
-
+                    headerAttributes: gridUtils.headerFormat,
+                    attributes: gridUtils.columnFormat,
 
                 },
                 {
                     command: ["edit", {
                         name: "myDelete",
                         text: "Удалить"
-                    }], title: "&nbsp;", width: "350px"
+                    }], title: "&nbsp;", width: "350px",
+                    headerAttributes: gridUtils.headerFormat,
+                    attributes: gridUtils.columnFormat,
                 }
             ]
         }).data("kendoGrid");
@@ -220,6 +217,8 @@ var normTimeLoad = (function() {
                     field: "enterprise",
                     title: "Предприятие",
                     width: "70px",
+                    headerAttributes: gridUtils.headerFormat,
+                    attributes: gridUtils.columnFormat,
                     editor: helper.enterpriseDropDownEditor, template: "#=enterprise.name#"
 
                 },
@@ -227,21 +226,23 @@ var normTimeLoad = (function() {
                     field: "packageTime",
                     title: "Пакет",
                     width: "60px",
-
+                    headerAttributes: gridUtils.headerFormat,
+                    attributes: gridUtils.columnFormat,
 
                 },
                 {
                     field: "commissionTime",
                     title: "Комиссионная отгрузка",
                     width: "60px",
-
-
+                    headerAttributes: gridUtils.headerFormat,
+                    attributes: gridUtils.columnFormat,
                 },
                 {
                     field: "placerTime",
                     title: "Россыпь",
                     width: "180px",
-
+                    headerAttributes: gridUtils.headerFormat,
+                    attributes: gridUtils.columnFormat,
 
                 },
 
