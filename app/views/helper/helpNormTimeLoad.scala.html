@@ -2,7 +2,8 @@
 @import auth.DstlProfile
 @(param: String)(implicit webJarAssets: WebJarAssets,isLoggedIn: Boolean, userInfo: DstlProfile)
 @main(param) {
-
+<script src="@routes.Assets.versioned("javascripts/helper.js")" type="application/javascript"></script>
+<script src="@routes.Assets.versioned("javascripts/normTimeLoad.js")" type="application/javascript"></script>
        <div class="k-content wide">
            <section class="well">
                <h2>Справочник нормативов времени погрузки</h2>
@@ -13,7 +14,9 @@
 
     <script>
 
-            var dataSourceDB = new kendo.data.DataSource({
+
+         normTimeLoad.gridNormTimeLoad();
+          /*  var dataSourceDB = new kendo.data.DataSource({
                 serverAggregates: true,
                 transport: {
                     read: function(options) {
@@ -106,19 +109,19 @@
                 }
 
 
-            });
+            });*/
 
 
 
             /* ========================================== Grid ======================================= */
 
-           var grid =  $("#gridNormTimeView").kendoGrid({
+       /*    var grid =  $("#gridNormTimeView").kendoGrid({
                toolbar: ["create"],
                dataSource: dataSourceDB,
                editable: {
                    mode: "inline",
                    confirmation: false
-               }/*function(){
+               }/!*function(){
                    if(@isLoggedIn){
                        return {
                            mode: "inline",
@@ -127,7 +130,7 @@
                    } else {
                        return false;
                    }
-               }()*/,
+               }()*!/,
              //  height: '300px',
                sortable: true,
 
@@ -145,7 +148,7 @@
                        field: "enterprise",
                        title: "Предприятие",
                        width: "70px",
-                       editor: enterpriseDropDownEditor, template: "#=enterprise.name#"
+                       editor: helper.enterpriseDropDownEditor, template: "#=enterprise.name#"
 
                    },
                    {
@@ -175,9 +178,9 @@
                        text: "Удалить"
                    }], title: "&nbsp;", width: "350px" }
                ]
-           }).data("kendoGrid");
+           }).data("kendoGrid");*/
 
-            function enterpriseDropDownEditor(container, options) {
+           /* function enterpriseDropDownEditor(container, options) {
                 $('<input required name="' + options.field + '"/>')
                         .appendTo(container)
                         .kendoDropDownList({
@@ -194,7 +197,7 @@
                                 }
                             }
                         });
-            }
+            }*/
             $("#gridNormTimeView").on("click", ".k-grid-myDelete", function(e) {
                 e.preventDefault();
 
