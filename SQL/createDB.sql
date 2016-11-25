@@ -21,6 +21,18 @@ ALTER TABLE GTK_DSTL_User ADD CONSTRAINT FK_GTK_DSTL_User_IdService foreign key 
 references GTK_DSTL_Enterprise (ID);
 CREATE INDEX IX_GTK_DSTL_User_IdService ON GTK_DSTL_User (IdService);
 
+CREATE TABLE GTK_DSTL_UserRole (
+  ID                           INTEGER not null,
+  IdUser                       INTEGER NOT NULL,
+  RoleName                         varchar(30) NOT NULL ,
+
+)
+ALTER TABLE GTK_DSTL_UserRole ADD CONSTRAINT PK_GTK_DSTL_User_Id_IdUser PRIMARY KEY(ID,IdUser)
+ALTER TABLE GTK_DSTL_UserRole ADD CONSTRAINT FK_GTK_DSTL_User_Id foreign key (IdUser) REFERENCES  GTK_DSTL_User(ID)
+
+
+
+
 CREATE TABLE GTK_DSTL_Deviation (
   ID                            integer not null PRIMARY KEY IDENTITY ,
   Description                   VARCHAR(100),
@@ -142,12 +154,15 @@ ALTER TABLE GTK_DSTL_PlanShipmentItem ADD CONSTRAINT UQ_GTK_DSTL_PlanShipmentIte
 
 
 GRANT SELECT ON dbo.GTK_DSTL_User TO report
+GRANT SELECT ON dbo.GTK_DSTL_UserRole TO report
 GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_Enterprise TO report
 GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_WorkTime TO report
 GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_NormaTimeLoading TO report
 GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_PlanShipment TO report
 GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_PlanShipmentItem TO report
 GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_Deviation TO report
+
+
 
 
 CREATE VIEW GTK_DSTL_TransportCompany

@@ -17,6 +17,8 @@ import play.libs.Json;
 
 import javax.inject.Inject;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -60,11 +62,12 @@ public class DbUsernamePasswordAuthenticator implements Authenticator<UsernamePa
             profile.setId(username);
             profile.addAttribute(Pac4jConstants.USERNAME, username);
             profile.addAttribute(AuthConstants.SERVICE_DSTL,service);
-            if(e.canCreatePlan) {
+            profile.addRoles(e.userRole);
+           /* if(e.canCreatePlan) {
                 profile.addRole("USER_DISPATCHER");
             }else {
                 profile.addRole("USER");
-            }
+            }*/
             return  profile;
         }).orElseThrow(()  ->   new CredentialsException("Ошибка. Пользователь : '" + username+ "' с таким паролем отсутствует"));
 
@@ -119,11 +122,9 @@ public class DbUsernamePasswordAuthenticator implements Authenticator<UsernamePa
         try(Connection conn =  DriverManager.getConnection(_configuration.getString("url"),
                 _configuration.getString("username"),
                 _configuration.getString("password"));
-            PreparedStatement preparedStatement = conn.prepareStatement("select u.name ,u.password,e.name, u.cancreateplan   from gtk_dstl.dbo.gtk_dstl_user u " +
-                    " join gtk_dstl_enterprise e on u.idService = e.id where u.Name = ? AND  u.Password = ? AND e.name = ?");) {
-
-            /*preparedStatement.executeQuery("select u.name ,u.password,e.name  from gtk_dstl.dbo.gtk_dstl_user u " +
-                            " join gtk_dstl_enterprise e on u.idService = e.id where u.Name = ? AND  u.Password = ? AND e.name = ?");*/
+            PreparedStatement preparedStatement = conn.prepareStatement("select u.id,u.name ,u.password,e.name, u.cancreateplan   from gtk_dstl.dbo.gtk_dstl_user u " +
+                    " join gtk_dstl_enterprise e on u.idService = e.id where u.Name = ? AND  u.Password = ? AND e.name = ?");
+            PreparedStatement userRole  = conn.prepareStatement("select roleName from gtk_dstl.dbo.gtk_dstl_UserRole where idUser = ?");) {
 
             preparedStatement.setString(1,user);
             preparedStatement.setString(2,password);
@@ -131,8 +132,13 @@ public class DbUsernamePasswordAuthenticator implements Authenticator<UsernamePa
             ResultSet  result = preparedStatement.executeQuery();
 
             while ( result.next() ){
-                _innerUser = new InnerUser(result.getString(1),result.getBoolean("cancreateplan"));
+                _innerUser = new InnerUser(result.getInt("id"), result.getString("name"),result.getBoolean("cancreateplan"));
+                userRole.setInt(1,_innerUser.id);
+                ResultSet  resultUserRole = userRole.executeQuery();
+                while ( resultUserRole.next() ){
+                   _innerUser.userRole.add(resultUserRole.getString("roleName"));
 
+                }
 
             }
 
@@ -144,15 +150,23 @@ public class DbUsernamePasswordAuthenticator implements Authenticator<UsernamePa
         return _innerUser;
     }
 
+
+
+
+
+
     private class  InnerUser {
+        private Integer id;
         private String name;
         private Boolean canCreatePlan;
 
-        public InnerUser(String name, Boolean canCreatePlan) {
+        private List<String> userRole ;
+
+        public InnerUser(Integer id, String name, Boolean canCreatePlan) {
+            this.id = id;
             this.name = name;
             this.canCreatePlan = canCreatePlan;
+            userRole = new ArrayList<>();
         }
-
-
     }
 }

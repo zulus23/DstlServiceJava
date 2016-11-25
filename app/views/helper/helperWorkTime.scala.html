@@ -178,25 +178,7 @@
                ]
            }).data("kendoGrid");
 
-         /*   function enterpriseDropDownEditor(container, options) {
-                console.log(options);
-                $('<input required name="' + options.field + '"/>')
-                        .appendTo(container)
-                        .kendoDropDownList({
-                            autoBind: false,
-                            dataTextField: "name",
-                            dataValueField: "id",
-                            dataSource: {
-                                transport: {
-                                    read: function(options){
-                                            axios.get('/api/enterprises').then(function(response){
-                                                options.success(response.data);
-                                            });
-                                    }
-                                }
-                            }
-                        });
-            }*/
+
             $("#gridWorkTimeView").on("click", ".k-grid-myDelete", function(e) {
                 e.preventDefault();
 

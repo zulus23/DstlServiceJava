@@ -23,7 +23,7 @@ public class HelperShipmentController extends Controller {
     @Inject
     private HelperServices helperServices;
 
-
+    @Secure(clients = "ServiceDstlFormClient")
     public Result show(){
         return ok(views.html.helper.helpNormTimeLoad.render("Норматив времени погрузки",webJarAssets, authService.isLoggedIn(), authService.getUserInfo().orElse(null)));
     }

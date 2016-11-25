@@ -173,11 +173,88 @@ var normTimeLoad = (function() {
             ]
         }).data("kendoGrid");
     }
+    function dataSourceDBReadOnly() {
+        return new kendo.data.DataSource({
+
+            transport: {
+                read: function (options) {
+                    $.ajax({
+                        type: "GET",
+                        url: "api/normloads",
+                        contentType: "application/json; charset=utf-8",
+                        //beforeSend: setHeaderRequest,
+                        dataType: 'json',
+
+                        success: function (data) {
+                            options.success(data);
+                        }
+                    });
+                },
+
+            },
+            //batch: true,
+            schema: {
+                model: {
+                    id: "id",
+
+                    fields: {
+                        id: {type: "number", editable: false},
+                        enterprise: {defaultValue: {id: 0, name: ''}},
+                        packageTime: {type: "number"},
+                        commissionTime: {type: "number"},
+                        placerTime: {type: "number"}
+                    }
+                }
+            },
+
+
+        });
+    }
+    var gridNormTimeLoadReadOnly = function () {
+        return $("#gridNormTimeView").kendoGrid({
+
+            dataSource: dataSourceDBReadOnly(),
+             sortable: true,
+            columns: [
+                {
+                    field: "enterprise",
+                    title: "Предприятие",
+                    width: "70px",
+                    editor: helper.enterpriseDropDownEditor, template: "#=enterprise.name#"
+
+                },
+                {
+                    field: "packageTime",
+                    title: "Пакет",
+                    width: "60px",
+
+
+                },
+                {
+                    field: "commissionTime",
+                    title: "Комиссионная отгрузка",
+                    width: "60px",
+
+
+                },
+                {
+                    field: "placerTime",
+                    title: "Россыпь",
+                    width: "180px",
+
+
+                },
+
+            ]
+        }).data("kendoGrid");
+    }
+
 
 
     return {
         dataSourceDB:dataSourceDB,
-        gridNormTimeLoad:gridNormTimeLoad
+        gridNormTimeLoad:gridNormTimeLoad,
+        gridNormTimeLoadReadOnly:gridNormTimeLoadReadOnly
     }
 
 })();
