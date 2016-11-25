@@ -46,14 +46,16 @@ public class HelperWorkTimeController extends Controller {
 
         return ok(Json.toJson(helperServices.workTimeList(authService.nameServiceDstl())));
     }
-
+    @Secure(clients = "HeaderClient")
     public Result create(){
 
         return ok(Json.toJson(helperServices.saveWorkTime(request().body().asJson(), authService.nameServiceDstl())));
     }
+    @Secure(clients = "HeaderClient")
     public Result update(Integer id){
         return ok(Json.toJson(helperServices.updateWorkTime(request().body().asJson(), authService.nameServiceDstl())));
     }
+    @Secure(clients = "HeaderClient")
     public Result delete(Integer id){
 
         return ok(Json.toJson(helperServices.deleteWorkTime(id, authService.nameServiceDstl())));

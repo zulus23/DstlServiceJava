@@ -3,6 +3,19 @@
  */
 
 var workTime = (function(){
+    var token;
+    userService.token(function (response) {
+        token = response;
+    });
+    function setHeaderRequest(request) {
+
+        if (!!token) {
+            request.setRequestHeader("token", token);
+        }
+    }
+
+
+
     var dataSourceWorkTime = function(){
         return new kendo.data.DataSource({
         serverAggregates: true,
@@ -26,6 +39,7 @@ var workTime = (function(){
                     url: "api/worktime/"+options.data.id,
                     contentType: "application/json; charset=utf-8",
                     dataType: 'json',
+                    beforeSend: setHeaderRequest,
                     data:  kendo.stringify({
                         "id":options.data.id,
                         "name":options.data.name,
@@ -44,6 +58,7 @@ var workTime = (function(){
                     url: "api/worktime/"+options.data.id,
                     contentType: "application/json; charset=utf-8",
                     dataType: 'json',
+                    beforeSend: setHeaderRequest,
                     data:  kendo.stringify({
                         "id":options.data.id,
                         "name":options.data.name,
@@ -63,6 +78,7 @@ var workTime = (function(){
                     url: "api/worktime",
                     contentType: "application/json; charset=utf-8",
                     dataType: 'json',
+                    beforeSend: setHeaderRequest,
                     data : kendo.stringify({
                         "id":options.data.id,
                         "name":options.data.name,
