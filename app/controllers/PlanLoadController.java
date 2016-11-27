@@ -25,7 +25,7 @@ public class PlanLoadController extends Controller {
     private AuthService authService;
 
     public CompletionStage<Result> showPlanShipmentFailure() {
-        return CompletableFuture.supplyAsync(() -> planLoadService.shipmentForLoadPlanList(authService.nameServiceDstl()))
+        return CompletableFuture.supplyAsync(() -> planLoadService.shipmentForLoadPlanList("ЗАО ГОТЭК-ЦПУ"/*authService.nameServiceDstl()*/))
                 .thenApply( e -> ok(Json.toJson(e)))
                 .exceptionally(e -> ok());
     }

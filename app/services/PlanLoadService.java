@@ -19,6 +19,8 @@ public class PlanLoadService {
     private DstlService dstlService;
 
 
+
+
     public List<PlanShipmentForLoadPlan> shipmentForLoadPlanList(String nameDstl){
         String sql = "select pi.id, p.dateplan, e.name as enterprise,pi.TypeShipment,pi.NumberOrderDispatcher,\n" +
                 "pi.DateShipmentDispatcher, pi.ExistInStore,pi.DateToStore\n" +
@@ -27,7 +29,7 @@ public class PlanLoadService {
                 "join gtk_dstl_enterprise e on pi.identerprise = e.id\n" +
                 "JOIN dbo.GTK_DSTL_Enterprise dstl ON dstl.ID = p.IdService \n" +
                 "WHERE pi.datedeliveryfact is NULL\n" +
-                "AND dstl.Name = :nameDstl \n";
+                "AND dstl.Name = :nameDstl  order by p.datePlan \n";
 
 
        List<PlanShipmentForLoadPlan> planShipmentForLoadPlans =  Optional.ofNullable(Ebean.createSqlQuery(sql).setParameter("nameDstl",nameDstl).findList())
@@ -46,7 +48,7 @@ public class PlanLoadService {
         result.setDatePlan(sqlRow.getDate("dateplan"));
         result.setEnterprise(sqlRow.getString("enterprise"));
         result.setTypeShipment(sqlRow.getString("TypeShipment"));
-        result.setNumberDispatcher(sqlRow.getString("NumberDispatcher"));
+        result.setNumberDispatcher(sqlRow.getString("NumberOrderDispatcher"));
         result.setDateShipmentDispatcher(sqlRow.getDate("DateShipmentDispatcher"));
         result.setExistInStore(sqlRow.getBoolean("ExistInStore"));
         result.setDateToStore(sqlRow.getTimestamp("DateToStore"));

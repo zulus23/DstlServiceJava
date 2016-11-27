@@ -144,18 +144,70 @@ var planLoadUtils = (function () {
         }).data("kendoGrid");
     }
 
+    var dataSourceShipmentPlan = function(){
+        return new kendo.data.DataSource({
+            transport:{
+                read: function (options) {
+                    $.ajax({
+                        type: "GET",
+                        url: "api/planshipmentfailure",
+                        contentType: "application/json; charset=utf-8",
+                        dataType: 'json',
+                        /*data: {
+                            datePlan: getPlanDay()
+                        },*/
+                        success: function (data) {
+
+                            if(data === "No Data"){
+                                options.success([]);
+                            }else
+                            {
+
+                                options.success(data);
+                            }
+
+
+                        }
+                    }).done(function(e){
+
+                    });
+                },
+            },
+            schema: {
+                model: {
+                    id: "id",
+
+                    fields: {
+                        id: {type: "number", editable: false},
+                        datePlan:{type:"string"},
+                        enterprise: { type:"string"} ,
+                        typeShipment: {type: "string"},
+                        numberDispatcher: {editable: false,type: "string"},
+                        dateShipmentDispatcher:{editable: false,type: "string"},
+                        existInStore: {editable: false,type: "boolean"},
+                        dateToStore: {editable: false,type:"string"},
+
+
+
+                    }
+                }
+            },
+            group: { field: "datePlan" }
+        });
+    }
+
     var planShipmentGridView = function () {
         return $("#planShipmentGridView").kendoGrid({
             // toolbar: ["edit"],
-            //dataSource: planShipmentUtil.dataSourcePlanDay(),
+            dataSource: dataSourceShipmentPlan(),
             // noRecords: true,
             height: '100%',
-            groupable: true,
+          //  groupable: true,
             sortable: true,
             filterable: true,
-            resizable: true,
+           // resizable: true,
             // selectable:"true",
-            columnMenu: true,
+           // columnMenu: true,
 
             //change:onChange,
             /*dataBound: function (e) {
@@ -164,7 +216,13 @@ var planLoadUtils = (function () {
 
             columns: [
                 {
-                    //field: "senderEnterprise.name",
+                    field: "datePlan",
+                    title: "Дата плана",
+                    width: "1px",
+                    groupable: false,
+                },
+                {
+                    field: "enterprise",
                     title: "Предприятие отправитель",
                     width: "100px",
                     headerAttributes: gridUtils.headerFormat,
@@ -175,7 +233,7 @@ var planLoadUtils = (function () {
                     //  editor: enterpriseDropDownEditor, template: "#=senderEnterprise.name#"
                 },
                 {
-                    //  field: "typeShipment",
+                     field: "typeShipment",
                     title: "Вид отгрузки",
                     width: "100px",
                     headerAttributes: gridUtils.headerFormat,
@@ -187,16 +245,17 @@ var planLoadUtils = (function () {
                     field: "numberDispatcher",
                     title: "№ поручения экспедитору",
                     width: "100px",
-                    filterable: false,
+                    filterable: true,
                     headerAttributes: gridUtils.headerFormat,
                     attributes: gridUtils.columnFormat,
 
                 },
                 {
-                    // field: "dateShipmentDispatcher",
+                    field: "dateShipmentDispatcher",
                     title: "Дата отгрузки в ПЭ",
                     width: "100px",
                     headerAttributes: gridUtils.headerFormat,
+                    attributes: gridUtils.columnFormat,
                     // attributes: {class:"#=moment.duration(moment(dateShipmentDispatcher).diff(moment('01-01-2016'))).asDays() > 0 ? 'table-cell-red':'table-cell'#  "},
                     //attributes: {class:"#=planShipmentUtil.getDay(dateShipmentDispatcher) ? 'table-cell-red':'table-cell'#  "},
                     filterable: false,
@@ -207,7 +266,7 @@ var planLoadUtils = (function () {
 
                 },
                 {
-                    // field: "existInStore",
+                     field: "existInStore",
                     title: "Наличие на складе",
                     width: "80px",
                     headerAttributes: gridUtils.headerFormat,
@@ -217,7 +276,7 @@ var planLoadUtils = (function () {
                     template: '<input type="checkbox" #= existInStore ? "checked=checked" : "" # disabled="disabled" ></input>'
                 },
                 {
-                    //  field: "dateToStore",
+                     field: "dateToStore",
                     title: "Сдача на склад",
                     width: "100px",
                     filterable: false,

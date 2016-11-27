@@ -1,5 +1,7 @@
 package dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.sql.Date;
 import java.sql.Timestamp;
 
@@ -15,6 +17,10 @@ public class PlanShipmentForLoadPlan {
     private String numberDispatcher;
     private Date dateShipmentDispatcher;
     private Boolean existInStore;
+    @JsonFormat(
+            shape = JsonFormat.Shape.STRING,
+            pattern = "dd-MM-yyyy hh:mm")
+
     private Timestamp dateToStore;
 
     public Long getId() {
