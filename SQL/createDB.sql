@@ -68,7 +68,7 @@ CREATE TABLE GTK_DSTL_WorkTime (
 ALTER TABLE GTK_DSTL_WorkTime ADD CONSTRAINT FK_constraint_IdServiceDstl foreign key (IdServiceDstl) REFERENCES GTK_DSTL_Enterprise (ID);
 CREATE INDEX IX_GTK_DSTL_WorkTime_IdServiceDstl on GTK_DSTL_WorkTime (IdServiceDstl);
 
-ALTER TABLE GTK_DSTL_PlanShipmentDetail ADD CONSTRAINT FK_Constraint_IDPLAN foreign key (IDPLAN) REFERENCES GTK_DSTL_PlanShipment (ID);
+--ALTER TABLE GTK_DSTL_PlanShipmentDetail ADD CONSTRAINT FK_Constraint_IDPLAN foreign key (IDPLAN) REFERENCES GTK_DSTL_PlanShipment (ID);
 CREATE TABLE GTK_DSTL_PlanShipment (
    ID                          integer identity(1,1) not null PRIMARY KEY ,
    IdService                INTEGER NOT NULL,
@@ -144,6 +144,35 @@ ALTER TABLE GTK_DSTL_PlanShipmentItem ADD CONSTRAINT FK_GTK_DSTL_PlanShipmentIte
 references GTK_DSTL_Deviation (ID);
 
 ALTER TABLE GTK_DSTL_PlanShipmentItem ADD CONSTRAINT UQ_GTK_DSTL_PlanShipmentItemByPlan UNIQUE (idPlan,idEnterprise,NumberOrderDispatcher,Co_Num,Co_Line,Item)
+
+
+
+
+CREATE TABLE  GTK_DSTL_PlanLoad(
+  ID INTEGER IDENTITY(1,1) PRIMARY KEY,
+  IdService                INTEGER NOT NULL,
+  Name VARCHAR(100),
+  Gate INTEGER NOT NULL
+);
+
+CREATE TABLE  GTK_DSTL_PlanLoadItem(
+  ID INTEGER IDENTITY(1,1) PRIMARY KEY,
+  IdPlanLoad INTEGER NOT NULL,
+  IdPlanShipmentItem INTEGER,
+  Name VARCHAR(100),
+  ArrivalTruck DATETIME2,
+  BeginLoad DATETIME2,
+  EndLoad DATETIME2,
+  DepartureTruck DATETIME2,
+  FactLoad INTEGER,
+
+  DateDeliveryFact            DATE,
+
+
+);
+
+
+
 
 
 

@@ -5,8 +5,8 @@ var planShipmentUtil = (
     function() {
 
 
-        var datePlan,ID, selectShipItem, countWorkTimeInMinute,notificationElement;
-
+        var datePlan,ID, selectShipItem, countWorkTimeInMinute;//,notificationElement;
+/*
         function showNotification(message){
             if(!!!notificationElement){
             notificationElement = $("#notification");
@@ -31,7 +31,7 @@ var planShipmentUtil = (
             notificationWidget.show(message,"warning");
 
 
-        }
+        }*/
 
         function enterpriseDropDownEditor(container, options) {
 
@@ -296,7 +296,7 @@ var planShipmentUtil = (
             return moment(datePlan).format("DD-MM-YYYY") ;
         }
 
-        function ErrorShow(request) {
+       /* function ErrorShow(request) {
             var notificationElement = $("#notification").kendoNotification({
                 // hide automatically after 7 seconds
                 autoHideAfter: 7000,
@@ -312,7 +312,7 @@ var planShipmentUtil = (
 
             var notificationWidget = notificationElement.data("kendoNotification");
             notificationWidget.show("Ошибка сохранения данных. " + request.responseText,"error");
-        }
+        }*/
         function timeEditor(container, options) {
             $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" data-format="' + options.format + '"/>')
                 .appendTo(container)
@@ -362,15 +362,16 @@ var planShipmentUtil = (
                             success: function (result) {
 
                                 options.success(result);
-                                showNotification(kendo.format("Создано {0} записей ",result.length));
+                                utils.showNotification(kendo.format("Создано {0} записей ",result.length),"warning");
 
                                 // planGrid().dataSource.read();
                             },
                             error: function (result) {
 
-                                ErrorShow(result);
+                                utils.showNotification("Ошибка сохранения данных","error");
+                                //    ErrorShow(result);
                                 options.error(result);
-                                planGrid().dataSource.fetch();
+                                kendoGridRefresh();//planGrid().dataSource.fetch();
 
                             }
                         }).done(function () {
@@ -389,8 +390,17 @@ var planShipmentUtil = (
                                //options.data.timeLoad = moment(options.data.timeLoad).format("DD-MM-YYYY HH:mm");
                             },
                             data:  kendo.stringify(options),
-                            success: function(data) {
-                                options.success(data);
+                            success: function(result) {
+                                options.success(result);
+                                utils.showNotification(kendo.format("Обновлено {0} записей ",result.length),"warning");
+                            },
+                            error: function (result) {
+
+                               // ErrorShow(result);
+                                utils.showNotification("Ошибка сохранения данных","error");
+                                options.error(result);
+                                kendoGridRefresh();// planGrid().dataSource.fetch();
+
                             }
                         });
                     },
@@ -401,8 +411,9 @@ var planShipmentUtil = (
                             contentType: "application/json; charset=utf-8",
                             dataType: 'json',
                             data:  kendo.stringify(options),
-                            success: function(data) {
-                                options.success(data);
+                            success: function(result) {
+                                options.success(result);
+                                utils.showNotification(kendo.format("Удалено {0} записей ",result),"warning");
                             }
                         });
                     },

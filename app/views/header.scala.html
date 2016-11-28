@@ -3,7 +3,9 @@
 @import helper._
 @import auth.DstlProfile
 @(param: Any)(implicit isLoggedIn: Boolean, userInfo: DstlProfile)
+
 <div class="navbar navbar-inverse navbar-fixed-top nav">
+
     <div class="container-fluid">
         <div class="navbar-header">
             @if(isLoggedIn) {
