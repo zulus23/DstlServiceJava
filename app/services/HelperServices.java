@@ -5,6 +5,7 @@ import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Query;
 import com.avaje.ebean.SqlRow;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import com.google.inject.Singleton;
 
 import model.*;
@@ -16,9 +17,7 @@ import utils.DbUtils;
 import javax.inject.Inject;
 import java.sql.Time;
 import java.time.LocalTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.avaje.ebean.Ebean.find;
 import static java.util.Optional.ofNullable;
@@ -181,17 +180,11 @@ public class HelperServices {
 
     public List<TransportCompanyWithDriver> driverTransportCompanyList(){
 
-        //String sqlsp = "exec dbo.gtk_rpt_logist_www :v_startdate, :v_enddate, :v_site,:v_type_rep";
-        /*List<DriverTransportCompany> result =   Ebean.createSqlQuery(sqlsp).setParameter("v_startdate",dateBegin)
-                .setParameter("v_enddate",dateEnd)
-                .setParameter("v_site",site)
-                .setParameter("v_type_rep",typeReport)
-                .findList().stream().map(this::mapSqlRowToReportPrecisionOrder).collect(toList());*/
-
         return   Ebean.createSqlQuery("select * from GTK_ALL_CAR").findList()
                 .stream()
                 .map(this::mapSqlRowToTransportCompanyWithDriver)
                 .collect(toList());
+
     }
 
     public List<DriverTransportCompany> driverTransportCompany(String refCompany){

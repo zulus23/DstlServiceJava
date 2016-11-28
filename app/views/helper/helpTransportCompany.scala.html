@@ -17,7 +17,7 @@
     <script>
 
             var dataSourceDB = new kendo.data.DataSource({
-                serverPaging:true,
+
                 pageSize: 100,
                 transport: {
                     read: function(options) {
@@ -27,9 +27,9 @@
                             url: "api/transports",
                             contentType: "application/json; charset=utf-8",
                             dataType: 'json',
-                            data:{startIndex: options.data.skip, rowsPerPage: options.data.pageSize},
-                            success: function(data) {
-                                options.success(data);
+                            //data:{startIndex: options.data.skip, rowsPerPage: options.data.pageSize},
+                            success: function(result) {
+                                options.success(result);
                             }
                         });
                     },
@@ -40,31 +40,25 @@
                     type:"json",
 
                     model: {
-                        id:"id",
+                     id:"id",
 
-                        fields: {
-                            id:{type:"string",editable:false},
-                            nameCompany: { type:"string" },
-                            enterpriseName:{type:"string" },
-                            codeCompany:{type:"string"},
-                            fullName: { type: "string" },
-                            addressCompany:{type:"string"},
-                            contactPersonCompany:{type:"string"},
-                            phoneContactPersonCompany:{type:"string"},
-                            driverFullName:{type:"string"},
-                            driverPhone :{type:"string"}
-                        }
+                     fields: {
+                     id:{type:"string",editable:false},
+                     nameCompany: { type:"string" },
+                     enterpriseName:{type:"string" },
+                     codeCompany:{type:"string"},
+                     fullName: { type: "string" },
+                     addressCompany:{type:"string"},
+                     contactPersonCompany:{type:"string"},
+                     phoneContactPersonCompany:{type:"string"},
+                     driverFullName:{type:"string"},
+                     driverPhone :{type:"string"}
+                     }
 
-                    },
-                    total: function(response) {
-                        console.log(response);
-                        return response.total; // total is returned in the "total" field of the response
-                    }
+                     },
+
+
                 },
-
-                change: function(e) {
-
-                }
 
 
             });
@@ -78,23 +72,11 @@
                dataSource: dataSourceDB,
                pageable: true,
                filterable: true,
-
-               /*editable: {
-                   mode: "inline",
-                   confirmation: false
-               },*/
               // height: '100%',
                sortable: true,
-
-
                dataBound: function() {
                    dataBindingFlag = true;
                    //$(".k-grid-myDelete span").addClass("k-icon k-delete");
-               },
-               cancel: function() {
-                   setTimeout(function(){
-                       $(".k-grid-myDelete span").addClass("k-icon k-delete");
-                   });
                },
                columns: [
                    {
