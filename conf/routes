@@ -57,7 +57,7 @@ GET         /api/minuteworkday           controllers.HelperWorkTimeController.mi
 
 
 #Транспортные компаниии
-GET         /api/transports               controllers.HelperTransportCompanyController.index()
+GET         /api/transports               controllers.HelperTransportCompanyController.index(startIndex:Int,rowsPerPage:Int)
 GET         /api/transportcompany/:enterprise               controllers.HelperTransportCompanyController.selectTransportCompanyByEnterprise(enterprise:String)
 GET         /api/drivertransportcompany/:refcompany    controllers.HelperTransportCompanyController.selectDriverByTransportCompany(refcompany:String)
 

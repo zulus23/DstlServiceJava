@@ -42,8 +42,12 @@ public class HelperTransportCompanyController extends Controller {
       return  ok(views.html.helper.helpTransportCompany.render("Транспортные компании",webJarAssets, authService.isLoggedIn(), authService.getUserInfo().orElse(null)));
   }
 
-    public CompletionStage<Result> index(){
-       return CompletableFuture.supplyAsync(() -> helperServices.driverTransportCompanyList())
+    public CompletionStage<Result> index(int startIndex, int rowsPerPage){
+
+       return CompletableFuture.supplyAsync(() -> {
+
+           return helperServices.driverTransportCompanyList();
+       })
                         .thenApply(l-> ok(Json.toJson(l)));
 
 

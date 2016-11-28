@@ -9,32 +9,6 @@
                <h2>Справочник транспортных компаний</h2>
            </section>
            <div  id="transportCompanyView" style="height: 100%; width: 100%;"></div>
-         @*  <div class="row clearfix">
-               <div class="col-lg-12">
-                   <section class="well">
-                       <h2 class="ra-well-title">Транспортные компании</h2>
-
-                       <div class="row">
-                           <div class="col-lg-12 col-sm-12">
-                               <div id="transportCompanyView"></div>
-                           </div>
-                       </div>
-                   </section>
-               </div>*@
-
-      @*         <div class="col-lg-5">
-                   <section class="well">
-                       <h2 class="ra-well-title">Водители</h2>
-
-                       <div class="row">
-                           <div class="col-lg-12 col-sm-12">
-                               <div id="transportCompanyDriverView"></div>
-                           </div>
-                       </div>
-                   </section>
-
-               </div>
-           </div>*@
 
 
            </div>
@@ -43,64 +17,28 @@
     <script>
 
             var dataSourceDB = new kendo.data.DataSource({
-                serverAggregates: true,
                 serverPaging:true,
                 pageSize: 100,
                 transport: {
                     read: function(options) {
+                        console.log(options);
                         $.ajax({
                             type: "GET",
                             url: "api/transports",
                             contentType: "application/json; charset=utf-8",
                             dataType: 'json',
-                            @*data:{dateBegin: '@select.getDateBegin',dateEnd:'@select.getDateEnd', site:'@select.getEnterprise'},*@
+                            data:{startIndex: options.data.skip, rowsPerPage: options.data.pageSize},
                             success: function(data) {
                                 options.success(data);
                             }
                         });
                     },
-                    /*update: function(options){
-                        console.log(options);
-                        $.ajax({
-                            type: "PATCH",
-                            url: "api/normload/"+options.data.id,
-                            contentType: "application/json; charset=utf-8",
-                            dataType: 'json',
-                            data: kendo.stringify(options.data),
-                            success: function(data) {
-                                options.success(data);
-                            }
-                        });
-                    },
-                    destroy: function(options) {
-                        $.ajax({
-                            type: "DELETE",
-                            url: "api/normload/"+options.data.id,
-                            contentType: "application/json; charset=utf-8",
-                            dataType: 'json',
-                            data: kendo.stringify(options.data),
-                            success: function(data) {
-                                options.success(data);
-                            }
-                        });
-                    },
-                    create: function(options){
-                        console.log(options);
-                        $.ajax({
-                            type: "POST",
-                            url: "api/normload",
-                            contentType: "application/json; charset=utf-8",
-                            dataType: 'json',
-                            data :kendo.stringify(options.data)
-                            ,
-                            success: function(data) {
-                                options.success(data);
-                            }
-                        });
-                    }*/
+
                 },
                 //batch: true,
                 schema: {
+                    type:"json",
+
                     model: {
                         id:"id",
 
@@ -116,6 +54,11 @@
                             driverFullName:{type:"string"},
                             driverPhone :{type:"string"}
                         }
+
+                    },
+                    total: function(response) {
+                        console.log(response);
+                        return response.total; // total is returned in the "total" field of the response
                     }
                 },
 
