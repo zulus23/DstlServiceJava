@@ -111,7 +111,7 @@ CREATE TABLE  GTK_DSTL_PlanShipmentItem(
   Cust_Num                     VARCHAR(25),
   Cust_Name                     VARCHAR(255),
   Cust_seq                     INTEGER,
-  PlaceDelivery                VARCHAR(25),
+  PlaceDelivery                VARCHAR(255),
   Co_Count                     INTEGER,
   SizePallet                   VARCHAR(50),
   KindPackage                  VARCHAR(50),

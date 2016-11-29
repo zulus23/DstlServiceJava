@@ -6,32 +6,7 @@ var planShipmentUtil = (
 
 
         var datePlan,ID, selectShipItem, countWorkTimeInMinute;//,notificationElement;
-/*
-        function showNotification(message){
-            if(!!!notificationElement){
-            notificationElement = $("#notification");
-            notificationElement.kendoNotification({
-                // hide automatically after 7 seconds
-                autoHideAfter: 7000,
-                // prevent accidental hiding for 1 second
-                allowHideAfter: 1000,
-                // show a hide button
-                button: true,
-                // prevent hiding by clicking on the notification content
-                position: {
-                    top: 20,
-                    right: 20
-                },
-                stacking: "down",
-                hideOnClick: false
-            });
-            }
 
-            var notificationWidget = notificationElement.data("kendoNotification");
-            notificationWidget.show(message,"warning");
-
-
-        }*/
 
         function enterpriseDropDownEditor(container, options) {
 
@@ -230,7 +205,7 @@ var planShipmentUtil = (
 
         var dataSourceJournal =  function() {
            return new kendo.data.DataSource({
-                serverAggregates: true,
+              // serverAggregates: true,
                 transport: {
                     read: function (options) {
                         $.ajax({
@@ -414,6 +389,7 @@ var planShipmentUtil = (
                             success: function(result) {
                                 options.success(result);
                                 utils.showNotification(kendo.format("Удалено {0} записей ",result),"warning");
+                                kendoGridRefresh();
                             }
                         });
                     },
@@ -518,18 +494,27 @@ var planShipmentUtil = (
                 selectable:"multiple, row",
                 filterable: true,
                 resizable: true,
-                pageable: {
-                    pageSizes: true
-                },
+
                  change: function(e) {
-                   var selectedRows = this.select();
-                     console.log(selectedRows);
+                     var grid = this;
+                  //   var model = grid.dataItem(this);
+                     //console.log(grid);
+                     var dataItem = this.dataItem(this.select()[0]);
+                     $.each(grid.tbody.find('tr'),function(){
+                         var model = grid.dataItem(this);
+                         if(model.senderEnterprise.id === dataItem.senderEnterprise.id && model.numberDispatcher === dataItem.numberDispatcher){//some condition
+                             $('[data-uid='+model.uid+']').addClass('k-state-selected');
+                         }
+                     });
+
+                  /* var selectedRows = this.select();
+
                    var selectedDataItems = [];
                    for (var i = 0; i < selectedRows.length; i++) {
                        var dataItem = this.dataItem(selectedRows[i]);
                        console.log(dataItem);
                        selectedDataItems.push(dataItem);
-                   }
+                   }*/
                 },
 
                 /* dataBound: function (e) {
@@ -789,12 +774,24 @@ var planShipmentUtil = (
 
 
         function onChange(e) {
+
             var model = this.dataItem(this.select());
             ID = model.uid; //gets the value of the field "ID"
 
             if(e.values.dateDeliveryFact !== e.model.dateDeliveryFact){
                 e.model.set('dateDeliveryFact',moment(values.dateDeliveryFact).format("DD-MM-YYYY"));
             }
+            var grid = this;
+            //   var model = grid.dataItem(this);
+            //console.log(grid);
+            var dataItem = this.dataItem(this.select()[0]);
+            $.each(grid.tbody.find('tr'),function(){
+                var model = grid.dataItem(this);
+                if(model.senderEnterprise.id === dataItem.senderEnterprise.id && model.numberDispatcher === dataItem.numberDispatcher){//some condition
+                    $('[data-uid='+model.uid+']').addClass('k-state-selected');
+                }
+            });
+
 
         }
         var  selectPlanDetailID = function(){
@@ -1313,6 +1310,7 @@ var planShipmentUtil = (
                         var dataItem = $("#planDayGrid").data("kendoGrid").dataSource.getByUid(e.draggable.currentTarget.data("uid"));
                         $("#planDayGrid").data("kendoGrid").dataSource.remove(dataItem);
                         $("#planDayGrid").data("kendoGrid").dataSource.sync();
+                        //kendoGridRefresh();
                     },
                     group: "gridGroupPlan"
                 });
@@ -1360,7 +1358,7 @@ var planShipmentUtil = (
             planGrid:planGrid,
             addToPlan:addToPlan,
             updateJournalShipment:UpdateJournalShipment,
-            selectPlanDetailID:selectPlanDetailID,
+            //selectPlanDetailID:selectPlanDetailID,
             setDatePlan:setDatePlan,
             getDay:getDay,
             /*isTransportCompany:isTransportCompany,

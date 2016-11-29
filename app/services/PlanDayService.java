@@ -169,6 +169,38 @@ public class PlanDayService {
 
         _journalShipments.add(journalShipmentSp);
 
+        JournalShipment journalShipmentGotek = new JournalShipment();
+        journalShipmentGotek.setId(5L);
+        journalShipmentGotek.setSenderEnterprise( dstlService.getEnterprise("ГОТЭК"));
+        journalShipmentGotek.setTypeShipment("Доставка");
+        journalShipmentGotek.setNumberDispatcher("5439");
+        journalShipmentGotek.setInPlanDay(false);
+        journalShipmentGotek.setDateCreateDispatcher(Timestamp.valueOf(LocalDateTime.of(2016,3,21,14,25,0,0)));
+        journalShipmentGotek.setDateShipmentDispatcher(LocalDate.of(2016,3,23).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        journalShipmentGotek.setDateDeliveryDispatcher(LocalDate.of(2016,3,24).format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        journalShipmentGotek.setExistInStore(true);
+        journalShipmentGotek.setDateToStore(Timestamp.valueOf(LocalDateTime.of(2016,3,20,17,20)));
+        journalShipmentGotek.setPlaceLoading("ПЖ");
+        journalShipmentGotek.setStatusDispatcher("заказано");
+        journalShipmentGotek.setNumberOrder("3715");
+        journalShipmentGotek.setNumberItem("44");
+        journalShipmentGotek.setNameOrder("Белочка Шоколадная - №3");
+        journalShipmentGotek.setNameCustomer("Звезда-Востока ООО");
+        journalShipmentGotek.setCodeCustomer("П0000002");
+        journalShipmentGotek.setPlaceDelivery("Россия Московская область село Переделкино");
+        journalShipmentGotek.setSizeOrder(1000);
+        journalShipmentGotek.setSizePallet("1000X1000");
+        journalShipmentGotek.setPackingMethod("Россыпь");
+        journalShipmentGotek.setCountPlace(20);
+        journalShipmentGotek.setCapacityOrder(4000);
+        journalShipmentGotek.setTypeTransport("82");
+        journalShipmentGotek.setManagerBackOffice("Звездун А.А.");
+        journalShipmentGotek.setNote("");
+       /* TransportCompany transportCompany =  TransportCompany.find.byId("A7ED6ABB-F607-438D-84BE-56BDDA07A192");
+        journalShipment.setTransportCompanyPlan(transportCompany);*/
+        _journalShipments.add(journalShipmentGotek);
+
+
         return _journalShipments.stream().filter(e -> e.getSenderEnterprise().getBelongToService() == dstlService.getEnterprise(nameServiceDstl).getId()).collect(toList());
     }
 
@@ -512,14 +544,22 @@ public class PlanDayService {
 
     public Integer deletePlandDayItem(JsonNode valueDelete, DstlProfile dstlProfile) {
         Iterator<JsonNode> nodeIterator =  valueDelete.get("data").get("models").elements();
-      //  Iterator<JsonNode> nodeIterator =  valueDelete.get("models").elements();
+         //  Iterator<JsonNode> nodeIterator =  valueDelete.get("models").elements();
+
+        int i = 0;
         while(nodeIterator.hasNext()){
+
             JsonNode _delete = nodeIterator.next();
-            PlanShipmentItem.find.where().eq("id",_delete.get("id").asInt()).delete();
+            //PlanShipmentItem planShipmentItem =  PlanShipmentItem.find.where().eq("id",_delete.get("id").asInt()).findUnique();
+            List<PlanShipmentItem> planShipmentItems =  PlanShipmentItem.find.where().eq("senderEnterprise.id",_delete.get("senderEnterprise").get("id").asInt())
+                                          .eq("numberDispatcher",_delete.get("numberDispatcher").textValue()).findList();
+            i = planShipmentItems.size();
+            planShipmentItems.stream().forEach(e -> Ebean.delete(e));
+
         }
 
         //PlanShipmentItem planShipmentItem =  Ebean.find(PlanShipmentItem.class,id);
-        return 1;
+        return i;
     }
 
 
