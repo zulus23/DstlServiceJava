@@ -801,6 +801,11 @@ var planShipmentUtil = (
         {
             return {"class" : "table-cell-red"};
         }*/
+        var timeLoadInHours =  function (data,field,value){
+            return  (parseInt((value/60).toFixed(2)) - (value/60).toFixed(2));
+        }
+
+
         var planGrid =  function(){
 
 
@@ -1085,7 +1090,7 @@ var planShipmentUtil = (
                         aggregates: ["sum"],
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        footerTemplate: "<div class = '#=planShipmentUtil.isNoMoreWorkTimeLoad(sum)? 'table-footer-cell-red' :'table-footer-cell-blue'#'>#=sum# </div> ",
+                        footerTemplate: "<div class = '#=planShipmentUtil.isNoMoreWorkTimeLoad(sum)? 'table-footer-cell-red' :'table-footer-cell-blue'#'>#= timeLoadInHours(data)# </div> ",
                         footerAttributes: {
                             //class: "# =planShipmentUtil.isNoMoreWorkTimeLoad(value)? 'table-footer-cell-red' : '' # ",
                             class: "table-footer-cell",
@@ -1351,6 +1356,7 @@ var planShipmentUtil = (
         }
         countAllWorkTime();
         return {
+            timeLoadInHours:timeLoadInHours,
             dataSourceJournal:dataSourceJournal,
             dataSourcePlanDay:dataSourcePlanDay,
             createDragAndDrop:createDragAndDrop,
@@ -1364,7 +1370,8 @@ var planShipmentUtil = (
             /*isTransportCompany:isTransportCompany,
             hasDeviation:hasDeviation,*/
             isNotNull:isNotNull,
-            isNoMoreWorkTimeLoad:isNoMoreWorkTimeLoad
+            isNoMoreWorkTimeLoad:isNoMoreWorkTimeLoad,
+
         }
     }
 )();

@@ -61,7 +61,16 @@
 
 
     <script>
+            function timeLoadInHours (data){
+                var value =  data.timeToLoad.sum;
+                var minute =  parseInt(((value/60).toFixed(2) - parseInt((value/60).toFixed(2)))*60);
+                console.log(minute);
+                var hours = parseInt((value/60).toFixed(2));
+                return  kendo.format("{0}ч. {1}м.",hours,minute);
+            }
             $(document).ready(function () {
+
+
                 /* ----------------------------------------------------------------------------*/
                moment.locale('ru');
                 var datePlan,  wnd,
