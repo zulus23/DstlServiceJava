@@ -114,7 +114,7 @@ public class HelperServices {
     }
 
     public List<WorkTime> workTimeList(String enterpriseName){
-           Enterprise serviceDstl  = DbUtils.enterpriseFromUser(enterpriseName);
+           Enterprise serviceDstl  = dstlService.getEnterprise(enterpriseName);
           List<WorkTime> _list  = Ebean.createQuery(WorkTime.class).fetch("serviceDstl").where().eq("serviceDstl.id",serviceDstl.getId()).findList();
           return  _list;
     }
@@ -133,7 +133,7 @@ public class HelperServices {
     }
 
     public WorkTime  saveWorkTime(JsonNode jsonNode,String nameServiceDstl) {
-        Enterprise _enterprise = DbUtils.enterpriseFromUser(nameServiceDstl);
+        Enterprise _enterprise = dstlService.getEnterprise(nameServiceDstl);
         WorkTime saveWorkTime = new WorkTime();
          saveWorkTime.setServiceDstl(_enterprise);
        // LocalDateTime localStartDateTime =  LocalDateTime.parse(jsonNode.findValue("startTime").asText());
@@ -151,7 +151,7 @@ public class HelperServices {
     }
 
     public WorkTime updateWorkTime(JsonNode jsonNode, String nameServiceDstl) {
-        Enterprise serviceDstl  = DbUtils.enterpriseFromUser(nameServiceDstl);
+        Enterprise serviceDstl  = dstlService.getEnterprise(nameServiceDstl);
         WorkTime updateWorkTime = Ebean.createQuery(WorkTime.class).fetch("serviceDstl")
                                                                    .where().eq("serviceDstl.id",serviceDstl.getId())
                                                                    .eq("id",jsonNode.findValue("id").intValue()).findUnique();
@@ -172,7 +172,7 @@ public class HelperServices {
     }
 
     public Integer deleteWorkTime(Integer id, String nameServiceDstl) {
-         Enterprise serviceDstl  = DbUtils.enterpriseFromUser(nameServiceDstl);
+         Enterprise serviceDstl  = dstlService.getEnterprise(nameServiceDstl);
          return Ebean.createQuery(WorkTime.class).fetch("serviceDstl").where().eq("serviceDstl.id",serviceDstl.getId()).eq("id",id).delete();
     }
 
@@ -190,19 +190,6 @@ public class HelperServices {
     public List<DriverTransportCompany> driverTransportCompany(String refCompany){
 
         return  DriverTransportCompany.find.where().eq("transportCompany",refCompany).findList();
-
-
-        //String sqlsp = "exec dbo.gtk_rpt_logist_www :v_startdate, :v_enddate, :v_site,:v_type_rep";
-        /*List<DriverTransportCompany> result =   Ebean.createSqlQuery(sqlsp).setParameter("v_startdate",dateBegin)
-                .setParameter("v_enddate",dateEnd)
-                .setParameter("v_site",site)
-                .setParameter("v_type_rep",typeReport)
-                .findList().stream().map(this::mapSqlRowToReportPrecisionOrder).collect(toList());*/
-//
-//        return   Ebean.createSqlQuery("select * from GTK_ALL_CAR").findList()
-//                .stream()
-//                .map(this::mapSqlRowToTransportCompanyWithDriver)
-//                .collect(toList());
 
 
     }

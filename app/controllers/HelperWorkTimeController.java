@@ -67,7 +67,7 @@ public class HelperWorkTimeController extends Controller {
 
     public Result  minuteWorkDay(){
         String dstlService =  authService.nameServiceDstl();
-        long count =   cache.getOrElse(authService.nameServiceDstl(),() -> helperServices.countMinuteInWorkDay(dstlService), 60*25) ;
+        long count =   cache.getOrElse(authService.nameServiceDstl()+"_workTime",() -> helperServices.countMinuteInWorkDay(dstlService), 60*25) ;
         return ok(Json.toJson(count));
     }
 

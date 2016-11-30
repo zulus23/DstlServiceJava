@@ -11,6 +11,9 @@ import java.util.Optional;
 @Entity
 @Table(name = "GTK_DSTL_Enterprise")
 public class Enterprise extends Model{
+
+    public static final Finder<Integer,Enterprise> find = new Finder<Integer, Enterprise>(Enterprise.class);
+
     @Id
     @Column(name = "ID")
     private int id;

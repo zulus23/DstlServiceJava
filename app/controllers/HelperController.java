@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
+import services.DstlService;
 import services.HelperServices;
 import utils.DbUtils;
 
@@ -20,6 +21,9 @@ public class HelperController extends Controller{
 
     @Inject
     private AuthService authService;
+
+    @Inject
+    DstlService dstlService;
 
 
 
@@ -38,7 +42,7 @@ public class HelperController extends Controller{
     }
 
     public Result listEnterprise(){
-        return ok(Json.toJson(helperServices.listEnterprise(Optional.ofNullable(DbUtils.enterpriseFromUser(authService.nameServiceDstl())))));
+        return ok(Json.toJson(helperServices.listEnterprise(Optional.ofNullable(dstlService.getEnterprise(authService.nameServiceDstl())))));
     }
 
 

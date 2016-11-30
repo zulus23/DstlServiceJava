@@ -232,7 +232,7 @@ public class PlanDayService {
     }
 
     public List<PlanShipmentItem> savePlanShipmentItems(JsonNode value,String nameServiceDstl) throws PlanShipmentItemException{
-        Enterprise _serviceDstl = DbUtils.enterpriseFromUser(nameServiceDstl);
+        Enterprise _serviceDstl = dstlService.getEnterprise(nameServiceDstl);
         Enterprise  _enterprise = dstlService.getEnterprise(value.findValue("senderEnterprise").findValue("name").asText());
         Date _datePlan =  dateFromStringInFormat_dd_MM_yyyy(value.findValue("datePlan").asText());
         PlanShipment planShipment =  createPlan(_datePlan,_serviceDstl);

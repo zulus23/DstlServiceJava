@@ -6,7 +6,9 @@ import javaslang.control.Try;
 import model.Enterprise;
 import model.NormaTimeLoading;
 import model.TypePacking;
+import play.cache.CacheApi;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.Optional;
 
@@ -16,9 +18,18 @@ import java.util.Optional;
 @Singleton
 public class DstlService {
 
+    @Inject
+    private CacheApi cache;
+
+
     public Enterprise getEnterprise(String companyName){
-        return Ebean.createQuery(Enterprise.class).where()
-                    .eq("name",companyName).findUnique();
+
+
+        return  cache.getOrElse(companyName,()-> Enterprise.find.where()
+                .eq("name",companyName).findUnique(),60*3);
+
+        /*return Ebean.createQuery(Enterprise.class).where()
+                    .eq("name",companyName).findUnique();*/
     }
 
     public Integer timeForLoadingByTypePacking(String typePacking,Enterprise enterprise){

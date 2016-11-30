@@ -175,13 +175,6 @@ CREATE TABLE  GTK_DSTL_PlanLoadItem(
 
 
 
-
-
-
-
-
-
-
 GRANT SELECT ON dbo.GTK_DSTL_User TO report
 GRANT SELECT ON dbo.GTK_DSTL_UserRole TO report
 GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_Enterprise TO report

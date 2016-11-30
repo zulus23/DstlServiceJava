@@ -206,7 +206,7 @@ var planLoadUtils = (function () {
             sortable: true,
             filterable: true,
            // resizable: true,
-            // selectable:"true",
+            selectable:"multiple, row",
            // columnMenu: true,
 
             //change:onChange,
