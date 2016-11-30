@@ -391,7 +391,7 @@ var planShipmentUtil = (
                                 utils.showNotification(kendo.format("Удалено {0} записей ",result),"warning");
                                 kendoGridRefresh();
                             },
-                             error: function (result) {
+                             error: function (error) {
                                  utils.showNotification("Ошибка удаления. Повторите операцию","error");
                              }
                         });
