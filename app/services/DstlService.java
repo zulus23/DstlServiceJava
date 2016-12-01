@@ -26,7 +26,7 @@ public class DstlService {
 
 
         return  cache.getOrElse(companyName,()-> Enterprise.find.where()
-                .eq("name",companyName).findUnique(),60*3);
+                .eq("name",companyName).findUnique(),60*10);
 
         /*return Ebean.createQuery(Enterprise.class).where()
                     .eq("name",companyName).findUnique();*/

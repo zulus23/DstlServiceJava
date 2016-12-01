@@ -3,9 +3,20 @@
  */
 var planShipmentUtil = (
     function() {
-
-
         var datePlan,ID, selectShipItem, countWorkTimeInMinute;//,notificationElement;
+        var token;
+        userService.token(function (response) {
+            token = response;
+        });
+        function setHeaderRequest(request) {
+
+            if (!!token) {
+                request.setRequestHeader("token", token);
+            }
+        }
+
+
+
 
 
         function enterpriseDropDownEditor(container, options) {
@@ -333,6 +344,7 @@ var planShipmentUtil = (
                             url: "api/plandayshipment",
                             contentType: "application/json; charset=utf-8",
                             dataType: 'json',
+                            beforeSend: setHeaderRequest,
                             data: kendo.stringify(options),
                             success: function (result) {
 
@@ -365,6 +377,7 @@ var planShipmentUtil = (
                                //options.data.timeLoad = moment(options.data.timeLoad).format("DD-MM-YYYY HH:mm");
                             },
                             data:  kendo.stringify(options),
+                            beforeSend: setHeaderRequest,
                             success: function(result) {
                                 options.success(result);
                                 utils.showNotification(kendo.format("Обновлено {0} записей ",result.length),"warning");
@@ -386,6 +399,7 @@ var planShipmentUtil = (
                             contentType: "application/json; charset=utf-8",
                             dataType: 'json',
                             data:  kendo.stringify(options),
+                            beforeSend: setHeaderRequest,
                             success: function(result) {
                                 options.success(result);
                                 utils.showNotification(kendo.format("Удалено {0} записей ",result),"warning");

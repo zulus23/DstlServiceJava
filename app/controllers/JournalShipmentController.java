@@ -38,10 +38,11 @@ public class JournalShipmentController extends Controller {
     @Inject
     private PlanDayService planDayService;
 
+    @Secure(clients = "HeaderClient")
     public Result deletePlanDayItem() {
         return ok(Json.toJson(planDayService.deletePlandDayItem(request().body().asJson(),authService.getUserInfo().orElse(null))));
     }
-
+    @Secure(clients = "HeaderClient")
     public  Result updatePlanDayItem() {
         //System.out.println(request().body().asJson());
         return ok(Json.toJson(planDayService.updatesPlanShipment(request().body().asJson())));
@@ -58,6 +59,8 @@ public class JournalShipmentController extends Controller {
     public Result index(){
         return ok(Json.toJson(planDayService.journalShipmentList(authService.nameServiceDstl())));
     }
+
+    @Secure(clients = "HeaderClient")
     public Result create() {
         //System.out.println(request().body().asJson());
 
@@ -69,6 +72,7 @@ public class JournalShipmentController extends Controller {
         }
 
     }
+
     public Result planDayIndex(Option<String> dateValue){
         LocalDate localDate = LocalDate.now();
         if(dateValue.isDefined()){

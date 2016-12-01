@@ -137,7 +137,8 @@ var planLoadUtils = (function () {
                     headerAttributes: gridUtils.headerFormat,
                     attributes: gridUtils.columnFormat,
 
-                }
+                },
+
 
 
             ]
