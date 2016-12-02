@@ -74,14 +74,15 @@ span.k-picker-wrap.k-state-default{
     margin-top: 8px;
 }
 
-label#labelPlanShipmentDay.pull-left {
+label#labelPlanShipmentDay.pull-left
+{
     padding-top: 15px;
     padding-left: 15px;
 }
 button#bSavePlan.k-button.k-state-default,button#bCancelPlan.k-button.k-state-default,
 button#bExportPlan.k-button.k-state-default,
-
-button#bExportJournalPlan.k-button.k-state-default{
+button#bExportJournalPlan.k-button.k-state-default
+{
     margin-left: 1px;
     margin-top: 8px;
 }

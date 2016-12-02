@@ -1,3 +1,22 @@
 .tooltip.fade.bottom.in{
     z-index: 20000;
 }
+
+
+#toolBarPlanLoad{
+    padding-top: 0px;
+}
+#bSavePlanLoad,#bCancelPlanLoad,#bExportPlanLoad,
+#bAddElementPlanLoad,#bDeleteElementFromPlanLoad{
+    margin-top: 0px;
+}
+span.k-picker-wrap.k-state-default{
+    margin-left: 0px;
+    margin-top: 0px;
+}
+
+
+.div.k-separator{
+
+
+}
