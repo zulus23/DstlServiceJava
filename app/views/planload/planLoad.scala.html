@@ -113,27 +113,32 @@
                       },
                       { template: "<label>Начать с:</label>" },
                       {
-                          template: "<input id='beginPlanFromTime' style='width: 150px;' />",
+                          template: "<input id='beginPlanFromTime' style='width: 90px;' />",
                           overflow: "never"
                       },
                       { type: "separator" },
 
                       { template: "<label>Доклевеллер:</label>" },
                       {
-                          template: "<input id='dpDoklever' style='width: 120px;' />",
+                          template: "<input id='dpDoklever' style='width: 60px;' />",
                           overflow: "never"
                       },
                       { template: "<label>№ по порядку:</label>" },
                       {
-                          template: "<input id='dpOrder' style='width: 120px;' />",
+                          template: "<input id='dpOrder' style='width: 60px;' />",
                           overflow: "never"
                       },
                       { type: "separator" },
-                      { template: "<label>Учитывать перерывы:</label>" },
+                      { template: "<label>Перерывы:</label>" },
                       {
-                          template: "<input id='dpCollectWeekTime' style='width: 120px;' />",
-                          overflow: "never"
+                          type: "buttonGroup",
+                          buttons: [
+                              { text: "Учитывать", togglable: true, group: "position" , selected: true},
+                              { text: "Не учитывать", togglable: true, group: "position" },
+
+                          ]
                       },
+
                       { type: "separator" },
                       {
                           template:"<button id='bAddElementPlanLoad' class='k-button k-state-default' title='Добавить произвольный элемент в план'><i class='fa fa-lg fa-plus'"+
@@ -153,12 +158,45 @@
                <button id="bDeleteElementFromPlanLoad" class="k-button k-state-default"
                title="Удалить заказ из плана"><i class="fa fa-lg fa-times" aria-hidden="true"></i></button>*/
 
+              $("#dpDoklever").kendoNumericTextBox({
+                  value: 1,
+                  decimals: 0,
+                  format: "n0",
+                  max: 4,
+                  min: 1,
+                  change: function() {
+                      var dimension = this.element.attr("id");
+
+                      target.css(dimension, this.value());
+                  }
+              });
+              $("#dpOrder").kendoNumericTextBox({
+                  value: 1,
+                  decimals: 0,
+                  format: "n0",
+                  max: 4,
+                  min: 1,
+                  change: function() {
+                      var dimension = this.element.attr("id");
+
+                      target.css(dimension, this.value());
+                  }
+              });
+
 
               $("#planLoadDay").kendoDatePicker({
                   format: kendo.culture().calendar.patterns.d,
                   value: moment().format("DD.MM.YYYY")
 
               });
+              $("#beginPlanFromTime").kendoTimePicker({
+                  //format: kendo.culture().calendar.patterns.m,
+                  value: moment().format("HH:mm"),
+                  format:"HH:mm"
+
+              })
+
+
               $("#bSavePlanLoad").kendoTooltip({
                   content: "Сохранить план",
                   position: "bottom"
@@ -176,6 +214,12 @@
                   content: "Удалить заказ из плана",
                   position: "bottom"
               });
+              $("#dpDoklever").kendoTooltip({
+                  content: "Доклевеллер",
+                  position: "bottom"
+              });
+
+
               /* ----------------------------------------------------------------------------*/
               moment.locale('ru');
               var datePlan, wnd,
