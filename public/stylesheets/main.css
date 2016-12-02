@@ -147,4 +147,7 @@ color: red;
     padding: 0.08em 0.08em
 }
 
+.k-tooltip{
+    background: red !important; //specify tooltip's color
 
+}
