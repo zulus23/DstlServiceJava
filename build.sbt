@@ -25,7 +25,8 @@ libraryDependencies ++= Seq(
   //"org.webjars" % "jquery" % "1.12.3",
   "org.webjars" % "jquery" % "2.2.4",
   "org.webjars.npm" % "moment" % "2.15.2",
-  "commons-io" % "commons-io" % "2.4"
+  "commons-io" % "commons-io" % "2.4",
+  "org.mockito" % "mockito-core" % "1.10.19" % "test"
 
 )
 resolvers ++= Seq(Resolver.mavenLocal, "Sonatype snapshots repository" at "https://oss.sonatype.org/content/repositories/snapshots/")

@@ -43,7 +43,7 @@ public class SecurityModule extends AbstractModule {
         bind(PlaySessionStore.class).to(PlayCacheStore.class);
 
         ServiceDstlFormClient serviceDstlFormClient = new ServiceDstlFormClient("/loginForm", new DbUsernamePasswordAuthenticator(configuration));
-       FormClient formClient =  new FormClient("/loginForm", new SimpleTestUsernamePasswordAuthenticator());
+      // FormClient formClient =  new FormClient("/loginForm", new SimpleTestUsernamePasswordAuthenticator());
         //IndirectBasicAuthClient basicAuthClient = new IndirectBasicAuthClient(new SimpleTestUsernamePasswordAuthenticator());
 
         HeaderClient headerClient = new HeaderClient("token", new JwtAuthenticator(new SecretSignatureConfiguration(JWT_SALT),
