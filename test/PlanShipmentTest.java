@@ -92,6 +92,9 @@ public class PlanShipmentTest   {
         cacheApiMock = mock(CacheApi.class);
         store = new PlayCacheStore(cacheApiMock);
         context = mock(PlayWebContext.class);
+
+
+
         // PlaySessionStore playSessionStore =  playSessionStore.getMock();
         /*
         AuthService authService = fakeApp.injector().instanceOf(AuthServiceImpl.class);*/
@@ -105,7 +108,9 @@ public class PlanShipmentTest   {
                 .bodyForm(ImmutableMap.of("username","user","password","user","servicedstl","ЗАО ГОТЭК-ЦПУ"));
          //
         Result result =  route(requestBuilder);
+
         when(context.getJavaSession()).thenReturn(result.session());
+
 
         final PlayWebContext _context = new PlayWebContext(Http.Context.current(),store );
 
