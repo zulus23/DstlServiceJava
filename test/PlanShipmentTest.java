@@ -26,10 +26,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static play.mvc.Http.Context.Implicit.ctx;
 import static play.mvc.Http.Status.NOT_FOUND;
-import static play.test.Helpers.fakeRequest;
-import static play.test.Helpers.route;
-import static play.test.Helpers.routeAndCall;
+import static play.test.Helpers.*;
 
 /**
  * Created by Zhukov on 20.11.2016.
@@ -50,8 +49,8 @@ public class PlanShipmentTest   {
         fakeApp = Helpers.fakeApplication();
 
         Helpers.start(fakeApp);
-        Http.Context context = mock(Http.Context.class);
-        Http.Context.current.set(context);
+       /* Http.Context context = mock(Http.Context.class);
+        Http.Context.current.set(context);*/
 
     }
 
@@ -89,9 +88,9 @@ public class PlanShipmentTest   {
     @Test
 
     public void authenticateSuccess(){
-        cacheApiMock = mock(CacheApi.class);
+       /* cacheApiMock = mock(CacheApi.class);
         store = new PlayCacheStore(cacheApiMock);
-        context = mock(PlayWebContext.class);
+        context = mock(PlayWebContext.class);*/
 
 
 
@@ -109,12 +108,13 @@ public class PlanShipmentTest   {
          //
         Result result =  route(requestBuilder);
 
-        when(context.getJavaSession()).thenReturn(result.session());
+        contentAsString(result);
+       // when(context.getJavaSession()).thenReturn(result.session());
 
 
-        final PlayWebContext _context = new PlayWebContext(Http.Context.current(),store );
+        final PlayWebContext _context = new PlayWebContext(ctx(),store );
 
-        final ProfileManager<DstlProfile> profileManager = new ProfileManager(context);
+        final ProfileManager<DstlProfile> profileManager = new ProfileManager(_context);
         assertEquals(profileManager.isAuthenticated(),true);
 
 
