@@ -1,8 +1,10 @@
+import controllers.routes;
 import dto.PlanShipmentForLoadPlan;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import play.Application;
+import play.mvc.Call;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.test.Helpers;
@@ -14,6 +16,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static play.mvc.Http.Status.NOT_FOUND;
+import static play.mvc.Http.Status.OK;
+import static play.test.Helpers.fakeRequest;
 import static play.test.Helpers.route;
 
 /**
@@ -42,13 +46,11 @@ public class PlanLoadTest {
 
     @Test
     public void mustReturnFullJSon(){
-        Http.RequestBuilder requestBuilder = new Http.RequestBuilder()
-                .method("GET")
 
-                .uri("/api/planshipmentfailure");
-        Result result =  route(requestBuilder);
+        Call call = controllers.routes.PlanLoadController.showPlanShipmentFailure();
+        Result result =  route(fakeRequest(call));
 
-        assertNotEquals(NOT_FOUND,result.status());
+        assertEquals(OK,result.status());
     }
 
 

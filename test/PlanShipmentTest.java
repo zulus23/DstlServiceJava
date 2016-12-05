@@ -1,56 +1,56 @@
+import auth.AuthService;
+import auth.AuthServiceImpl;
 import auth.DstlProfile;
 import com.google.common.collect.ImmutableMap;
-import controllers.routes;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.stubbing.OngoingStubbing;
-import org.pac4j.core.context.session.SessionStore;
+import org.pac4j.core.context.WebContext;
 import org.pac4j.core.profile.ProfileManager;
 import org.pac4j.play.PlayWebContext;
-import org.pac4j.play.cas.logout.PlayCacheLogoutHandler;
 import org.pac4j.play.store.PlayCacheStore;
 import org.pac4j.play.store.PlaySessionStore;
 import play.Application;
-import play.cache.CacheApi;
-import play.core.j.JavaHelpers;
 import play.mvc.Call;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.test.Helpers;
 import services.HelperServices;
 
-import java.util.concurrent.Callable;
+import java.util.LinkedHashMap;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockingDetails;
 import static org.mockito.Mockito.when;
-import static play.mvc.Http.Context.Implicit.ctx;
+import static org.pac4j.core.context.Pac4jConstants.USER_PROFILES;
 import static play.mvc.Http.Status.NOT_FOUND;
-import static play.test.Helpers.*;
+import static play.mvc.Http.Status.OK;
+import static play.test.Helpers.fakeRequest;
+import static play.test.Helpers.invokeWithContext;
+import static play.test.Helpers.route;
 
 /**
  * Created by Zhukov on 20.11.2016.
  */
+
 public class PlanShipmentTest   {
 
 
     private Application fakeApp;
 
-    private PlayCacheStore store;
-    private PlayWebContext context;
-    private CacheApi cacheApiMock;
 
+    private ProfileManager profileManager;
 
     @Before
     public void setup(){
-        //UtilsTest.getObjectLocal();
+
+        profileManager = new ProfileManager(mock(WebContext.class));
         fakeApp = Helpers.fakeApplication();
 
         Helpers.start(fakeApp);
-       /* Http.Context context = mock(Http.Context.class);
-        Http.Context.current.set(context);*/
 
     }
 
@@ -86,66 +86,51 @@ public class PlanShipmentTest   {
 
     }
     @Test
-
     public void authenticateSuccess(){
-       /* cacheApiMock = mock(CacheApi.class);
-        store = new PlayCacheStore(cacheApiMock);
-        context = mock(PlayWebContext.class);*/
 
-
-
-        // PlaySessionStore playSessionStore =  playSessionStore.getMock();
-        /*
-        AuthService authService = fakeApp.injector().instanceOf(AuthServiceImpl.class);*/
-
-
-       //  Http.Session session = mock(Http.Session.class);
+        LinkedHashMap<String,DstlProfile> dstlProfileLinkedHashMap = new LinkedHashMap<>();
 
         Http.RequestBuilder requestBuilder = new Http.RequestBuilder()
                 .method("POST")
                 .uri("/callback?client_name=ServiceDstlFormClient")
                 .bodyForm(ImmutableMap.of("username","user","password","user","servicedstl","ЗАО ГОТЭК-ЦПУ"));
-         //
-        Result result =  route(requestBuilder);
 
-        contentAsString(result);
-       // when(context.getJavaSession()).thenReturn(result.session());
+            Result result =   route(requestBuilder);
+            Http.Context.current.set(new Http.Context(requestBuilder));
+            final PlayWebContext _context = new PlayWebContext(Http.Context.current(),mock(PlayCacheStore.class));
+            dstlProfileLinkedHashMap.put("DstlProfile",new DstlProfile());
+            _context.setRequestAttribute(USER_PROFILES,dstlProfileLinkedHashMap);
+            final ProfileManager<DstlProfile> profileManager = new ProfileManager(_context);
+          //  assertEquals(profileManager.isAuthenticated(),true);
+            Optional<DstlProfile> dstlProfile =  profileManager.get(false);
 
+       assertEquals(true,profileManager.isAuthenticated());
 
-        final PlayWebContext _context = new PlayWebContext(ctx(),store );
+    }
 
-        final ProfileManager<DstlProfile> profileManager = new ProfileManager(_context);
-        assertEquals(profileManager.isAuthenticated(),true);
+    @Test
+    public void authenticateSuccessJournalShipmentControllerShow(){
+        PlaySessionStore playSessionStore = fakeApp.injector().instanceOf(PlayCacheStore.class);
 
+        LinkedHashMap<String,DstlProfile> dstlProfileLinkedHashMap = new LinkedHashMap<>();
+        Call call =  controllers.routes.JournalShipmentController.show();
 
+        invokeWithContext(fakeRequest(call), ()->{
+            Http.Session session = Http.Context.current().session();
 
+            final PlayWebContext _context = new PlayWebContext(Http.Context.current(),playSessionStore);
+            dstlProfileLinkedHashMap.put("DstlProfile",new DstlProfile());
+            _context.setRequestAttribute(USER_PROFILES,dstlProfileLinkedHashMap);
 
-
-
-        //final PlayWebContext _context = new PlayWebContext(context, store);
-//        final ProfileManager<DstlProfile> profileManager = new ProfileManager(context);
-//        assertEquals(profileManager.isAuthenticated(),true);
-        /*
-         Helpers.invokeWithContext(requestBuilder, new Callable<Object>() {
-             @Override
-             public Object call() throws Exception {
-
-                 final PlayWebContext _context = new PlayWebContext(Http.Context.current(), store);
-                 final ProfileManager<DstlProfile> profileManager = new ProfileManager(_context);
-                 assertEquals(profileManager.isAuthenticated(),true);
-                 return  _context;
-             }
-         });
-            */
-
-       // final PlayWebContext context = new PlayWebContext(_context, store);
-
-
-
+             Result result =  route(fakeRequest(call));
+            assertEquals(OK,result.status());
+            return result;
+        });
 
 
 
     }
+
 
 
 
