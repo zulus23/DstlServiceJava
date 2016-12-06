@@ -291,9 +291,183 @@ var planLoadUtils = (function () {
         }).data("kendoGrid")
     }
 
+    var planLoadGridView = function(){
+      return $("#planLoadGridView").kendoGrid({
+            // toolbar: ["edit"],
+            //dataSource: dataSourceShipmentPlan(),
+            // noRecords: true,
+            height: '100%',
+            //  groupable: true,
+            sortable: true,
+            filterable: true,
+            // resizable: true,
+            selectable: "multiple, row",
+            // columnMenu: true,
+
+            //change:onChange,
+            /*dataBound: function (e) {
+             $("#gridView").find('.k-icon.k-i-collapse').trigger('click');
+             },*/
+
+            columns: [ {
+                //field: "driverTransportCompany",
+                title: "Гос. номер ТС",
+                width: "80px",
+                filterable: false,
+                headerAttributes: gridUtils.headerFormat,
+                attributes: gridUtils.columnFormat,
+                //  template: "#=planShipmentUtil.isNotNull(driverTransportCompany) ? driverTransportCompany.numberTruck : ''#"
+            },
+                {
+                    //field: "senderEnterprise",
+                    title: "Предприятие отправитель",
+                    width: "100px",
+                    headerAttributes: gridUtils.headerFormat,
+                    attributes: gridUtils.columnFormat,
+                    groupable: false,
+                    /* locked: true,
+                     lockable: false,*/
+                  //  template: "#=senderEnterprise.name#"
+                },
+                {
+                    //field: "numberOrder",
+                    title: "№ заказа",
+                    width: "70px",
+                    headerAttributes: gridUtils.headerFormat,
+                    attributes: gridUtils.columnFormat,
+                    filterable: false,
+                },
+                {
+                    //field: "numberItem",
+                    title: "№ изделия",
+                    width: "80px",
+                    filterable: false,
+                    headerAttributes: gridUtils.headerFormat,
+                    attributes: gridUtils.columnFormat
+
+                },
+            ]
+        });
+    }
+
+
+
+    var toolBar = function(){
+        return  $("#headertoolbar").kendoToolBar({
+            resizable: true,
+            items: [
+                {
+                    template:"<button id='bSavePlanLoad' class='k-button k-state-default' title='Сохранить план'><i class='fa fa-lg fa-floppy-o'"+
+                    "aria-hidden='true'></i></button>",
+                    overflow: "never"
+                },
+                /* {
+                 template:"<button id='bCancelPlanLoad' class='k-button k-state-default' title='Отменить изменения'><i class='fa fa-lg fa-times'"+
+                 "aria-hidden='true'></i></button>",
+                 overflow: "never"
+                 },*/
+                {
+                    template:"<button id='bExportPlanLoad' class='k-button k-state-default' title='Экспортировать план погрузки(Еxcel)'>"+
+                    "<i class='fa fa-lg fa-download fa-rotate-270' aria-hidden='true'></i></button>",
+                    overflow: "never"
+                },
+                { type: "separator" },
+                { template: "<label  >Дата плана:</label>" },
+                {
+                    template: "<input id='planLoadDay' style='width: 150px;' />",
+                    overflow: "never"
+                },
+                { template: "<label>Начать с:</label>" },
+                {
+                    template: "<input id='beginPlanFromTime' style='width: 90px;' />",
+                    overflow: "never"
+                },
+                { type: "separator" },
+
+                { template: "<label>Доклевеллер:</label>" },
+                {
+                    template: "<input id='dpDoklever' style='width: 60px;' />",
+                    overflow: "never"
+                },
+               /* { template: "<label>№ по порядку:</label>" },
+                {
+                    template: "<input id='dpOrder' style='width: 60px;' />",
+                    overflow: "never"
+                },*/
+                { type: "separator" },
+                { template: "<label>Перерывы:</label>" },
+                {
+                    type: "buttonGroup",
+                    buttons: [
+                        { text: "Учитывать", togglable: true, group: "position" , selected: true},
+                        { text: "Не учитывать", togglable: true, group: "position" },
+
+                    ]
+                },
+
+                { type: "separator" },
+                {
+                    template:"<button id='bAddElementPlanLoad' class='k-button k-state-default' title='Добавить произвольный элемент в план'><i class='fa fa-lg fa-plus'"+
+                    "aria-hidden='true'></i></button>",
+                    overflow: "never"
+                },
+                {
+                    template:"<button id='bDeleteElementFromPlanLoad' class='k-button k-state-default' title='Удалить заказ из плана'><i class='fa fa-lg fa-times'"+
+                    "aria-hidden='true'></i></button>",
+                    overflow: "never"
+                }
+            ]
+        });
+    }
+
+
+    var createDragAndDrop = function () {
+        $("#planShipmentGridView").kendoDraggable({
+            filter: "tr",
+            hint: function (item) {
+               console.log(item);
+                /*var item = $('<div class="k-grid k-widget" style="background-color: DarkOrange; color: black;"><table><tbody><tr>' + e.html() + '</tr></tbody></table></div>');
+              /*   return item;*!/
+                var helper = $('<div class="k-grid k-widget drag-helper" style="background-color: DarkOrange; color: black;"/>');
+                if (!item.hasClass(selectedClass)) {
+                    item.addClass(selectedClass).siblings().removeClass(selectedClass);
+                }
+                var elements = item.parent().children('.'+selectedClass).clone();
+                // item.data('multidrag', elements).siblings('.'+selectedClass).remove();
+                return helper.append(elements);*/
+                return item.clone();
+            },
+            group: "planShipmentGridView",
+        });
+
+        $("#planLoadGridView").kendoDraggable({
+            filter: "tr",
+            hint: function (e) {
+                var item = $('<div class="k-grid k-widget" style="background-color: MediumVioletRed; color: black;"><table><tbody><tr>' + e.html() + '</tr></tbody></table></div>');
+                return item;
+            },
+            group: "planLoadGridView"
+        });
+        $("#planLoadGridView").kendoDropTarget({
+
+            drop: function (e) {
+                console.log(e);
+                console.log(e.draggable.currentTarget.data());
+                console.log(e.draggable.currentTarget.text().split(":")[1].trim());
+
+            },
+            group: "planShipmentGridView"
+        });
+    }
+
+
+
     return {
         factLoadGridView: factLoadGridView,
-        planShipmentGridView: planShipmentGridView
+        planShipmentGridView: planShipmentGridView,
+        toolBar:toolBar,
+        planLoadGridView:planLoadGridView,
+        createDragAndDrop:createDragAndDrop
     }
 
 

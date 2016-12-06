@@ -9,62 +9,14 @@
 
     <div  id="planLoadSplitter">
         <div id="headertoolbar">
-      @*      <div class="nav " style="height:50px; width: 100%;">
-                <div class="row">
-                    <div id="toolBarPlanLoad" class="col-lg-12 col-md-12 col-sm-12">
-                        <div class="col-lg-2">
-                            <div class="input-group">
-                                <span class="input-group-addon" id="basic-addon1">Дата плана:</span>
-                                <input id="planLoadDay" type="date" class="form-control" placeholder="Дата плана:" aria-describedby="basic-addon1">
-                            </div>
-                        </div>
-                        <div class="col-lg-1">
-                                <button id="bSavePlanLoad" class="k-button k-state-default"
-                                   title="Сохранить план"><i class="fa fa-lg fa-floppy-o" aria-hidden="true"></i></button>
-                                <button id="bCancelPlanLoad" class="k-button k-state-default"
-                                 title="Отменить изменения"><i class="fa fa-lg fa-times" aria-hidden="true"></i></button>
-                            <button id="bExportPlanLoad" class="k-button k-state-default"
-                            title="Экспортировать план погрузки(Еxcel)">
-                                <i class="fa fa-lg fa-download fa-rotate-270" aria-hidden="true"></i></button>
-                        </div>
-
-
-                            <div class="col-lg-1">
-                                <div class="input-group">
-                                    <span class="input-group-addon" id="basic-addon1">Доклевеллер:</span>
-                                    <input id="planLoadDoklever" type="text" class="form-control" placeholder="Доклевеллер:" aria-describedby="basic-addon1">
-                                </div>
-                            </div>
-                            <div class="col-lg-1">
-                                <div class="input-group">
-                                    <span class="input-group-addon" id="basic-addon1">Перерывы:</span>
-                                    <input id="planLoadWorkType" type="text" class="form-control" placeholder="Перерывы:" aria-describedby="basic-addon1">
-                                </div>
-                            </div>
-                            *@@*<label id="labelPlanLoadDoklever" for="planLoadDoklever" class="pull-left">Доклевеллер: </label>
-                            <input id="planLoadDoklever"  >
-                            <label id="labelDayPlanWorkType" for="planLoadWorkType" class="pull-left">Перерывы: </label>
-                            <input id="planLoadWorkType"  >*@@*
-                        <div class="col-lg-1">
-                            <button id="bAddElementPlanLoad" class="k-button k-state-default"
-                              title="Добавить произвольный элемент в план"><i class="fa fa-lg fa-plus" aria-hidden="true"></i></button>
-                            <button id="bDeleteElementFromPlanLoad" class="k-button k-state-default"
-                                  title="Удалить заказ из плана"><i class="fa fa-lg fa-times" aria-hidden="true"></i></button>
-                        </div>
-
-
-                    </div>
-
-                </div>
-
-            </div>*@
         </div>
         <div >
             <div id="graphViewSplitter" >
                <div id="planLoadGrid">
                   <div id="planShipmentGridView"></div>
                </div>
-               <div id="graphLoad"></div>
+               <div id="planLoadGridView"></div>
+               @*<div id="graphLoad"></div>*@
 
             </div>
         </div>
@@ -87,76 +39,8 @@
               });
 
 
-              $("#headertoolbar").kendoToolBar({
-                  resizable: true,
-                  items: [
-                      {
-                          template:"<button id='bSavePlanLoad' class='k-button k-state-default' title='Сохранить план'><i class='fa fa-lg fa-floppy-o'"+
-                          "aria-hidden='true'></i></button>",
-                          overflow: "never"
-                      },
-                      /* {
-                       template:"<button id='bCancelPlanLoad' class='k-button k-state-default' title='Отменить изменения'><i class='fa fa-lg fa-times'"+
-                       "aria-hidden='true'></i></button>",
-                       overflow: "never"
-                       },*/
-                      {
-                          template:"<button id='bExportPlanLoad' class='k-button k-state-default' title='Экспортировать план погрузки(Еxcel)'>"+
-                          "<i class='fa fa-lg fa-download fa-rotate-270' aria-hidden='true'></i></button>",
-                          overflow: "never"
-                      },
-                      { type: "separator" },
-                      { template: "<label  >Дата плана:</label>" },
-                      {
-                          template: "<input id='planLoadDay' style='width: 150px;' />",
-                          overflow: "never"
-                      },
-                      { template: "<label>Начать с:</label>" },
-                      {
-                          template: "<input id='beginPlanFromTime' style='width: 90px;' />",
-                          overflow: "never"
-                      },
-                      { type: "separator" },
 
-                      { template: "<label>Доклевеллер:</label>" },
-                      {
-                          template: "<input id='dpDoklever' style='width: 60px;' />",
-                          overflow: "never"
-                      },
-                      { template: "<label>№ по порядку:</label>" },
-                      {
-                          template: "<input id='dpOrder' style='width: 60px;' />",
-                          overflow: "never"
-                      },
-                      { type: "separator" },
-                      { template: "<label>Перерывы:</label>" },
-                      {
-                          type: "buttonGroup",
-                          buttons: [
-                              { text: "Учитывать", togglable: true, group: "position" , selected: true},
-                              { text: "Не учитывать", togglable: true, group: "position" },
-
-                          ]
-                      },
-
-                      { type: "separator" },
-                      {
-                          template:"<button id='bAddElementPlanLoad' class='k-button k-state-default' title='Добавить произвольный элемент в план'><i class='fa fa-lg fa-plus'"+
-                          "aria-hidden='true'></i></button>",
-                          overflow: "never"
-                      },
-                      {
-                          template:"<button id='bDeleteElementFromPlanLoad' class='k-button k-state-default' title='Удалить заказ из плана'><i class='fa fa-lg fa-times'"+
-                          "aria-hidden='true'></i></button>",
-                          overflow: "never"
-                      }
-                  ]
-              });
-
-              /*  <button id="bAddElementPlanLoad" class="k-button k-state-default"
-               title="Добавить произвольный элемент в план"><i class="fa fa-lg fa-plus" aria-hidden="true"></i></button>
-               <button id="bDeleteElementFromPlanLoad" class="k-button k-state-default"
-               title="Удалить заказ из плана"><i class="fa fa-lg fa-times" aria-hidden="true"></i></button>*/
+              planLoadUtils.toolBar();
 
               $("#dpDoklever").kendoNumericTextBox({
                   value: 1,
@@ -239,7 +123,8 @@
                   panes: [
                       /*  {collapsible: false},*/
                       {collapsible: true, size: "20%"},
-                      {collapsible: true, resizable: true, size: "80%"}
+                      {collapsible: true,resizable: true, size: "80%"},
+                     /* {collapsible: true, resizable: true, size: "50%"}*/
                   ],
 
               });
@@ -248,48 +133,14 @@
               // create DatePicker from input HTML element
               kendo.culture("ru-RU");
 
-              var scheduler = $("#graphLoad").kendoScheduler({
-                  date: new Date("2013/6/6"), // The current date of the scheduler
-                  dataSource: [ // The kendo.data.SchedulerDataSource configuration
-                      // First scheduler event
-                      {
-                          id: 1, // Unique identifier. Needed for editing.
-                          start: new Date("2013/6/6 08:00 AM"), // Start of the event
-                          end: new Date("2013/6/6 09:00 AM"), // End of the event
-                          title: "Breakfast" // Title of the event
-                      },
-                      // Second scheduler event
-                      {
-                          id: 2,
-                          start: new Date("2013/6/6 10:15 AM"),
-                          end: new Date("2013/6/6 12:30 PM"),
-                          title: "Job Interview"
-                      }
-                  ],
-                  eventHeight: 10,
-                  majorTick: 30,
-                  views: [
-                      "timeline",
-                      /*"timelineWeek",
-                      "timelineWorkWeek",
-                      {
-                          type: "timelineMonth",
-                          startTime: new Date("2013/6/13 00:00 AM"),
-                          majorTick: 1440
-                      }*/
-                  ],
-                  timezone: "Europe/Moscow",
-                  edit: function(e) {
-                      var buttonsContainer = e.container.find(".k-edit-buttons");
-                      var cancelButton = buttonsContainer.find(".k-scheduler-cancel");
-                      cancelButton.text("Delete");
-                  }
-              }).data("");
 
+              planLoadUtils.factLoadGridView();
+              planLoadUtils.planShipmentGridView();
+              planLoadUtils.planLoadGridView();
+              planLoadUtils.createDragAndDrop();
 
           });
-          planLoadUtils.factLoadGridView();
-          planLoadUtils.planShipmentGridView();
+
   </script>
 
 }
