@@ -1,6 +1,7 @@
 package controllers;
 
 import auth.AuthService;
+import model.plan.PlanRequestTransport;
 import model.plan.PlanShipmentItem;
 import org.pac4j.play.java.Secure;
 import play.cache.CacheApi;
@@ -42,10 +43,11 @@ public class JournalShipmentController extends Controller {
     public Result deletePlanDayItem() {
         return ok(Json.toJson(planDayService.deletePlandDayItem(request().body().asJson(),authService.getUserInfo().orElse(null))));
     }
-    @Secure(clients = "HeaderClient")
+    //@Secure(clients = "HeaderClient")
     public  Result updatePlanDayItem() {
         //System.out.println(request().body().asJson());
-        return ok(Json.toJson(planDayService.updatesPlanShipment(request().body().asJson())));
+        //return ok(Json.toJson(planDayService.updatesPlanShipment(request().body().asJson())));
+        return TODO;
     }
 
 
@@ -66,9 +68,10 @@ public class JournalShipmentController extends Controller {
 
         try {
             //planShipmentItem = planDayService.savePlanShipmentItem(request().body().asJson(), "ЗАО ГОТЭК-СЕВЕРО-ЗАПАД");
-            return ok(Json.toJson(planDayService.savePlanShipmentItems(request().body().asJson(), authService.nameServiceDstl())));
+            return ok(Json.toJson(planDayService.savePlanRequestTransports(request().body().asJson(), authService.nameServiceDstl())));
+           // return TODO;
         } catch (PlanShipmentItemException e ){
-            return internalServerError("Данная запись уже есть в плане");
+           return internalServerError("Данная запись уже есть в плане");
         }
 
     }
@@ -78,7 +81,8 @@ public class JournalShipmentController extends Controller {
         if(dateValue.isDefined()){
            localDate =  LocalDate.parse(dateValue.get(), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         }
-        List<PlanShipmentItem> result =  planDayService.selectItemPlan(Date.valueOf(localDate),authService.nameServiceDstl());
+        List<PlanRequestTransport> result =  planDayService.selectItemPlan(Date.valueOf(localDate),authService.nameServiceDstl());
+       // List<PlanShipmentItem> result = null;
         if (Objects.nonNull(result)){
             return ok(Json.toJson(result));
         }

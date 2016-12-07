@@ -26,7 +26,7 @@ public class PlanShipment extends Model {
     @Column(name = "DatePlan")
     private Date datePlan;
     @OneToMany(mappedBy = "planShipment",cascade = CascadeType.ALL)
-    List<PlanRequestTransport> planRequestTransportss;
+    List<PlanRequestTransport> planRequestTransports;
     @ManyToOne
     @JoinColumn(name = "idService")
     private Enterprise serviceDstl;
@@ -72,12 +72,12 @@ public class PlanShipment extends Model {
         this.datePlan = datePlan;
     }
 
-    public List<PlanRequestTransport> getPlanRequestTransportss() {
-        return planRequestTransportss;
+    public List<PlanRequestTransport> getPlanRequestTransports() {
+        return planRequestTransports;
     }
 
-    public void setPlanRequestTransportss(List<PlanRequestTransport> planRequestTransportss) {
-        this.planRequestTransportss = planRequestTransportss;
+    public void setPlanRequestTransports(List<PlanRequestTransport> planRequestTransports) {
+        this.planRequestTransports = planRequestTransports;
     }
 
     public Enterprise getServiceDstl() {

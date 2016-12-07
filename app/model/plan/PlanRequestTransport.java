@@ -4,12 +4,10 @@ import com.avaje.ebean.Model;
 import com.avaje.ebean.annotation.CreatedTimestamp;
 import com.avaje.ebean.annotation.UpdatedTimestamp;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import model.DriverTransportCompany;
-import model.Enterprise;
-import model.TransportCompany;
-import model.UserDstl;
+import model.*;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
@@ -41,6 +39,9 @@ public class PlanRequestTransport extends Model{
 
     @Column(name = "PlaceShipment")
     private String placeShipment;
+    @Column(name = "DateShipmentDispatcher")
+    private Date dateShipmentDispatcher;
+
     @Column(name = "StatusDispatcher")
     private String statusDispatcher;
     @Column(name = "NumberOrderDispatcher")
@@ -51,6 +52,19 @@ public class PlanRequestTransport extends Model{
             pattern = "dd-MM-yyyy hh:mm",
             timezone="Europe/Moscow")
     private Timestamp dateCreateDispatcher;
+
+    @Column(name = "DateDeliveryDispatcher")
+    private Date dateDeliveryDispatcher;
+    @Column(name = "DateDeliveryFact")
+    private Date dateDeliveryFact;
+
+
+    @ManyToOne
+    @JoinColumn(name = "IdDeviationShipment")
+    private DeviationShipment deviationShipment;
+    @ManyToOne
+    @JoinColumn(name = "IdDeviationDelivery")
+    private DeviationDelivery deviationDelivery;
 
     @Column(name = "TypeTransport")
     private String typeTransport;
@@ -75,17 +89,17 @@ public class PlanRequestTransport extends Model{
     @Column(name = "Note")
     private String note;
 
-    @OneToMany(mappedBy = "planShipment",cascade = CascadeType.ALL)
+    /*@OneToMany(mappedBy = "planShipment",cascade = CascadeType.ALL)
     private List<PlanShipmentItem> planShipmentItems;
+*/
 
-
-    @Column(name = "CreateRequestTransport")
+    @Column(name = "CreateRequest")
     @CreatedTimestamp
     private Timestamp createRequestTransport;
     @ManyToOne
     @JoinColumn(name = "CreateBy")
     private UserDstl userCreate;
-    @Column(name = "UpdateRequestTransport")
+    @Column(name = "UpdateRequest")
     @UpdatedTimestamp
     private Timestamp updateRequestTransport;
     @ManyToOne
@@ -220,13 +234,7 @@ public class PlanRequestTransport extends Model{
         this.note = note;
     }
 
-    public List<PlanShipmentItem> getPlanShipmentItems() {
-        return planShipmentItems;
-    }
 
-    public void setPlanShipmentItems(List<PlanShipmentItem> planShipmentItems) {
-        this.planShipmentItems = planShipmentItems;
-    }
 
     public Timestamp getCreateRequestTransport() {
         return createRequestTransport;
@@ -258,5 +266,46 @@ public class PlanRequestTransport extends Model{
 
     public void setUserUpdate(UserDstl userUpdate) {
         this.userUpdate = userUpdate;
+    }
+
+
+    public Date getDateShipmentDispatcher() {
+        return dateShipmentDispatcher;
+    }
+
+    public void setDateShipmentDispatcher(Date dateShipmentDispatcher) {
+        this.dateShipmentDispatcher = dateShipmentDispatcher;
+    }
+
+    public DeviationShipment getDeviationShipment() {
+        return deviationShipment;
+    }
+
+    public void setDeviationShipment(DeviationShipment deviationShipment) {
+        this.deviationShipment = deviationShipment;
+    }
+
+    public DeviationDelivery getDeviationDelivery() {
+        return deviationDelivery;
+    }
+
+    public void setDeviationDelivery(DeviationDelivery deviationDelivery) {
+        this.deviationDelivery = deviationDelivery;
+    }
+
+    public Date getDateDeliveryDispatcher() {
+        return dateDeliveryDispatcher;
+    }
+
+    public void setDateDeliveryDispatcher(Date dateDeliveryDispatcher) {
+        this.dateDeliveryDispatcher = dateDeliveryDispatcher;
+    }
+
+    public Date getDateDeliveryFact() {
+        return dateDeliveryFact;
+    }
+
+    public void setDateDeliveryFact(Date dateDeliveryFact) {
+        this.dateDeliveryFact = dateDeliveryFact;
     }
 }

@@ -91,6 +91,7 @@ CREATE TABLE GTK_DSTL_PlanShipmentRequestTransport (
   ID                          integer identity(1,1) not null PRIMARY KEY ,
   IdPlan                      INTEGER NOT NULL,
   IdEnterprise                INTEGER NOT NULL,
+  PlaceShipment               VARCHAR(50),
   TypeShipment                VARCHAR(50),
   DateShipmentDispatcher      DATE,
   IdDeviationShipment         INTEGER NOT NULL DEFAULT  -1,
@@ -122,27 +123,17 @@ ALTER TABLE GTK_DSTL_PlanShipmentRequestTransport ADD CONSTRAINT FK_GTK_DSTL_Pla
 references GTK_DSTL_Deviation (ID);
 ALTER TABLE GTK_DSTL_PlanShipmentRequestTransport ADD CONSTRAINT FK_GTK_DSTL_PlanShipmentRequestTransportDeviationDelivery foreign key (IdDeviationDelivery)
 references GTK_DSTL_Deviation (ID);
-ALTER TABLE GTK_DSTL_PlanShipmentItem ADD CONSTRAINT UQ_GTK_DSTL_PlanShipmentItemByPlan UNIQUE (idPlan,idEnterprise,NumberOrderDispatcher)
+ALTER TABLE GTK_DSTL_PlanShipmentRequestTransport ADD CONSTRAINT UQ_GTK_DSTL_PlanShipmentRequestTransportByPlan UNIQUE (idPlan,idEnterprise,NumberOrderDispatcher)
 
 
 
 CREATE TABLE  GTK_DSTL_PlanShipmentItem(
   ID                          integer identity(1,1) not null PRIMARY KEY ,
-  IdPlan                      INTEGER NOT NULL,
-  IdEnterprise                INTEGER NOT NULL,
-  TypeShipment                VARCHAR(50),
-  PlanLoad                    INTEGER,
-  DateShipmentDispatcher      DATE,
-  IdDeviationShipment         INTEGER NOT NULL DEFAULT  -1,
-  DateDeliveryDispatcher      DATE,
-  DateDeliveryFact            DATE,
-  IdDeviationDelivery         INTEGER NOT NULL DEFAULT  -1,
+  IdRequestTransport          INTEGER NOT NULL,
   ExistInStore                BIT, -- На складе
   DateToStore                  DATETIME2,
   PlaceShipment                 VARCHAR(10),
   StatusDispatcher             VARCHAR(20),
-  NumberOrderDispatcher        VARCHAR(20),
-  DateCreateDispatcher         DATETIME2,
   Co_Num                       VARCHAR(25),
   Co_Line                      VARCHAR(25),
   Item                         VARCHAR(25),
@@ -158,31 +149,15 @@ CREATE TABLE  GTK_DSTL_PlanShipmentItem(
   Co_Capacity                  VARCHAR(50),
   TypeTransport                VARCHAR(50),
   TimeForLoading               INTEGER,
-  DeliveryCompanyPlan          VARCHAR(50),
-  DeliveryCompanyFact          VARCHAR(50),
-  Driver                       VARCHAR(50),
-  NumberGate                   INTEGER,
   DistanceDeliver              INTEGER,
   CostDelivery                 DECIMAL(15,3),
-  TimeLoading                  TIME,
-  BackManager                  VARCHAR(50),
-  Note                         VARCHAR(255),
   CreatePlanItem               DATETIME2,
   CreateBy                     INTEGER,
   UpdatePlanItem               DATETIME2,
   UpdateBy                     INTEGER
 )
-ALTER TABLE GTK_DSTL_PlanShipmentItem ADD CONSTRAINT FK_GTK_DSTL_PlanShipmentItemEnterprise foreign key (IdEnterprise)
-references GTK_DSTL_Enterprise (ID);
-ALTER TABLE GTK_DSTL_PlanShipmentItem ADD CONSTRAINT FK_GTK_DSTL_PlanShipmentItemPLan foreign key (IdPlan)
-references GTK_DSTL_PlanShipment (ID);
-
-ALTER TABLE GTK_DSTL_PlanShipmentItem ADD CONSTRAINT FK_GTK_DSTL_PlanShipmentItemDeviationShipment foreign key (IdDeviationShipment)
-references GTK_DSTL_Deviation (ID);
-ALTER TABLE GTK_DSTL_PlanShipmentItem ADD CONSTRAINT FK_GTK_DSTL_PlanShipmentItemDeviationDelivery foreign key (IdDeviationDelivery)
-references GTK_DSTL_Deviation (ID);
-
-ALTER TABLE GTK_DSTL_PlanShipmentItem ADD CONSTRAINT UQ_GTK_DSTL_PlanShipmentItemByPlan UNIQUE (idPlan,idEnterprise,NumberOrderDispatcher,Co_Num,Co_Line,Item)
+ALTER TABLE GTK_DSTL_PlanShipmentItem ADD CONSTRAINT FK_GTK_DSTL_PlanShipmentItem foreign key (IdRequestTransport)
+references GTK_DSTL_PlanShipmentRequestTransport (ID);
 
 
 

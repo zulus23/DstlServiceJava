@@ -31,8 +31,9 @@ public class PlanShipmentItem  extends Model {
 
 
     @ManyToOne()
-    @JoinColumn(name = "IDPLAN")
+    @JoinColumn(name = "IDRequestTransport")
     @com.fasterxml.jackson.annotation.JsonIgnore
+    private PlanRequestTransport planRequestTransport;
     private PlanShipment planShipment;
     @ManyToOne
     @JoinColumn(name = "IdEnterprise")
@@ -42,8 +43,7 @@ public class PlanShipmentItem  extends Model {
     /*ССылка на план погрузки*/
     @Transient
     private Boolean planLoad;
-    @Column(name = "DateShipmentDispatcher")
-    private Date dateShipmentDispatcher;
+
     @ManyToOne
     @JoinColumn(name = "IdDeviationShipment")
     private DeviationShipment deviationShipment;
@@ -64,16 +64,6 @@ public class PlanShipmentItem  extends Model {
     private Timestamp dateToStore;
     @Column(name = "PlaceShipment")
     private String placeShipment;
-    @Column(name = "StatusDispatcher")
-    private String statusDispatcher;
-    @Column(name = "NumberOrderDispatcher")
-    private String numberDispatcher;
-    @Column(name = "DateCreateDispatcher")
-    @JsonFormat(
-            shape = JsonFormat.Shape.STRING,
-            pattern = "dd-MM-yyyy hh:mm",
-            timezone="Europe/Moscow")
-    private Timestamp dateCreateDispatcher;
     @Column(name = "Co_Num")
     private String numberOrder;
     @Column(name = "Co_Line")
@@ -103,33 +93,12 @@ public class PlanShipmentItem  extends Model {
     private Integer countPlace;
     @Column(name = "Co_Capacity")
     private String capacityOrder;
-    @Column(name = "TypeTransport")
-    private String typeTransport;
-    @Column(name = "TimeForLoading")
-    private Integer timeToLoad;
-    @ManyToOne
-    @JoinColumn(name = "DeliveryCompanyPlan")
-    private TransportCompany transportCompanyPlan;
-
-    @ManyToOne
-    @JoinColumn(name = "DeliveryCompanyFact")
-    private TransportCompany transportCompanyFact;
-    @ManyToOne
-    @JoinColumn(name = "Driver")
-    private DriverTransportCompany driverTransportCompany;
     @Column(name = "NumberGate")
     private Integer numberGate;
     @Column(name = "DistanceDeliver")
     private Double distanceDelivery;
     @Column(name = "CostDelivery")
     private Double costTrip;
-    @Column(name = "TimeLoading")
-    @Temporal(TemporalType.TIME)
-    private Time timeLoad;
-    @Column(name = "BackManager")
-    private String managerBackOffice;
-    @Column(name = "Note")
-    private String note;
 
 
 
@@ -155,76 +124,12 @@ public class PlanShipmentItem  extends Model {
         this.id = id;
     }
 
-    public PlanShipment getPlanShipment() {
-        return planShipment;
+    public PlanRequestTransport getPlanRequestTransport() {
+        return planRequestTransport;
     }
 
-    public void setPlanShipment(PlanShipment planShipment) {
-        this.planShipment = planShipment;
-    }
-
-    public Enterprise getSenderEnterprise() {
-        return senderEnterprise;
-    }
-
-    public void setSenderEnterprise(Enterprise senderEnterprise) {
-        this.senderEnterprise = senderEnterprise;
-    }
-
-    public String getTypeShipment() {
-        return typeShipment;
-    }
-
-    public void setTypeShipment(String typeShipment) {
-        this.typeShipment = typeShipment;
-    }
-
-    public Boolean getPlanLoad() {
-        return planLoad;
-    }
-
-    public void setPlanLoad(Boolean planLoad) {
-        this.planLoad = planLoad;
-    }
-
-    public Date getDateShipmentDispatcher() {
-        return dateShipmentDispatcher;
-    }
-
-    public void setDateShipmentDispatcher(Date dateShipmentDispatcher) {
-        this.dateShipmentDispatcher = dateShipmentDispatcher;
-    }
-
-    public DeviationShipment getDeviationShipment() {
-        return deviationShipment;
-    }
-
-    public void setDeviationShipment(DeviationShipment deviationShipment) {
-        this.deviationShipment = deviationShipment;
-    }
-
-    public Date getDateDeliveryDispatcher() {
-        return dateDeliveryDispatcher;
-    }
-
-    public void setDateDeliveryDispatcher(Date dateDeliveryDispatcher) {
-        this.dateDeliveryDispatcher = dateDeliveryDispatcher;
-    }
-
-    public Date getDateDeliveryFact() {
-        return dateDeliveryFact;
-    }
-
-    public void setDateDeliveryFact(Date dateDeliveryFact) {
-        this.dateDeliveryFact = dateDeliveryFact;
-    }
-
-    public DeviationDelivery getDeviationDelivery() {
-        return deviationDelivery;
-    }
-
-    public void setDeviationDelivery(DeviationDelivery deviationDelivery) {
-        this.deviationDelivery = deviationDelivery;
+    public void setPlanRequestTransport(PlanRequestTransport planRequestTransport) {
+        this.planRequestTransport = planRequestTransport;
     }
 
     public Boolean getExistInStore() {
@@ -249,30 +154,6 @@ public class PlanShipmentItem  extends Model {
 
     public void setPlaceShipment(String placeShipment) {
         this.placeShipment = placeShipment;
-    }
-
-    public String getStatusDispatcher() {
-        return statusDispatcher;
-    }
-
-    public void setStatusDispatcher(String statusDispatcher) {
-        this.statusDispatcher = statusDispatcher;
-    }
-
-    public String getNumberDispatcher() {
-        return numberDispatcher;
-    }
-
-    public void setNumberDispatcher(String numberDispatcher) {
-        this.numberDispatcher = numberDispatcher;
-    }
-
-    public Timestamp getDateCreateDispatcher() {
-        return dateCreateDispatcher;
-    }
-
-    public void setDateCreateDispatcher(Timestamp dateCreateDispatcher) {
-        this.dateCreateDispatcher = dateCreateDispatcher;
     }
 
     public String getNumberOrder() {
@@ -379,46 +260,6 @@ public class PlanShipmentItem  extends Model {
         this.capacityOrder = capacityOrder;
     }
 
-    public String getTypeTransport() {
-        return typeTransport;
-    }
-
-    public void setTypeTransport(String typeTransport) {
-        this.typeTransport = typeTransport;
-    }
-
-    public Integer getTimeToLoad() {
-        return timeToLoad;
-    }
-
-    public void setTimeToLoad(Integer timeToLoad) {
-        this.timeToLoad = timeToLoad;
-    }
-
-    public TransportCompany getTransportCompanyPlan() {
-        return transportCompanyPlan;
-    }
-
-    public void setTransportCompanyPlan(TransportCompany transportCompanyPlan) {
-        this.transportCompanyPlan = transportCompanyPlan;
-    }
-
-    public TransportCompany getTransportCompanyFact() {
-        return transportCompanyFact;
-    }
-
-    public void setTransportCompanyFact(TransportCompany transportCompanyFact) {
-        this.transportCompanyFact = transportCompanyFact;
-    }
-
-    public DriverTransportCompany getDriverTransportCompany() {
-        return driverTransportCompany;
-    }
-
-    public void setDriverTransportCompany(DriverTransportCompany driverTransportCompany) {
-        this.driverTransportCompany = driverTransportCompany;
-    }
-
     public Integer getNumberGate() {
         return numberGate;
     }
@@ -441,30 +282,6 @@ public class PlanShipmentItem  extends Model {
 
     public void setCostTrip(Double costTrip) {
         this.costTrip = costTrip;
-    }
-
-    public Time getTimeLoad() {
-        return timeLoad;
-    }
-
-    public void setTimeLoad(Time timeLoad) {
-        this.timeLoad = timeLoad;
-    }
-
-    public String getManagerBackOffice() {
-        return managerBackOffice;
-    }
-
-    public void setManagerBackOffice(String managerBackOffice) {
-        this.managerBackOffice = managerBackOffice;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
     }
 
     public Timestamp getCreatePlanItem() {

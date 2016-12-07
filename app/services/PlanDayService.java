@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.NullNode;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import model.*;
 import model.plan.JournalShipment;
+import model.plan.PlanRequestTransport;
 import model.plan.PlanShipment;
 import model.plan.PlanShipmentItem;
 import org.jetbrains.annotations.NotNull;
@@ -204,10 +205,10 @@ public class PlanDayService {
         return _journalShipments.stream().filter(e -> e.getSenderEnterprise().getBelongToService() == dstlService.getEnterprise(nameServiceDstl).getId()).collect(toList());
     }
 
-    public List<PlanShipmentItem> selectItemPlan(Date datePlan, String nameServiceDstl){
+    public List<PlanRequestTransport> selectItemPlan(Date datePlan, String nameServiceDstl){
         return Optional.ofNullable(PlanShipment.find.where()
                                                     .eq("datePlan",datePlan)
-                                                    .eq("serviceDstl",dstlService.getEnterprise(nameServiceDstl)).findUnique()).map(e ->e.getPlanShipmentItems()).orElse(null);
+                                                    .eq("serviceDstl",dstlService.getEnterprise(nameServiceDstl)).findUnique()).map(e ->e.getPlanRequestTransports()).orElse(null);
     }
 
 
@@ -223,7 +224,7 @@ public class PlanDayService {
             planShipment = new PlanShipment();
             planShipment.setDatePlan(datePlan);
             planShipment.setServiceDstl(serviceDstl);
-            planShipment.setPlanShipmentItems(null);
+            planShipment.setPlanRequestTransports(null);
             planShipment.setName("No name");
             planShipment.save();
          }
@@ -231,19 +232,22 @@ public class PlanDayService {
        return planShipment;
     }
 
-    public List<PlanShipmentItem> savePlanShipmentItems(JsonNode value,String nameServiceDstl) throws PlanShipmentItemException{
+    public List<PlanRequestTransport> savePlanRequestTransports(JsonNode value,String nameServiceDstl) throws PlanShipmentItemException{
         Enterprise _serviceDstl = dstlService.getEnterprise(nameServiceDstl);
         Enterprise  _enterprise = dstlService.getEnterprise(value.findValue("senderEnterprise").findValue("name").asText());
         Date _datePlan =  dateFromStringInFormat_dd_MM_yyyy(value.findValue("datePlan").asText());
         PlanShipment planShipment =  createPlan(_datePlan,_serviceDstl);
-        Long maxIdInPLan =  planShipment.getPlanShipmentItems().stream().max((p,n) -> p.getId().compareTo( n.getId())).map(e -> e.getId()).orElse(0L);
+        Long maxIdInPLan =  planShipment.getPlanRequestTransports().stream().max((p,n) -> p.getId().compareTo( n.getId())).map(e -> e.getId()).orElse(0L);
 
         Iterator<JsonNode> nodeIterator =  value.get("data").get("models").elements();
       // Iterator<JsonNode> nodeIterator =  value.get("models").elements();
         while(nodeIterator.hasNext()){
             JsonNode valueInsert = nodeIterator.next();
-            PlanShipmentItem planShipmentItem = savePlanShipmentItem(valueInsert,planShipment);
-            planShipment.getPlanShipmentItems().add(planShipmentItem);
+            PlanRequestTransport planRequestTransport = createPlanShipmentRequestTransportItemFromJson(valueInsert,planShipment);
+
+          // PlanShipmentItem planShipmentItem = savePlanShipmentItem(valueInsert,planShipment);
+            // TODO: 07.12.2016 Необходимо добавлять только уникальные элементы
+          // planShipment.getPlanRequestTransports().add(planRequestTransport);
 
         }
         try {
@@ -263,11 +267,94 @@ public class PlanDayService {
             }
         }
 
-        return planShipment.getPlanShipmentItems().stream(). filter(e -> e.getId() > maxIdInPLan).collect(toList());
+        return planShipment.getPlanRequestTransports().stream(). filter(e -> e.getId() > maxIdInPLan).collect(toList());
 
 
     }
-    public PlanShipmentItem savePlanShipmentItem(JsonNode value,PlanShipment planShipment) throws PlanShipmentItemException{
+
+    private PlanRequestTransport createPlanShipmentRequestTransportItemFromJson(JsonNode value, PlanShipment planShipment) {
+        Enterprise  enterprise = dstlService.getEnterprise(value.findValue("senderEnterprise").findValue("name").asText());
+        PlanRequestTransport _newPlanRequestTransport = new PlanRequestTransport();
+        Optional.ofNullable(value.findValue("senderEnterprise")).ifPresent(e -> {
+
+            _newPlanRequestTransport.setSenderEnterprise(enterprise);
+        });
+
+        _newPlanRequestTransport.setPlanShipment(planShipment);
+        _newPlanRequestTransport.setTypeShipment(value.findValue("typeShipment").asText());
+        // Необходимо держать ссылку на план отрузки
+        //_newPlanShipmentItem.setPlanLoad(value.findValue("planLoad").asBoolean(false));
+        _newPlanRequestTransport.setDateShipmentDispatcher(dateFromStringInFormat_dd_MM_yyyy(value.findValue("dateShipmentDispatcher").asText()));
+
+        _newPlanRequestTransport.setDeviationShipment(null);
+        _newPlanRequestTransport.setDateDeliveryDispatcher(dateFromStringInFormat_dd_MM_yyyy(value.findValue("dateDeliveryDispatcher").asText()));
+
+        Optional.ofNullable(value.findValue("dateDeliveryFact")).ifPresent(e -> {
+            _newPlanRequestTransport.setDateDeliveryFact(dateFromStringInFormat_dd_MM_yyyy(e.asText()));
+                }
+        );
+
+        _newPlanRequestTransport.setDeviationDelivery(null);
+
+
+        Optional.ofNullable(value.findValue("placeShipment")).ifPresent(e -> {
+            _newPlanRequestTransport.setPlaceShipment(e.asText());
+        });
+        Optional.ofNullable(value.findValue("statusDispatcher")).ifPresent( e -> {
+            _newPlanRequestTransport.setStatusDispatcher(e.asText());
+        });
+        Optional.ofNullable(value.findValue("numberDispatcher")).ifPresent( e ->{
+            _newPlanRequestTransport.setNumberDispatcher(e.asText());
+        } );
+
+        Optional.ofNullable(value.findValue("dateCreateDispatcher")).ifPresent(e -> {
+            DateTime dateTime =   DateTime.parse(value.findValue("dateCreateDispatcher").asText(), DateTimeFormat.forPattern("dd-MM-yyyy HH:mm"));
+            LocalDateTime localTime = LocalDateTime.of(dateTime.getYear(),
+                    dateTime.getMonthOfYear(),
+                    dateTime.getDayOfMonth(),
+                    dateTime.getHourOfDay(),
+                    dateTime.getMinuteOfHour());
+            _newPlanRequestTransport.setDateCreateDispatcher(Timestamp.valueOf(localTime));
+        });
+
+
+        Optional.ofNullable(value.findValue("typeTransport")).ifPresent(e -> {
+            _newPlanRequestTransport.setTypeTransport(e.asText());
+        });
+        Optional.ofNullable(value.findValue("transportCompanyPlan")).ifPresent(e -> {
+            //TODO При создании в плане фактическая компания доставки = плановой
+            if(!e.equals(NullNode.getInstance())){
+                TransportCompany transportCompany =  TransportCompany.find.byId(e.get("rowPointer").asText());
+                _newPlanRequestTransport.setTransportCompanyPlan(transportCompany);
+                _newPlanRequestTransport.setTransportCompanyFact(transportCompany);
+            }
+
+        });
+
+
+        _newPlanRequestTransport.setDriverTransportCompany(null);
+        /*Optional.ofNullable(value.findValue("numberGate")).ifPresent(e -> {
+            _newPlanRequestTransport.setNumberGate(e.asInt());
+        });*/
+
+        Optional.ofNullable(value.findValue("timeLoad")).ifPresent( e -> {
+            DateTime dateTime =   DateTime.parse(value.findValue("timeLoad").asText(), DateTimeFormat.forPattern("dd-MM-yyyy HH:mm"));
+            LocalTime localTime = LocalTime.of(
+                    dateTime.getHourOfDay(),
+                    dateTime.getMinuteOfHour());
+
+            _newPlanRequestTransport.setTimeLoad(Time.valueOf(localTime));
+        });
+        Optional.ofNullable(value.findValue("managerBackOffice")).ifPresent(e -> {
+            _newPlanRequestTransport.setManagerBackOffice(e.asText());
+        });
+        Optional.ofNullable(value.findValue("note")).ifPresent(e -> {
+            _newPlanRequestTransport.setNote(e.asText());
+        });
+
+        return _newPlanRequestTransport;
+    }
+   /* public PlanShipmentItem savePlanShipmentItem(JsonNode value,PlanShipment planShipment) throws PlanShipmentItemException{
         Enterprise  enterprise = dstlService.getEnterprise(value.findValue("senderEnterprise").findValue("name").asText());
         PlanShipmentItem _newPlanShipmentItem = new PlanShipmentItem();
         Optional.ofNullable(value.findValue("senderEnterprise")).ifPresent(e -> {
@@ -377,9 +464,9 @@ public class PlanDayService {
         Optional.ofNullable(value.findValue("typeTransport")).ifPresent(e -> {
             _newPlanShipmentItem.setTypeTransport(e.asText());
         });
-        /*Optional.ofNullable(value.findValue("timeToLoad")).ifPresent(e -> {
+        *//*Optional.ofNullable(value.findValue("timeToLoad")).ifPresent(e -> {
 
-        });*/
+        });*//*
 
         // ???????
         Optional.ofNullable(value.findValue("transportCompanyPlan")).ifPresent(e -> {
@@ -422,10 +509,11 @@ public class PlanDayService {
 
 
         return _newPlanShipmentItem;
-    }
+    }*/
 
 
 
+/*
 
     public List<PlanShipmentItem>  updatesPlanShipment(JsonNode value){
         List<PlanShipmentItem> planShipmentItems = new ArrayList<>();
@@ -440,8 +528,9 @@ public class PlanDayService {
 
 
     }
+*/
 
-    public PlanShipmentItem updatePlanShipment(JsonNode value,PlanShipmentItem planShipmentItem){
+   /* public PlanShipmentItem updatePlanShipment(JsonNode value,PlanShipmentItem planShipmentItem){
 
         Optional.ofNullable(value.findValue("deviationShipment")).ifPresent(e -> {
          if (!e.equals(NullNode.getInstance())){
@@ -513,17 +602,17 @@ public class PlanDayService {
         Ebean.save(planShipmentItem);
 
 
-        /*if(Objects.isNull(planShipmentItem.getDeviationShipment())){
+        *//*if(Objects.isNull(planShipmentItem.getDeviationShipment())){
 
             planShipmentItem.setDeviationShipment(new DeviationShipment(-1,""));
         }
         if(Objects.isNull(planShipmentItem.getDeviationDelivery())){
             planShipmentItem.setDeviationDelivery(new DeviationDelivery(-1,""));
-        }*/
+        }*//*
 
         return  planShipmentItem;
     }
-
+*/
 
     @NotNull
     private Date dateFromStringInFormat_dd_MM_yyyy(String dateValue) {
