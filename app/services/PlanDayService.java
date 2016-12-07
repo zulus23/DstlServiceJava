@@ -240,16 +240,20 @@ public class PlanDayService {
         Long maxIdInPLan =  planShipment.getPlanRequestTransports().stream().max((p,n) -> p.getId().compareTo( n.getId())).map(e -> e.getId()).orElse(0L);
 
         Iterator<JsonNode> nodeIterator =  value.get("data").get("models").elements();
-      // Iterator<JsonNode> nodeIterator =  value.get("models").elements();
+        List<PlanRequestTransport> _temp = new ArrayList<>();
+
         while(nodeIterator.hasNext()){
             JsonNode valueInsert = nodeIterator.next();
             PlanRequestTransport planRequestTransport = createPlanShipmentRequestTransportItemFromJson(valueInsert,planShipment);
-
+            _temp.add(planRequestTransport);
           // PlanShipmentItem planShipmentItem = savePlanShipmentItem(valueInsert,planShipment);
             // TODO: 07.12.2016 Необходимо добавлять только уникальные элементы
           // planShipment.getPlanRequestTransports().add(planRequestTransport);
 
         }
+        planShipment.getPlanRequestTransports().addAll(_temp.stream().distinct().collect(toList()));
+
+
         try {
        //TODO Need uses transaction
       //     Ebean.beginTransaction();
