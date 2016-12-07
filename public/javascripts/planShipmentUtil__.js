@@ -461,7 +461,7 @@ var planShipmentUtil = (
                             statusDispatcher: {editable: false,type: "string"},
                             numberDispatcher: {editable: false,type: "string"},
                             dateCreateDispatcher: {editable: false,type:"string"},
-                         /*   numberOrder: {editable: false,type: "string"},
+                            numberOrder: {editable: false,type: "string"},
                             numberItem: {editable: false,type: "string"},
                             nameOrder: {editable: false,type: "string"},
                             nameCustomer: {editable: false,type: "string"},
@@ -470,7 +470,7 @@ var planShipmentUtil = (
                             sizePallet: {editable: false,type: "string"},
                             packingMethod: {editable: false,type: "string"},
                             countPlace: {editable: false,type: "number"},
-                            capacityOrder: {editable: false,type: "number"},*/
+                            capacityOrder: {editable: false,type: "number"},
                             typeTransport: {editable: false,type: "string"},
                             timeToLoad: {editable: false,type:"number"},
                             transportCompanyPlan: {editable:false,defaultValue:{rowPointer:"",name:""}},

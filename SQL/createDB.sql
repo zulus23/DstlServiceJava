@@ -87,6 +87,45 @@ ALTER  TABLE GTK_DSTL_PlanShipment ADD CONSTRAINT   UQ_GTK_DSTL_PlanShipment UNI
 --CREATE INDEX IX_GTK_DSTL_PlanShipment_IdService ON GTK_DSTL_PlanShipment (IdService);
 CREATE INDEX IX_GTK_DSTL_PlanShipment_IdServiceDate ON GTK_DSTL_PlanShipment (IdService,DatePlan);
 
+CREATE TABLE GTK_DSTL_PlanShipmentRequestTransport (
+  ID                          integer identity(1,1) not null PRIMARY KEY ,
+  IdPlan                      INTEGER NOT NULL,
+  IdEnterprise                INTEGER NOT NULL,
+  TypeShipment                VARCHAR(50),
+  DateShipmentDispatcher      DATE,
+  IdDeviationShipment         INTEGER NOT NULL DEFAULT  -1,
+  DateDeliveryDispatcher      DATE,
+  DateDeliveryFact            DATE,
+  IdDeviationDelivery         INTEGER NOT NULL DEFAULT  -1,
+  StatusDispatcher             VARCHAR(20),
+  NumberOrderDispatcher        VARCHAR(20),
+  DateCreateDispatcher         DATETIME2,
+  TypeTransport                VARCHAR(50),
+  TimeForLoading               INTEGER,
+  DeliveryCompanyPlan          VARCHAR(50),
+  DeliveryCompanyFact          VARCHAR(50),
+  Driver                       VARCHAR(50),
+  TimeLoading                  TIME,
+  BackManager                  VARCHAR(50),
+  Note                         VARCHAR(255),
+  CreateRequest               DATETIME2,
+  CreateBy                     INTEGER,
+  UpdateRequest               DATETIME2,
+  UpdateBy                     INTEGER
+)
+ALTER TABLE GTK_DSTL_PlanShipmentRequestTransport ADD CONSTRAINT FK_GTK_DSTL_PlanShipmentRequestTransportEnterprise foreign key (IdEnterprise)
+references GTK_DSTL_Enterprise (ID);
+ALTER TABLE GTK_DSTL_PlanShipmentRequestTransport ADD CONSTRAINT FK_GTK_DSTL_PlanShipmentRequestTransportPLan foreign key (IdPlan)
+references GTK_DSTL_PlanShipment (ID);
+
+ALTER TABLE GTK_DSTL_PlanShipmentRequestTransport ADD CONSTRAINT FK_GTK_DSTL_PlanShipmentRequestTransportDeviationShipment foreign key (IdDeviationShipment)
+references GTK_DSTL_Deviation (ID);
+ALTER TABLE GTK_DSTL_PlanShipmentRequestTransport ADD CONSTRAINT FK_GTK_DSTL_PlanShipmentRequestTransportDeviationDelivery foreign key (IdDeviationDelivery)
+references GTK_DSTL_Deviation (ID);
+ALTER TABLE GTK_DSTL_PlanShipmentItem ADD CONSTRAINT UQ_GTK_DSTL_PlanShipmentItemByPlan UNIQUE (idPlan,idEnterprise,NumberOrderDispatcher)
+
+
+
 CREATE TABLE  GTK_DSTL_PlanShipmentItem(
   ID                          integer identity(1,1) not null PRIMARY KEY ,
   IdPlan                      INTEGER NOT NULL,
@@ -181,6 +220,7 @@ GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_Enterprise TO report
 GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_WorkTime TO report
 GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_NormaTimeLoading TO report
 GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_PlanShipment TO report
+GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_PlanShipmentRequestTransport TO report
 GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_PlanShipmentItem TO report
 GRANT SELECT, INSERT,UPDATE,DELETE ON dbo.GTK_DSTL_Deviation TO report
 
