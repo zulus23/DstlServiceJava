@@ -251,7 +251,9 @@ public class PlanDayService {
           // planShipment.getPlanRequestTransports().add(planRequestTransport);
 
         }
-        planShipment.getPlanRequestTransports().addAll(_temp.stream().distinct().collect(toList()));
+
+        List<PlanRequestTransport> planRequestTransports =  _temp.stream().distinct().collect(toList());
+        planShipment.getPlanRequestTransports().addAll(planRequestTransports);
 
 
         try {
@@ -355,7 +357,11 @@ public class PlanDayService {
         Optional.ofNullable(value.findValue("note")).ifPresent(e -> {
             _newPlanRequestTransport.setNote(e.asText());
         });
-
+        Optional.ofNullable(value.findValue("packingMethod")).ifPresent( e -> {
+            _newPlanRequestTransport.setPackingMethod(e.asText());
+            _newPlanRequestTransport.setTimeToLoad(dstlService.timeForLoadingByTypePacking(e.asText(),enterprise));
+                }
+        );
         return _newPlanRequestTransport;
     }
    /* public PlanShipmentItem savePlanShipmentItem(JsonNode value,PlanShipment planShipment) throws PlanShipmentItemException{

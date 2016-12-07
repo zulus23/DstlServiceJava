@@ -35,9 +35,14 @@ create table gtk_dstl_planshipmentrequesttransport (
   identerprise                  integer,
   typeshipment                  varchar(255),
   placeshipment                 varchar(255),
+  dateshipmentdispatcher        date,
   statusdispatcher              varchar(255),
   numberorderdispatcher         varchar(255),
   datecreatedispatcher          datetime2,
+  datedeliverydispatcher        date,
+  datedeliveryfact              date,
+  iddeviationshipment           integer,
+  iddeviationdelivery           integer,
   typetransport                 varchar(255),
   timeforloading                integer,
   deliverycompanyplan           varchar(255),
@@ -68,6 +73,12 @@ create table gtk_dstl_planshipment (
 create table gtk_dstl_planshipmentitem (
   id                            numeric(19) identity(1,1) not null,
   idrequesttransport            numeric(19),
+  identerprise                  integer,
+  typeshipment                  varchar(255),
+  iddeviationshipment           integer,
+  datedeliverydispatcher        date,
+  datedeliveryfact              date,
+  iddeviationdelivery           integer,
   existinstore                  bit default 0,
   datetostore                   datetime2,
   placeshipment                 varchar(255),
@@ -121,11 +132,17 @@ create index ix_gtk_dstl_planshipmentrequesttransport_idplan on gtk_dstl_planshi
 alter table gtk_dstl_planshipmentrequesttransport add constraint fk_gtk_dstl_planshipmentrequesttransport_identerprise foreign key (identerprise) references gtk_dstl_enterprise (id);
 create index ix_gtk_dstl_planshipmentrequesttransport_identerprise on gtk_dstl_planshipmentrequesttransport (identerprise);
 
-alter table gtk_dstl_planshipmentrequesttransport add constraint fk_gtk_dstl_planshipmentrequesttransport_deliverycompanyp_3 foreign key (deliverycompanyplan) references gtk_dstl_transportcompany (rowpointer);
-create index ix_gtk_dstl_planshipmentrequesttransport_deliverycompanyp_3 on gtk_dstl_planshipmentrequesttransport (deliverycompanyplan);
+alter table gtk_dstl_planshipmentrequesttransport add constraint fk_gtk_dstl_planshipmentrequesttransport_iddeviationshipm_3 foreign key (iddeviationshipment) references gtk_dstl_deviation (id);
+create index ix_gtk_dstl_planshipmentrequesttransport_iddeviationshipm_3 on gtk_dstl_planshipmentrequesttransport (iddeviationshipment);
 
-alter table gtk_dstl_planshipmentrequesttransport add constraint fk_gtk_dstl_planshipmentrequesttransport_deliverycompanyf_4 foreign key (deliverycompanyfact) references gtk_dstl_transportcompany (rowpointer);
-create index ix_gtk_dstl_planshipmentrequesttransport_deliverycompanyf_4 on gtk_dstl_planshipmentrequesttransport (deliverycompanyfact);
+alter table gtk_dstl_planshipmentrequesttransport add constraint fk_gtk_dstl_planshipmentrequesttransport_iddeviationdeliv_4 foreign key (iddeviationdelivery) references gtk_dstl_deviation (id);
+create index ix_gtk_dstl_planshipmentrequesttransport_iddeviationdeliv_4 on gtk_dstl_planshipmentrequesttransport (iddeviationdelivery);
+
+alter table gtk_dstl_planshipmentrequesttransport add constraint fk_gtk_dstl_planshipmentrequesttransport_deliverycompanyp_5 foreign key (deliverycompanyplan) references gtk_dstl_transportcompany (rowpointer);
+create index ix_gtk_dstl_planshipmentrequesttransport_deliverycompanyp_5 on gtk_dstl_planshipmentrequesttransport (deliverycompanyplan);
+
+alter table gtk_dstl_planshipmentrequesttransport add constraint fk_gtk_dstl_planshipmentrequesttransport_deliverycompanyf_6 foreign key (deliverycompanyfact) references gtk_dstl_transportcompany (rowpointer);
+create index ix_gtk_dstl_planshipmentrequesttransport_deliverycompanyf_6 on gtk_dstl_planshipmentrequesttransport (deliverycompanyfact);
 
 alter table gtk_dstl_planshipmentrequesttransport add constraint fk_gtk_dstl_planshipmentrequesttransport_driver foreign key (driver) references gtk_all_car (driverref);
 create index ix_gtk_dstl_planshipmentrequesttransport_driver on gtk_dstl_planshipmentrequesttransport (driver);
@@ -147,6 +164,15 @@ create index ix_gtk_dstl_planshipment_updateby on gtk_dstl_planshipment (updateb
 
 alter table gtk_dstl_planshipmentitem add constraint fk_gtk_dstl_planshipmentitem_idrequesttransport foreign key (idrequesttransport) references gtk_dstl_planshipmentrequesttransport (id);
 create index ix_gtk_dstl_planshipmentitem_idrequesttransport on gtk_dstl_planshipmentitem (idrequesttransport);
+
+alter table gtk_dstl_planshipmentitem add constraint fk_gtk_dstl_planshipmentitem_identerprise foreign key (identerprise) references gtk_dstl_enterprise (id);
+create index ix_gtk_dstl_planshipmentitem_identerprise on gtk_dstl_planshipmentitem (identerprise);
+
+alter table gtk_dstl_planshipmentitem add constraint fk_gtk_dstl_planshipmentitem_iddeviationshipment foreign key (iddeviationshipment) references gtk_dstl_deviation (id);
+create index ix_gtk_dstl_planshipmentitem_iddeviationshipment on gtk_dstl_planshipmentitem (iddeviationshipment);
+
+alter table gtk_dstl_planshipmentitem add constraint fk_gtk_dstl_planshipmentitem_iddeviationdelivery foreign key (iddeviationdelivery) references gtk_dstl_deviation (id);
+create index ix_gtk_dstl_planshipmentitem_iddeviationdelivery on gtk_dstl_planshipmentitem (iddeviationdelivery);
 
 alter table gtk_dstl_planshipmentitem add constraint fk_gtk_dstl_planshipmentitem_createby foreign key (createby) references gtk_dstl_user (id);
 create index ix_gtk_dstl_planshipmentitem_createby on gtk_dstl_planshipmentitem (createby);
@@ -172,11 +198,17 @@ drop index if exists ix_gtk_dstl_planshipmentrequesttransport_idplan;
 IF OBJECT_ID('fk_gtk_dstl_planshipmentrequesttransport_identerprise', 'F') IS NOT NULL alter table gtk_dstl_planshipmentrequesttransport drop constraint fk_gtk_dstl_planshipmentrequesttransport_identerprise;
 drop index if exists ix_gtk_dstl_planshipmentrequesttransport_identerprise;
 
-IF OBJECT_ID('fk_gtk_dstl_planshipmentrequesttransport_deliverycompanyp_3', 'F') IS NOT NULL alter table gtk_dstl_planshipmentrequesttransport drop constraint fk_gtk_dstl_planshipmentrequesttransport_deliverycompanyp_3;
-drop index if exists ix_gtk_dstl_planshipmentrequesttransport_deliverycompanyp_3;
+IF OBJECT_ID('fk_gtk_dstl_planshipmentrequesttransport_iddeviationshipm_3', 'F') IS NOT NULL alter table gtk_dstl_planshipmentrequesttransport drop constraint fk_gtk_dstl_planshipmentrequesttransport_iddeviationshipm_3;
+drop index if exists ix_gtk_dstl_planshipmentrequesttransport_iddeviationshipm_3;
 
-IF OBJECT_ID('fk_gtk_dstl_planshipmentrequesttransport_deliverycompanyf_4', 'F') IS NOT NULL alter table gtk_dstl_planshipmentrequesttransport drop constraint fk_gtk_dstl_planshipmentrequesttransport_deliverycompanyf_4;
-drop index if exists ix_gtk_dstl_planshipmentrequesttransport_deliverycompanyf_4;
+IF OBJECT_ID('fk_gtk_dstl_planshipmentrequesttransport_iddeviationdeliv_4', 'F') IS NOT NULL alter table gtk_dstl_planshipmentrequesttransport drop constraint fk_gtk_dstl_planshipmentrequesttransport_iddeviationdeliv_4;
+drop index if exists ix_gtk_dstl_planshipmentrequesttransport_iddeviationdeliv_4;
+
+IF OBJECT_ID('fk_gtk_dstl_planshipmentrequesttransport_deliverycompanyp_5', 'F') IS NOT NULL alter table gtk_dstl_planshipmentrequesttransport drop constraint fk_gtk_dstl_planshipmentrequesttransport_deliverycompanyp_5;
+drop index if exists ix_gtk_dstl_planshipmentrequesttransport_deliverycompanyp_5;
+
+IF OBJECT_ID('fk_gtk_dstl_planshipmentrequesttransport_deliverycompanyf_6', 'F') IS NOT NULL alter table gtk_dstl_planshipmentrequesttransport drop constraint fk_gtk_dstl_planshipmentrequesttransport_deliverycompanyf_6;
+drop index if exists ix_gtk_dstl_planshipmentrequesttransport_deliverycompanyf_6;
 
 IF OBJECT_ID('fk_gtk_dstl_planshipmentrequesttransport_driver', 'F') IS NOT NULL alter table gtk_dstl_planshipmentrequesttransport drop constraint fk_gtk_dstl_planshipmentrequesttransport_driver;
 drop index if exists ix_gtk_dstl_planshipmentrequesttransport_driver;
@@ -198,6 +230,15 @@ drop index if exists ix_gtk_dstl_planshipment_updateby;
 
 IF OBJECT_ID('fk_gtk_dstl_planshipmentitem_idrequesttransport', 'F') IS NOT NULL alter table gtk_dstl_planshipmentitem drop constraint fk_gtk_dstl_planshipmentitem_idrequesttransport;
 drop index if exists ix_gtk_dstl_planshipmentitem_idrequesttransport;
+
+IF OBJECT_ID('fk_gtk_dstl_planshipmentitem_identerprise', 'F') IS NOT NULL alter table gtk_dstl_planshipmentitem drop constraint fk_gtk_dstl_planshipmentitem_identerprise;
+drop index if exists ix_gtk_dstl_planshipmentitem_identerprise;
+
+IF OBJECT_ID('fk_gtk_dstl_planshipmentitem_iddeviationshipment', 'F') IS NOT NULL alter table gtk_dstl_planshipmentitem drop constraint fk_gtk_dstl_planshipmentitem_iddeviationshipment;
+drop index if exists ix_gtk_dstl_planshipmentitem_iddeviationshipment;
+
+IF OBJECT_ID('fk_gtk_dstl_planshipmentitem_iddeviationdelivery', 'F') IS NOT NULL alter table gtk_dstl_planshipmentitem drop constraint fk_gtk_dstl_planshipmentitem_iddeviationdelivery;
+drop index if exists ix_gtk_dstl_planshipmentitem_iddeviationdelivery;
 
 IF OBJECT_ID('fk_gtk_dstl_planshipmentitem_createby', 'F') IS NOT NULL alter table gtk_dstl_planshipmentitem drop constraint fk_gtk_dstl_planshipmentitem_createby;
 drop index if exists ix_gtk_dstl_planshipmentitem_createby;

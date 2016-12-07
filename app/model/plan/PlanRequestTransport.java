@@ -308,4 +308,27 @@ public class PlanRequestTransport extends Model{
     public void setDateDeliveryFact(Date dateDeliveryFact) {
         this.dateDeliveryFact = dateDeliveryFact;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PlanRequestTransport)) return false;
+
+        PlanRequestTransport that = (PlanRequestTransport) o;
+
+        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
+        if (!getPlanShipment().equals(that.getPlanShipment())) return false;
+        if (!getSenderEnterprise().equals(that.getSenderEnterprise())) return false;
+        return getNumberDispatcher().equals(that.getNumberDispatcher());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + getPlanShipment().hashCode();
+        result = 31 * result + getSenderEnterprise().hashCode();
+        result = 31 * result + getNumberDispatcher().hashCode();
+        return result;
+    }
 }
