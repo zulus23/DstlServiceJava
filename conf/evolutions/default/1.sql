@@ -32,6 +32,7 @@ create table gtk_dstl_normatimeloading (
 create table gtk_dstl_planshipmentrequesttransport (
   id                            numeric(19) identity(1,1) not null,
   idplan                        numeric(19),
+  inplanload                    bit default 0,
   identerprise                  integer,
   typeshipment                  varchar(255),
   placeshipment                 varchar(255),

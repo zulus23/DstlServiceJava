@@ -31,6 +31,9 @@ public class PlanRequestTransport extends Model{
     @JoinColumn(name = "IDPLAN")
     @com.fasterxml.jackson.annotation.JsonIgnore
     private PlanShipment planShipment;
+    @Column(name = "InPlanLoad")
+    private Boolean hasInPlanLoad;
+
     @ManyToOne
     @JoinColumn(name = "IdEnterprise")
     private Enterprise senderEnterprise;
@@ -329,6 +332,14 @@ public class PlanRequestTransport extends Model{
 
     public void setPlanShipmentItems(List<PlanShipmentItem> planShipmentItems) {
         this.planShipmentItems = planShipmentItems;
+    }
+
+    public Boolean getHasInPlanLoad() {
+        return hasInPlanLoad;
+    }
+
+    public void setHasInPlanLoad(Boolean hasInPlanLoad) {
+        this.hasInPlanLoad = hasInPlanLoad;
     }
 
     @Override

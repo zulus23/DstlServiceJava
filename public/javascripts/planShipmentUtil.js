@@ -450,7 +450,7 @@ var planShipmentUtil = (
                             idPlan: {editable: false,type:"number"},
                             senderEnterprise: { editable: false/*,defaultValue: { id: 0,name:''}*/} ,
                             typeShipment: {editable: false,type: "string"},
-                            planLoad: {editable: false,type: "boolean"},
+                            hasInPlanLoad: {editable: false,type: "boolean"},
                             dateShipmentDispatcher: {editable: false,type: "date",format:"{0:dd-MM-yyyy}"},
                             deviationShipment: {/*defaultValue:{id:-1,description:''},*/ nullable: true},
                             dateDeliveryDispatcher: {editable: false,type: "string"},
@@ -867,18 +867,16 @@ var planShipmentUtil = (
                         width: "100px",
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-                        //filterable: false,
                         groupable: false
                     },
 
                     {
-                        field: "planLoad",
+                        field: "hasInPlanLoad",
                         title: "В плане погрузки",
                         width: "70px",
-
                         headerAttributes: gridUtils.headerFormat,
-                        attributes: gridUtils.columnFormat
-
+                        attributes: gridUtils.columnFormat,
+                        template: '<input type="checkbox" #= hasInPlanLoad ? "checked=checked" : "" # disabled="disabled" ></input>'
                     },
                     {
                         field: "dateShipmentDispatcher",

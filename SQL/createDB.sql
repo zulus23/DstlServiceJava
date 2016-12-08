@@ -93,6 +93,7 @@ CREATE TABLE GTK_DSTL_PlanShipmentRequestTransport (
   IdEnterprise                INTEGER NOT NULL,
   PlaceShipment               VARCHAR(50),
   TypeShipment                VARCHAR(50),
+  InPlanLoad                  BIT DEFAULT  0,
   KindPackage                  VARCHAR(50),
   DateShipmentDispatcher      DATE,
   IdDeviationShipment         INTEGER ,

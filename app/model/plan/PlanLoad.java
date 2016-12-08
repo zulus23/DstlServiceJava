@@ -8,6 +8,10 @@ import com.avaje.ebean.Model;
 
 
 public class PlanLoad extends Model {
+
+   private  Long id;
+
+
    public static final Finder<Integer,PlanLoad> find = new Finder<Integer, PlanLoad>(PlanLoad.class);
 
 
