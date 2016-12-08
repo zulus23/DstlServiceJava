@@ -252,8 +252,18 @@ public class PlanDayService {
 
         }
 
-        List<PlanRequestTransport> planRequestTransports =  _temp.stream().distinct().collect(toList());
-        planShipment.getPlanRequestTransports().addAll(planRequestTransports);
+        PlanRequestTransport planRequestTransports =  _temp.stream().distinct().findFirst().get();
+        // TODO: 08.12.2016  Выбрать данные из источника по номеру заявки и предприятию
+
+        List<PlanShipmentItem>  _planShipmentItems = journalShipmentList(nameServiceDstl)
+                                                     .stream()
+                                                     .filter(e -> e.getSenderEnterprise().equals(_enterprise) && e.getNumberDispatcher().equals(planRequestTransports.getNumberDispatcher()))
+                                                     .map(this::createPlanShipmentItem)
+                                                     .collect(toList());
+
+        planRequestTransports.getPlanShipmentItems().addAll(_planShipmentItems);
+
+        planShipment.getPlanRequestTransports().add(planRequestTransports);
 
 
         try {
@@ -364,6 +374,24 @@ public class PlanDayService {
         );
         return _newPlanRequestTransport;
     }
+    public PlanShipmentItem createPlanShipmentItem(JournalShipment journalShipment){
+        PlanShipmentItem _temp = new PlanShipmentItem();
+        _temp.setDateToStore(journalShipment.getDateToStore());
+        _temp.setExistInStore(journalShipment.getExistInStore());
+        _temp.setSizeOrder(journalShipment.getSizeOrder());
+        _temp.setCodeCustomer(journalShipment.getCodeCustomer());
+        _temp.setCostTrip(journalShipment.getCostTrip());
+        _temp.setCountPlace(journalShipment.getCountPlace());
+        _temp.setDistanceDelivery(journalShipment.getDistanceDelivery());
+        _temp.setLineOrder(journalShipment.getLineOrder());
+        _temp.setNameCustomer(journalShipment.getNameCustomer());
+        _temp.setNameOrder(journalShipment.getNameOrder());
+        _temp.setNumberOrder(journalShipment.getNumberOrder());
+        _temp.setSizePallet(journalShipment.getSizePallet());
+        return  _temp;
+    }
+
+
    /* public PlanShipmentItem savePlanShipmentItem(JsonNode value,PlanShipment planShipment) throws PlanShipmentItemException{
         Enterprise  enterprise = dstlService.getEnterprise(value.findValue("senderEnterprise").findValue("name").asText());
         PlanShipmentItem _newPlanShipmentItem = new PlanShipmentItem();
@@ -650,10 +678,10 @@ public class PlanDayService {
 
             JsonNode _delete = nodeIterator.next();
             //PlanShipmentItem planShipmentItem =  PlanShipmentItem.find.where().eq("id",_delete.get("id").asInt()).findUnique();
-            List<PlanShipmentItem> planShipmentItems =  PlanShipmentItem.find.where().eq("senderEnterprise.id",_delete.get("senderEnterprise").get("id").asInt())
+            List<PlanRequestTransport> planRequestTransports =  PlanRequestTransport.find.where().eq("senderEnterprise.id",_delete.get("senderEnterprise").get("id").asInt())
                                           .eq("numberDispatcher",_delete.get("numberDispatcher").textValue()).findList();
-            i = planShipmentItems.size();
-            planShipmentItems.stream().forEach(e -> Ebean.delete(e));
+            i = planRequestTransports.size();
+            planRequestTransports.stream().forEach(e -> Ebean.delete(e));
 
         }
 

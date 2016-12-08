@@ -81,6 +81,12 @@ public class PlanRequestTransport extends Model{
     @JoinColumn(name = "Driver")
     private DriverTransportCompany driverTransportCompany;
 
+    @OneToMany(mappedBy = "planRequestTransport",cascade = CascadeType.ALL)
+    private List<PlanShipmentItem> planShipmentItems;
+
+    @Column(name = "KindPackage")
+    private String packingMethod;
+
     @Column(name = "TimeLoading")
     @Temporal(TemporalType.TIME)
     private Time timeLoad;
@@ -309,6 +315,21 @@ public class PlanRequestTransport extends Model{
         this.dateDeliveryFact = dateDeliveryFact;
     }
 
+    public String getPackingMethod() {
+        return packingMethod;
+    }
+
+    public void setPackingMethod(String packingMethod) {
+        this.packingMethod = packingMethod;
+    }
+
+    public List<PlanShipmentItem> getPlanShipmentItems() {
+        return planShipmentItems;
+    }
+
+    public void setPlanShipmentItems(List<PlanShipmentItem> planShipmentItems) {
+        this.planShipmentItems = planShipmentItems;
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -31,6 +31,7 @@ public class JournalShipment {
     private String statusDispatcher;
     private String numberOrder;
     private String numberItem;
+    private Integer lineOrder;
     private String nameOrder;
     private String nameCustomer;
     private String codeCustomer;
@@ -46,6 +47,9 @@ public class JournalShipment {
     private String typeTransport;
     private String managerBackOffice;
     private String note;
+
+    private Double costTrip;
+    private Double distanceDelivery;
 
 
     public Long getId() {
@@ -270,6 +274,30 @@ public class JournalShipment {
 
     public void setTransportCompanyPlan(TransportCompany transportCompanyPlan) {
         this.transportCompanyPlan = transportCompanyPlan;
+    }
+
+    public Double getCostTrip() {
+        return costTrip;
+    }
+
+    public void setCostTrip(Double costTrip) {
+        this.costTrip = costTrip;
+    }
+
+    public Double getDistanceDelivery() {
+        return distanceDelivery;
+    }
+
+    public void setDistanceDelivery(Double distanceDelivery) {
+        this.distanceDelivery = distanceDelivery;
+    }
+
+    public Integer getLineOrder() {
+        return lineOrder;
+    }
+
+    public void setLineOrder(Integer lineOrder) {
+        this.lineOrder = lineOrder;
     }
 
     @Override

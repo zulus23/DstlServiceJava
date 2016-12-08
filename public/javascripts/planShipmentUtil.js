@@ -837,12 +837,14 @@ var planShipmentUtil = (
                 sortable: true,
                 filterable: true,
                 resizable: true,
-               // selectable:"true",
                 columnMenu: true,
                 editable: true,
                 change:onChange,
+                detailInit: detailInit,
                 dataBound: function (e) {
                     $("#gridView").find('.k-icon.k-i-collapse').trigger('click');
+                    this.expandRow(this.tbody.find("tr.k-master-row").first());
+
                 },
 
                 columns: [
@@ -855,8 +857,8 @@ var planShipmentUtil = (
                         attributes: gridUtils.columnFormat,
                         groupable: false,
                         editable:false,
-                        locked: true,
-                        lockable: false,
+                       /* locked: true,
+                        lockable: false,*/
                       //  editor: enterpriseDropDownEditor, template: "#=senderEnterprise.name#"
                     },
                     {
@@ -868,15 +870,7 @@ var planShipmentUtil = (
                         //filterable: false,
                         groupable: false
                     },
-                  /*  {
-                        field: "",
-                        title: "Дата плана",
-                        width: "60px",
-                        headerAttributes: gridUtils.headerFormat,
-                        attributes: gridUtils.columnFormat,
-                        //filterable: false,
-                        groupable: false
-                    },*/
+
                     {
                         field: "planLoad",
                         title: "В плане погрузки",
@@ -938,26 +932,7 @@ var planShipmentUtil = (
                         editor: deviationDeliveryDropDownEditor, template: "#=planShipmentUtil.isNotNull(deviationDelivery) ? deviationDelivery.description : ''#"
 
                     },
-                /*    {
-                        field: "existInStore",
-                        title: "Наличие на складе",
-                        width: "80px",
-                        headerAttributes: gridUtils.headerFormat,
-                        attributes: gridUtils.columnFormat,
-                        filterable: false,
-                        groupable: false,
-                        template: '<input type="checkbox" #= existInStore ? "checked=checked" : "" # disabled="disabled" ></input>'
-                    },
-                    {
-                        field: "dateToStore",
-                        title: "Сдача на склад",
-                        width: "100px",
-                        filterable: false,
-                        headerAttributes: gridUtils.headerFormat,
-                        attributes: gridUtils.columnFormat,
-                        groupable: false,
-                        //template:'#=  moment(dateToStore).format("DD-MM-YYYY HH:mm")#'
-                    },*/
+
                     {
                         field: "placeShipment",
                         title: "Площадка отгрузки",
@@ -996,7 +971,134 @@ var planShipmentUtil = (
                         groupable: false,
                       //  template:'#=  moment(dateCreateDispatcher).format("DD-MM-YYYY HH:mm")#'
                     },
-                   /* {
+
+                    {
+                        field: "packingMethod",
+                        title: "Способ упаковки",
+                        width: "80px",
+                        filterable: false,
+                        headerAttributes: gridUtils.headerFormat,
+                        attributes: gridUtils.columnFormat,
+
+                    },
+
+                    {
+                        field: "typeTransport",
+                        title: "Вид транспорта",
+                        width: "80px",
+                        filterable: false,
+                        headerAttributes: gridUtils.headerFormat,
+                        attributes: gridUtils.columnFormat,
+
+                    },
+                    {
+                        field: "timeToLoad",
+                        title: "Время на погрузку",
+                        width: "80px",
+                        filterable: false,
+                        /*locked: true,
+                        lockable: false,*/
+                        aggregates: ["sum"],
+                        headerAttributes: gridUtils.headerFormat,
+                        attributes: gridUtils.columnFormat,
+                        footerTemplate: "<div class = '#=planShipmentUtil.isNoMoreWorkTimeLoad(sum)? 'table-footer-cell-red' :'table-footer-cell-blue'#'>#= timeLoadInHours(data)# </div> ",
+                        footerAttributes: {
+                            //class: "# =planShipmentUtil.isNoMoreWorkTimeLoad(value)? 'table-footer-cell-red' : '' # ",
+                            class: "table-footer-cell",
+                            //style: "# =planShipmentUtil.isNoMoreWorkTimeLoad(value) ? 'color: red;text-align: right; font-size: 14px ':'color:blue;text-align: right; font-size: 14px'#; "
+                          //  style: 'color:# =planShipmentUtil.isNoMoreWorkTimeLoad(value)? blue:red #;text-align: right; font-size: 14px'
+                        }
+
+                    },
+                    {
+                        field: "transportCompanyPlan",
+                        title: "Наименование ТЭК план",
+                        width: "140px",
+                        filterable: false,
+                        headerAttributes: gridUtils.headerFormat,
+                        attributes: gridUtils.columnFormat,
+                        editor:transportCompanyDropDownEditor, template: "#=planShipmentUtil.isNotNull(transportCompanyPlan) ? transportCompanyPlan.name : ''#"
+
+                    },
+                    {
+                        field: "transportCompanyFact",
+                        title: "Наименование ТЭК факт",
+                        width: "140px",
+                        filterable: false,
+                        headerAttributes: gridUtils.headerFormat,
+                        attributes: gridUtils.columnFormat,
+                        editor:transportCompanyDropDownEditor, template: "#=planShipmentUtil.isNotNull(transportCompanyFact) ? transportCompanyFact.name : ''#"
+
+                    },
+                    {
+                        //field: "driverTransportCompany",
+                        title: "Гос. номер ТС",
+                        width: "80px",
+                        filterable: false,
+                        headerAttributes: gridUtils.headerFormat,
+                        attributes: gridUtils.columnFormat,
+                        template: "#=planShipmentUtil.isNotNull(driverTransportCompany) ? driverTransportCompany.numberTruck : ''#"
+                    },
+                    {
+                        field: "driverTransportCompany",
+                        title: "Водитель",
+                        width: "180px",
+                        filterable: false,
+                        headerAttributes: gridUtils.headerFormat,
+                        attributes: gridUtils.columnFormat,
+                        editor:driverTransportCompanyDropDownEditor,
+                        template: "#=planShipmentUtil.isNotNull(driverTransportCompany) ? driverTransportCompany.fullName : ''#"
+                    },
+                    {
+                       // field: "driverTransportCompany",
+                        title: "Телефон водителя",
+                        width: "80px",
+                        filterable: false,
+                        headerAttributes: gridUtils.headerFormat,
+                        attributes: gridUtils.columnFormat,
+                        template: "#=planShipmentUtil.isNotNull(driverTransportCompany) ? driverTransportCompany.phone : ''#"
+                    },
+
+                    {
+                        field: "timeLoad",
+                        title: "Время погрузки ТС",
+                        width: "80px",
+                        filterable: false,
+                        headerAttributes: gridUtils.headerFormat,
+                        attributes: gridUtils.columnFormat,
+                        format:"{0:HH:mm}", editor: timeEditor
+
+                    },
+                    {
+                        field: "managerBackOffice",
+                        title: "Менеджер Back-Office",
+                        width: "80px",
+                        filterable: false,
+                        headerAttributes: gridUtils.headerFormat,
+                        attributes: gridUtils.columnFormat,
+
+                    },
+                    {
+                        field: "note",
+                        title: "Примечание",
+                        width: "80px",
+                        filterable: false,
+                        headerAttributes: gridUtils.headerFormat,
+                        attributes: gridUtils.columnFormat,
+
+                    }
+
+
+                ]
+            }).data("kendoGrid");
+        }
+
+        function detailInit(e) {
+            $("<div/>").appendTo(e.detailCell).kendoGrid({
+                dataSource:e.data.planShipmentItems,
+
+                columns: [
+                    {
                         field: "numberOrder",
                         title: "№ заказа",
                         width: "70px",
@@ -1087,91 +1189,6 @@ var planShipmentUtil = (
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
 
-                    },*/
-                    {
-                        field: "typeTransport",
-                        title: "Вид транспорта",
-                        width: "80px",
-                        filterable: false,
-                        headerAttributes: gridUtils.headerFormat,
-                        attributes: gridUtils.columnFormat,
-
-                    },
-                    {
-                        field: "timeToLoad",
-                        title: "Время на погрузку",
-                        width: "80px",
-                        filterable: false,
-                        locked: true,
-                        lockable: false,
-                        aggregates: ["sum"],
-                        headerAttributes: gridUtils.headerFormat,
-                        attributes: gridUtils.columnFormat,
-                        footerTemplate: "<div class = '#=planShipmentUtil.isNoMoreWorkTimeLoad(sum)? 'table-footer-cell-red' :'table-footer-cell-blue'#'>#= timeLoadInHours(data)# </div> ",
-                        footerAttributes: {
-                            //class: "# =planShipmentUtil.isNoMoreWorkTimeLoad(value)? 'table-footer-cell-red' : '' # ",
-                            class: "table-footer-cell",
-                            //style: "# =planShipmentUtil.isNoMoreWorkTimeLoad(value) ? 'color: red;text-align: right; font-size: 14px ':'color:blue;text-align: right; font-size: 14px'#; "
-                          //  style: 'color:# =planShipmentUtil.isNoMoreWorkTimeLoad(value)? blue:red #;text-align: right; font-size: 14px'
-                        }
-
-                    },
-                    {
-                        field: "transportCompanyPlan",
-                        title: "Наименование ТЭК план",
-                        width: "140px",
-                        filterable: false,
-                        headerAttributes: gridUtils.headerFormat,
-                        attributes: gridUtils.columnFormat,
-                        editor:transportCompanyDropDownEditor, template: "#=planShipmentUtil.isNotNull(transportCompanyPlan) ? transportCompanyPlan.name : ''#"
-
-                    },
-                    {
-                        field: "transportCompanyFact",
-                        title: "Наименование ТЭК факт",
-                        width: "140px",
-                        filterable: false,
-                        headerAttributes: gridUtils.headerFormat,
-                        attributes: gridUtils.columnFormat,
-                        editor:transportCompanyDropDownEditor, template: "#=planShipmentUtil.isNotNull(transportCompanyFact) ? transportCompanyFact.name : ''#"
-
-                    },
-                    {
-                        //field: "driverTransportCompany",
-                        title: "Гос. номер ТС",
-                        width: "80px",
-                        filterable: false,
-                        headerAttributes: gridUtils.headerFormat,
-                        attributes: gridUtils.columnFormat,
-                        template: "#=planShipmentUtil.isNotNull(driverTransportCompany) ? driverTransportCompany.numberTruck : ''#"
-                    },
-                    {
-                        field: "driverTransportCompany",
-                        title: "Водитель",
-                        width: "180px",
-                        filterable: false,
-                        headerAttributes: gridUtils.headerFormat,
-                        attributes: gridUtils.columnFormat,
-                        editor:driverTransportCompanyDropDownEditor,
-                        template: "#=planShipmentUtil.isNotNull(driverTransportCompany) ? driverTransportCompany.fullName : ''#"
-                    },
-                    {
-                       // field: "driverTransportCompany",
-                        title: "Телефон водителя",
-                        width: "80px",
-                        filterable: false,
-                        headerAttributes: gridUtils.headerFormat,
-                        attributes: gridUtils.columnFormat,
-                        template: "#=planShipmentUtil.isNotNull(driverTransportCompany) ? driverTransportCompany.phone : ''#"
-                    },
-                 /*   {
-                        field: "numberGate",
-                        title: "Доклевеллер",
-                        width: "80px",
-                        filterable: false,
-                        headerAttributes: gridUtils.headerFormat,
-                        attributes: gridUtils.columnFormat,
-
                     },
                     {
                         field: "deliveryDistance",
@@ -1190,40 +1207,11 @@ var planShipmentUtil = (
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
 
-                    },*/
-                    {
-                        field: "timeLoad",
-                        title: "Время погрузки ТС",
-                        width: "80px",
-                        filterable: false,
-                        headerAttributes: gridUtils.headerFormat,
-                        attributes: gridUtils.columnFormat,
-                        format:"{0:HH:mm}", editor: timeEditor
-
                     },
-                    {
-                        field: "managerBackOffice",
-                        title: "Менеджер Back-Office",
-                        width: "80px",
-                        filterable: false,
-                        headerAttributes: gridUtils.headerFormat,
-                        attributes: gridUtils.columnFormat,
-
-                    },
-                    {
-                        field: "note",
-                        title: "Примечание",
-                        width: "80px",
-                        filterable: false,
-                        headerAttributes: gridUtils.headerFormat,
-                        attributes: gridUtils.columnFormat,
-
-                    }
-
-
                 ]
-            }).data("kendoGrid");
+            });
         }
+
 
         var addToPlan = function (item) {
 

@@ -34,26 +34,9 @@ public class PlanShipmentItem  extends Model {
     @JoinColumn(name = "IDRequestTransport")
     @com.fasterxml.jackson.annotation.JsonIgnore
     private PlanRequestTransport planRequestTransport;
-    private PlanShipment planShipment;
-    @ManyToOne
-    @JoinColumn(name = "IdEnterprise")
-    private Enterprise senderEnterprise;
-    @Column(name = "TypeShipment")
-    private String typeShipment;
-    /*ССылка на план погрузки*/
-    @Transient
-    private Boolean planLoad;
 
-    @ManyToOne
-    @JoinColumn(name = "IdDeviationShipment")
-    private DeviationShipment deviationShipment;
-    @Column(name = "DateDeliveryDispatcher")
-    private Date dateDeliveryDispatcher;
-    @Column(name = "DateDeliveryFact")
-    private Date dateDeliveryFact;
-    @ManyToOne
-    @JoinColumn(name = "IdDeviationDelivery")
-    private DeviationDelivery deviationDelivery;
+
+
     @Column(name = "ExistInStore")
     private Boolean existInStore;
     @Column(name = "DateToStore")
@@ -62,8 +45,7 @@ public class PlanShipmentItem  extends Model {
             pattern = "dd-MM-yyyy hh:mm",
             timezone="Europe/Moscow")
     private Timestamp dateToStore;
-    @Column(name = "PlaceShipment")
-    private String placeShipment;
+
     @Column(name = "Co_Num")
     private String numberOrder;
     @Column(name = "Co_Line")
@@ -91,10 +73,7 @@ public class PlanShipmentItem  extends Model {
     private String packingMethod;
     @Column(name = "CountPlace")
     private Integer countPlace;
-    @Column(name = "Co_Capacity")
-    private String capacityOrder;
-    @Column(name = "NumberGate")
-    private Integer numberGate;
+
     @Column(name = "DistanceDeliver")
     private Double distanceDelivery;
     @Column(name = "CostDelivery")
@@ -148,13 +127,6 @@ public class PlanShipmentItem  extends Model {
         this.dateToStore = dateToStore;
     }
 
-    public String getPlaceShipment() {
-        return placeShipment;
-    }
-
-    public void setPlaceShipment(String placeShipment) {
-        this.placeShipment = placeShipment;
-    }
 
     public String getNumberOrder() {
         return numberOrder;
@@ -252,21 +224,7 @@ public class PlanShipmentItem  extends Model {
         this.countPlace = countPlace;
     }
 
-    public String getCapacityOrder() {
-        return capacityOrder;
-    }
 
-    public void setCapacityOrder(String capacityOrder) {
-        this.capacityOrder = capacityOrder;
-    }
-
-    public Integer getNumberGate() {
-        return numberGate;
-    }
-
-    public void setNumberGate(Integer numberGate) {
-        this.numberGate = numberGate;
-    }
 
     public Double getDistanceDelivery() {
         return distanceDelivery;
