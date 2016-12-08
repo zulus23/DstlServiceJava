@@ -422,8 +422,9 @@ var planShipmentUtil = (
 
                     if (e.action === "itemchange" && e.field === "driverTransportCompany"){
                         var model = e.items[0];
-                        $("#planDayGrid").find("tr[data-uid='" + model.uid + "'] td:eq(30)").text(model.driverTransportCompany.phone);
-                        $("#planDayGrid").find("tr[data-uid='" + model.uid + "'] td:eq(28)").text(model.driverTransportCompany.numberTruck);
+                        $("#planDayGrid").find("tr[data-uid='" + model.uid + "'] td:eq(18)").text(model.driverTransportCompany.numberTruck);
+                        $("#planDayGrid").find("tr[data-uid='" + model.uid + "'] td:eq(20)").text(model.driverTransportCompany.phone);
+
                     }
                     /*if (data.values.driverTransportCompany) {
                         data.model.set("numTruck", data.values.driverTransportCompany.numberTruck);
@@ -828,10 +829,9 @@ var planShipmentUtil = (
 
 
             return $("#planDayGrid").kendoGrid({
-                // toolbar: ["edit"],
-                //dataSource: planShipmentUtil.dataSourcePlanDay(),
+
                 dataSource: dataSourcePlanDay(),
-               // noRecords: true,
+
                 height: '100%',
                 groupable: true,
                 sortable: true,
@@ -874,7 +874,7 @@ var planShipmentUtil = (
                     {
                         field: "planLoad",
                         title: "В плане погрузки",
-                        width: "180px",
+                        width: "70px",
 
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat
