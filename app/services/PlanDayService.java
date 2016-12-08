@@ -551,31 +551,31 @@ public class PlanDayService {
 
 
 
-/*
 
-    public List<PlanShipmentItem>  updatesPlanShipment(JsonNode value){
-        List<PlanShipmentItem> planShipmentItems = new ArrayList<>();
+
+    public List<PlanRequestTransport>  updatesPlanShipment(JsonNode value){
+        List<PlanRequestTransport> planRequestTransports = new ArrayList<>();
         Iterator<JsonNode> nodeIterator =  value.findValue("data").findValue("models").elements();
         while(nodeIterator.hasNext()){
             JsonNode valueUpdate = nodeIterator.next();
-            PlanShipmentItem _updatePlanShipmentItem  = PlanShipmentItem.find.where().eq("id",valueUpdate.get("id").asInt()).findUnique();
-            planShipmentItems.add(updatePlanShipment(valueUpdate,_updatePlanShipmentItem));
+            PlanRequestTransport _updatePlanRequestTransport  = PlanRequestTransport.find.where().eq("id",valueUpdate.get("id").asInt()).findUnique();
+            planRequestTransports.add(updatePlanShipment(valueUpdate,_updatePlanRequestTransport));
         }
-        planShipmentItems.stream().forEach(e -> e.save());
-        return planShipmentItems;
+        planRequestTransports.stream().forEach(e -> e.save());
+        return planRequestTransports;
 
 
     }
-*/
 
-   /* public PlanShipmentItem updatePlanShipment(JsonNode value,PlanShipmentItem planShipmentItem){
+
+    public PlanRequestTransport updatePlanShipment(JsonNode value,PlanRequestTransport planRequestTransport){
 
         Optional.ofNullable(value.findValue("deviationShipment")).ifPresent(e -> {
          if (!e.equals(NullNode.getInstance())){
               DeviationShipment deviationShipment =   Optional.ofNullable(find(DeviationShipment.class).where().eq("id", e
                     .findValue("id").asInt())
                     .findUnique()).orElse(null);
-               planShipmentItem.setDeviationShipment(deviationShipment);
+             planRequestTransport.setDeviationShipment(deviationShipment);
          }
         });
         Optional.ofNullable(value.findValue("deviationDelivery")).ifPresent(e -> {
@@ -583,45 +583,45 @@ public class PlanDayService {
                 DeviationDelivery deviationDelivery =   Optional.ofNullable(find(DeviationDelivery.class).where().eq("id", e
                     .findValue("id").asInt())
                     .findUnique()).orElse(null);
-               planShipmentItem.setDeviationDelivery(deviationDelivery);
+                planRequestTransport.setDeviationDelivery(deviationDelivery);
             }
         });
 
 
 
-        Optional.ofNullable(value.findValue("costTrip")).ifPresent(e -> {
-            planShipmentItem.setCostTrip(e.asDouble());
-        });
+       /* Optional.ofNullable(value.findValue("costTrip")).ifPresent(e -> {
+            planRequestTransport.setCostTrip(e.asDouble());
+        });*/
         Optional.ofNullable(value.findValue("note")).ifPresent(e -> {
-            planShipmentItem.setNote(e.asText());
+            planRequestTransport.setNote(e.asText());
         });
 
-        Optional.ofNullable(value.findValue("numberGate")).ifPresent(e -> {
-            planShipmentItem.setNumberGate(e.asInt());
-        });
+       /* Optional.ofNullable(value.findValue("numberGate")).ifPresent(e -> {
+            planRequestTransport.setNumberGate(e.asInt());
+        });*/
 
         Optional.ofNullable(value.findValue("dateDeliveryFact")).ifPresent(e -> {
             if (!e.equals(NullNode.getInstance())){
-            planShipmentItem.setDateDeliveryFact(dateFromStringInFormat_dd_MM_yyyy(e.asText()));
+                planRequestTransport.setDateDeliveryFact(dateFromStringInFormat_dd_MM_yyyy(e.asText()));
               }
             }
         );
 
         Optional.ofNullable(value.findValue("transportCompanyPlan")).ifPresent(e -> {
             if (!e.equals(NullNode.getInstance())) {
-                planShipmentItem.setTransportCompanyPlan(TransportCompany.find.byId(e.findValue("rowPointer").asText()));
+                planRequestTransport.setTransportCompanyPlan(TransportCompany.find.byId(e.findValue("rowPointer").asText()));
             }
         });
         Optional.ofNullable(value.findValue("transportCompanyFact")).ifPresent(e -> {
             if (!e.equals(NullNode.getInstance())) {
-                planShipmentItem.setTransportCompanyFact(TransportCompany.find.byId(e.findValue("rowPointer").asText()));
+                planRequestTransport.setTransportCompanyFact(TransportCompany.find.byId(e.findValue("rowPointer").asText()));
             }
         });
 
         Optional.ofNullable(value.get("driverTransportCompany")).ifPresent(e -> {
             if(!e.equals(NullNode.getInstance())){
                 DriverTransportCompany driverTransportCompany = DriverTransportCompany.find.where().eq("id",e.get("id").asText()).findUnique();
-                planShipmentItem.setDriverTransportCompany(driverTransportCompany);
+                planRequestTransport.setDriverTransportCompany(driverTransportCompany);
             }
         });
 
@@ -631,26 +631,15 @@ public class PlanDayService {
                 DateTime dateTime = DateTime.parse(e.asText()).plusHours(3);
                //DateTime dateTime =   DateTime.parse(e.asText(), DateTimeFormat.forPattern("dd-MM-yyyy HH:mm"));
                LocalTime localTime = LocalTime.of(dateTime.getHourOfDay(),dateTime.getMinuteOfHour());
-               planShipmentItem.setTimeLoad(Time.valueOf(localTime));
+                planRequestTransport.setTimeLoad(Time.valueOf(localTime));
             }
         });
 
 
 
-        Ebean.save(planShipmentItem);
-
-
-        *//*if(Objects.isNull(planShipmentItem.getDeviationShipment())){
-
-            planShipmentItem.setDeviationShipment(new DeviationShipment(-1,""));
-        }
-        if(Objects.isNull(planShipmentItem.getDeviationDelivery())){
-            planShipmentItem.setDeviationDelivery(new DeviationDelivery(-1,""));
-        }*//*
-
-        return  planShipmentItem;
+        return  planRequestTransport;
     }
-*/
+
 
     @NotNull
     private Date dateFromStringInFormat_dd_MM_yyyy(String dateValue) {

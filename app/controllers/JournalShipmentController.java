@@ -43,11 +43,11 @@ public class JournalShipmentController extends Controller {
     public Result deletePlanDayItem() {
         return ok(Json.toJson(planDayService.deletePlandDayItem(request().body().asJson(),authService.getUserInfo().orElse(null))));
     }
-    //@Secure(clients = "HeaderClient")
+    @Secure(clients = "HeaderClient")
     public  Result updatePlanDayItem() {
         //System.out.println(request().body().asJson());
-        //return ok(Json.toJson(planDayService.updatesPlanShipment(request().body().asJson())));
-        return TODO;
+        return ok(Json.toJson(planDayService.updatesPlanShipment(request().body().asJson())));
+        //return TODO;
     }
 
 

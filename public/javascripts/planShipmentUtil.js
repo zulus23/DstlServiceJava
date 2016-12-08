@@ -843,7 +843,7 @@ var planShipmentUtil = (
                 detailInit: detailInit,
                 dataBound: function (e) {
                     $("#gridView").find('.k-icon.k-i-collapse').trigger('click');
-                    this.expandRow(this.tbody.find("tr.k-master-row").first());
+                  //  this.expandRow(this.tbody.find("tr.k-master-row").first());
 
                 },
 
@@ -1101,7 +1101,7 @@ var planShipmentUtil = (
                     {
                         field: "numberOrder",
                         title: "№ заказа",
-                        width: "70px",
+                        width: "20px",
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
@@ -1110,7 +1110,7 @@ var planShipmentUtil = (
                     {
                         field: "numberItem",
                         title: "№ изделия",
-                        width: "80px",
+                        width: "30px",
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
@@ -1119,7 +1119,7 @@ var planShipmentUtil = (
                     {
                         field: "nameOrder",
                         title: "Наименование заказа",
-                        width: "180px",
+                        width: "100px",
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
@@ -1128,10 +1128,9 @@ var planShipmentUtil = (
                     {
                         field: "nameCustomer",
                         title: "Грузополучатель",
-                        width: "120px",
+                        width: "80px",
                         filterable: false,
-                        locked: true,
-                        lockable: false,
+
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
 
@@ -1139,7 +1138,7 @@ var planShipmentUtil = (
                     {
                         field: "placeDelivery",
                         title: "Пункт доставки",
-                        width: "100px",
+                        width: "80px",
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
@@ -1148,7 +1147,7 @@ var planShipmentUtil = (
                     {
                         field: "sizeOrder",
                         title: "Объем заказа",
-                        width: "80px",
+                        width: "30px",
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
@@ -1157,7 +1156,7 @@ var planShipmentUtil = (
                     {
                         field: "sizePallet",
                         title: "Размер палетты",
-                        width: "80px",
+                        width: "30px",
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
@@ -1166,7 +1165,7 @@ var planShipmentUtil = (
                     {
                         field: "packingMethod",
                         title: "Способ упаковки",
-                        width: "80px",
+                        width: "30px",
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
@@ -1175,7 +1174,7 @@ var planShipmentUtil = (
                     {
                         field: "countPlace",
                         title: "Количество мест",
-                        width: "80px",
+                        width: "30px",
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
@@ -1184,7 +1183,7 @@ var planShipmentUtil = (
                     {
                         field: "capacityOrder",
                         title: "Объем заказа",
-                        width: "80px",
+                        width: "30px",
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
@@ -1193,7 +1192,7 @@ var planShipmentUtil = (
                     {
                         field: "deliveryDistance",
                         title: "Расстояние доставки",
-                        width: "80px",
+                        width: "30px",
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
@@ -1202,7 +1201,7 @@ var planShipmentUtil = (
                     {
                         field: "costTrip",
                         title: "Ставка рейса",
-                        width: "80px",
+                        width: "30px",
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
