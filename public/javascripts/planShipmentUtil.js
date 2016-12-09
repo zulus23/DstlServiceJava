@@ -1064,9 +1064,35 @@ var planShipmentUtil = (
         }
 
         function detailInit(e) {
+            var findByID = function (id) {
+                return e.data.planShipmentItems.find(function(item){
+                    return item.id == id;
+                });
+            };
+
             $("<div/>").appendTo(e.detailCell).kendoGrid({
-                dataSource:e.data.planShipmentItems,
+                /*dataSource:e.data.planShipmentItems,*/
+                dataSource: {
+                    transport: {
+                        read: function (options) {
+                            options.success(e.data.planShipmentItems);
+                        },
+                        update: function (options) {
+                            var data = options.data,
+                                parentItem = findByID(data.id);
+                            for (var field in data) {
+                                if (!(field.indexOf("_") === 0)) {
+                                    parentItem[field] = data[field];
+                                }
+                            }
+
+                            e.data.dirty = true;
+                            options.success();
+                        },
+                    }
+                },
                 editable: true,
+               /* editable: "inline",*/
                 edit:function(element){
                     console.log(e);
 
@@ -1189,6 +1215,7 @@ var planShipmentUtil = (
                         attributes: gridUtils.columnFormat,
 
                     },
+                  /* { command: ["edit", "destroy"], width: "80px", title: "&nbsp;" }*/
                 ]
             });
         }
