@@ -282,23 +282,6 @@ var planShipmentUtil = (
             return moment(datePlan).format("DD-MM-YYYY") ;
         }
 
-       /* function ErrorShow(request) {
-            var notificationElement = $("#notification").kendoNotification({
-                // hide automatically after 7 seconds
-                autoHideAfter: 7000,
-                // prevent accidental hiding for 1 second
-                allowHideAfter: 1000,
-                // show a hide button
-                button: true,
-                // prevent hiding by clicking on the notification content
-
-
-                hideOnClick: false
-            });
-
-            var notificationWidget = notificationElement.data("kendoNotification");
-            notificationWidget.show("Ошибка сохранения данных. " + request.responseText,"error");
-        }*/
         function timeEditor(container, options) {
             $('<input data-text-field="' + options.field + '" data-value-field="' + options.field + '" data-bind="value:' + options.field + '" data-format="' + options.format + '"/>')
                 .appendTo(container)
@@ -515,8 +498,7 @@ var planShipmentUtil = (
 
                  change: function(e) {
                      var grid = this;
-                  //   var model = grid.dataItem(this);
-                     //console.log(grid);
+
                      var dataItem = this.dataItem(this.select()[0]);
                      $.each(grid.tbody.find('tr'),function(){
                          var model = grid.dataItem(this);
@@ -776,14 +758,7 @@ var planShipmentUtil = (
             moment.locale('ru');
             return moment(datePlan) > moment(dateShipmentDispatcher);
         }
-     /*   var isTransportCompany = function(transportCompany) {
 
-            return transportCompany !== null;
-        }
-
-        var hasDeviation = function (deviation) {
-            return deviation !== null;
-        }*/
 
         var isNotNull = function(value){
             return value !== null;
@@ -815,10 +790,7 @@ var planShipmentUtil = (
         var  selectPlanDetailID = function(){
             return ID;
         }
-       /* function getColor(dateShipmentDispatcher)
-        {
-            return {"class" : "table-cell-red"};
-        }*/
+
         var timeLoadInHours =  function (data,field,value){
             return  (parseInt((value/60).toFixed(2)) - (value/60).toFixed(2));
         }
@@ -1094,7 +1066,18 @@ var planShipmentUtil = (
         function detailInit(e) {
             $("<div/>").appendTo(e.detailCell).kendoGrid({
                 dataSource:e.data.planShipmentItems,
+                editable: true,
+                edit:function(element){
+                    console.log(e);
 
+                        dataSource = $('#planDayGrid').data('kendoGrid').dataSource;
+                        item = dataSource.get(e.data.id);
+                        item.dirty = true;
+                   //e.model.dirty = true;
+                   console.log(element);
+                    console.log(item);
+                   // console.log(e.model.dirty);
+                },
                 columns: [
                     {
                         field: "numberOrder",
@@ -1103,6 +1086,7 @@ var planShipmentUtil = (
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
+                        editable:false,
 
                     },
                     {
@@ -1112,7 +1096,7 @@ var planShipmentUtil = (
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-
+                        editable:false,
                     },
                     {
                         field: "nameOrder",
@@ -1121,7 +1105,7 @@ var planShipmentUtil = (
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-
+                        editable:false,
                     },
                     {
                         field: "nameCustomer",
@@ -1131,7 +1115,7 @@ var planShipmentUtil = (
 
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-
+                        editable:false,
                     },
                     {
                         field: "placeDelivery",
@@ -1140,7 +1124,7 @@ var planShipmentUtil = (
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-
+                        editable:false,
                     },
                     {
                         field: "sizeOrder",
@@ -1149,7 +1133,7 @@ var planShipmentUtil = (
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-
+                        editable:false,
                     },
                     {
                         field: "sizePallet",
@@ -1158,7 +1142,7 @@ var planShipmentUtil = (
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-
+                        editable:false,
                     },
                     {
                         field: "packingMethod",
@@ -1167,7 +1151,7 @@ var planShipmentUtil = (
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-
+                        editable:false,
                     },
                     {
                         field: "countPlace",
@@ -1176,7 +1160,7 @@ var planShipmentUtil = (
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-
+                        editable:false,
                     },
                     {
                         field: "capacityOrder",
@@ -1185,7 +1169,7 @@ var planShipmentUtil = (
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-
+                        editable:false,
                     },
                     {
                         field: "deliveryDistance",
@@ -1194,7 +1178,7 @@ var planShipmentUtil = (
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-
+                        editable:false,
                     },
                     {
                         field: "costTrip",
@@ -1366,12 +1350,9 @@ var planShipmentUtil = (
             planGrid:planGrid,
             addToPlan:addToPlan,
             updateJournalShipment:UpdateJournalShipment,
-            //selectPlanDetailID:selectPlanDetailID,
             setDatePlan:setDatePlan,
             getDay:getDay,
-            /*isTransportCompany:isTransportCompany,
-            hasDeviation:hasDeviation,*/
-            isNotNull:isNotNull,
+             isNotNull:isNotNull,
             isNoMoreWorkTimeLoad:isNoMoreWorkTimeLoad,
 
         }

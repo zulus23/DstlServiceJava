@@ -250,10 +250,6 @@ public class PlanDayService {
             JsonNode valueInsert = nodeIterator.next();
             PlanRequestTransport planRequestTransport = createPlanShipmentRequestTransportItemFromJson(valueInsert,planShipment);
             _temp.add(planRequestTransport);
-          // PlanShipmentItem planShipmentItem = savePlanShipmentItem(valueInsert,planShipment);
-            // TODO: 07.12.2016 Необходимо добавлять только уникальные элементы
-          // planShipment.getPlanRequestTransports().add(planRequestTransport);
-
         }
 
         PlanRequestTransport planRequestTransports =  _temp.stream().distinct().findFirst().get();
@@ -483,7 +479,20 @@ public class PlanDayService {
                 planRequestTransport.setTimeLoad(Time.valueOf(localTime));
             }
         });
+        Optional.ofNullable(value.get("planShipmentItems")).ifPresent( e-> {
 
+            Iterator<JsonNode> temp = value.get("planShipmentItems").elements();
+            while (temp.hasNext()){
+                JsonNode jsonNode = temp.next();
+                planRequestTransport.getPlanShipmentItems().stream()
+                                                           .filter(p -> p.getId().equals((jsonNode.findValue("id").asLong())))
+                                                           .findFirst()
+                                                           .get().setCostTrip(jsonNode.findValue("costTrip").asDouble());
+            }
+
+
+
+        });
 
 
         return  planRequestTransport;
