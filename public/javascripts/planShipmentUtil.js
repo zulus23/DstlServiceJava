@@ -4,6 +4,7 @@
 var planShipmentUtil = (
     function() {
         var datePlan,ID, selectShipItem, countWorkTimeInMinute;//,notificationElement;
+        var preventBinding = false;
         var token;
         userService.token(function (response) {
             token = response;
@@ -813,14 +814,7 @@ var planShipmentUtil = (
                 editable: true,
                 change:onChange,
                 detailInit: detailInit,
-                dataBound: function (e) {
-                   // $("#gridView").find('.k-icon.k-i-collapse').trigger('click');
-                  //  this.expandRow(this.tbody.find("tr.k-master-row").first());
 
-
-                            e.preventDefault();
-
-                },
 
                 columns: [
 
@@ -1067,6 +1061,7 @@ var planShipmentUtil = (
         }
 
         function detailInit(e) {
+
             var findByID = function (id) {
                 return e.data.planShipmentItems.find(function(item){
                     return item.idShipmentItem == id;
@@ -1078,9 +1073,10 @@ var planShipmentUtil = (
                 dataSource: {
                     transport: {
                         read: function (options) {
-                            options.success(e.data.planShipmentItems);
+                            options.success(e.data.planShipmentItems.toJSON());
                         },
-                       /* update: function (options) {
+                        update: function (options) {
+                            console.log("Update "+options.data);
                             var data = options.data,
                                 parentItem = findByID(data.idShipmentItem);
                             for (var field in data) {
@@ -1091,13 +1087,14 @@ var planShipmentUtil = (
 
                             e.data.dirty = true;
                             options.success();
-                        },*/
+                        },
                     },
                     schema: {
                         model: {
                             id: "idShipmentItem",
                             fields: {
                                 idShipmentItem: { editable: false },
+
                                 numberOrder: { editable: false },
                                 numberItem: { editable: false },
                                 nameOrder:{editable:false},
@@ -1115,28 +1112,7 @@ var planShipmentUtil = (
                     }
                 },
                 editable: "inline",
-               /* editable: "inline",*/
-                edit:function(element){
-                    console.log("edit - "+e);
 
-              /*          dataSource = $('#planDayGrid').data('kendoGrid').dataSource;
-                        item = dataSource.get(e.data.id);
-                        item.dirty = true;
-                   //e.model.dirty = true;
-                   console.log(element);
-                    console.log(item);
-                   // console.log(e.model.dirty);*/
-                },
-                save:function (e) {
-                    console.log(e);
-                },
-                cancel:function (e) {
-                    console.log(e);
-                    this.closeCell();
-                    e.preventDefault();
-
-
-                },
 
                 columns: [
 
