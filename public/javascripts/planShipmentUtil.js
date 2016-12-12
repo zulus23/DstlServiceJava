@@ -814,8 +814,11 @@ var planShipmentUtil = (
                 change:onChange,
                 detailInit: detailInit,
                 dataBound: function (e) {
-                    $("#gridView").find('.k-icon.k-i-collapse').trigger('click');
+                   // $("#gridView").find('.k-icon.k-i-collapse').trigger('click');
                   //  this.expandRow(this.tbody.find("tr.k-master-row").first());
+
+
+                            e.preventDefault();
 
                 },
 
@@ -1066,7 +1069,7 @@ var planShipmentUtil = (
         function detailInit(e) {
             var findByID = function (id) {
                 return e.data.planShipmentItems.find(function(item){
-                    return item.id == id;
+                    return item.idShipmentItem == id;
                 });
             };
 
@@ -1077,9 +1080,9 @@ var planShipmentUtil = (
                         read: function (options) {
                             options.success(e.data.planShipmentItems);
                         },
-                        update: function (options) {
+                       /* update: function (options) {
                             var data = options.data,
-                                parentItem = findByID(data.id);
+                                parentItem = findByID(data.idShipmentItem);
                             for (var field in data) {
                                 if (!(field.indexOf("_") === 0)) {
                                     parentItem[field] = data[field];
@@ -1088,23 +1091,55 @@ var planShipmentUtil = (
 
                             e.data.dirty = true;
                             options.success();
-                        },
+                        },*/
+                    },
+                    schema: {
+                        model: {
+                            id: "idShipmentItem",
+                            fields: {
+                                idShipmentItem: { editable: false },
+                                numberOrder: { editable: false },
+                                numberItem: { editable: false },
+                                nameOrder:{editable:false},
+                                nameCustomer:{editable:false},
+                                placeDelivery:{editable:false},
+                                sizeOrder:{editable:false},
+                                sizePallet:{editable:false},
+                                packingMethod:{editable:false},
+                                countPlace:{editable:false},
+                                capacityOrder:{editable:false},
+                                deliveryDistance:{editable:false},
+                                costTrip:{editable:true}
+                            }
+                        }
                     }
                 },
-                editable: true,
+                editable: "inline",
                /* editable: "inline",*/
                 edit:function(element){
-                    console.log(e);
+                    console.log("edit - "+e);
 
-                        dataSource = $('#planDayGrid').data('kendoGrid').dataSource;
+              /*          dataSource = $('#planDayGrid').data('kendoGrid').dataSource;
                         item = dataSource.get(e.data.id);
                         item.dirty = true;
                    //e.model.dirty = true;
                    console.log(element);
                     console.log(item);
-                   // console.log(e.model.dirty);
+                   // console.log(e.model.dirty);*/
                 },
+                save:function (e) {
+                    console.log(e);
+                },
+                cancel:function (e) {
+                    console.log(e);
+                    this.closeCell();
+                    e.preventDefault();
+
+
+                },
+
                 columns: [
+
                     {
                         field: "numberOrder",
                         title: "№ заказа",
@@ -1213,9 +1248,9 @@ var planShipmentUtil = (
                         filterable: false,
                         headerAttributes: gridUtils.headerFormat,
                         attributes: gridUtils.columnFormat,
-
+                        editable:true,
                     },
-                  /* { command: ["edit", "destroy"], width: "80px", title: "&nbsp;" }*/
+                   { command: ["edit"], width: "80px", title: "&nbsp;" }
                 ]
             });
         }

@@ -27,7 +27,7 @@ public class PlanShipmentItem  extends Model {
 
     @Id
     @Column(name = "ID")
-    private Long id;
+    private Long idShipmentItem;
 
 
     @ManyToOne()
@@ -95,12 +95,12 @@ public class PlanShipmentItem  extends Model {
     @JoinColumn(name = "UpdateBy")
     private UserDstl userUpdate;
 
-    public Long getId() {
-        return id;
+    public Long getIdShipmentItem() {
+        return idShipmentItem;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdShipmentItem(Long idShipmentItem) {
+        this.idShipmentItem = idShipmentItem;
     }
 
     public PlanRequestTransport getPlanRequestTransport() {
@@ -281,13 +281,13 @@ public class PlanShipmentItem  extends Model {
 
         PlanShipmentItem that = (PlanShipmentItem) o;
 
-        return getId().equals(that.getId());
+        return getIdShipmentItem().equals(that.getIdShipmentItem());
 
     }
 
     @Override
     public int hashCode() {
-        return getId().hashCode();
+        return getIdShipmentItem().hashCode();
     }
 
 

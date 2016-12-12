@@ -485,7 +485,7 @@ public class PlanDayService {
             while (temp.hasNext()){
                 JsonNode jsonNode = temp.next();
                 planRequestTransport.getPlanShipmentItems().stream()
-                                                           .filter(p -> p.getId().equals((jsonNode.findValue("id").asLong())))
+                                                           .filter(p -> p.getIdShipmentItem().equals((jsonNode.findValue("id").asLong())))
                                                            .findFirst()
                                                            .get().setCostTrip(jsonNode.findValue("costTrip").asDouble());
             }
